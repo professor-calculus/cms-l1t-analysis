@@ -1,0 +1,21 @@
+#!/bin/env python
+import os
+
+from ROOT import gSystem, gROOT
+
+location = 'external/L1Trigger/L1TNtuples/interface'
+combined_header = os.path.join(location, 'L1AnalysisAllDataformats.h')
+
+# add 'external' folder to include path
+gROOT.ProcessLine(".include external")
+
+# k : keep the shared library after the session end.
+# f : force recompilation.
+# g : compile with debug symbol
+# O : optimized the code
+# c : compile only, do not attempt to load the library.
+# s : silence all informational output
+# v : output all information output
+# d : debug ACLiC, keep all the output files.
+# - : if buildir is set, use a flat structure (see buildir below)
+gSystem.CompileMacro(combined_header, 'kOcs', 'build/L1TAnalysisDataformats')
