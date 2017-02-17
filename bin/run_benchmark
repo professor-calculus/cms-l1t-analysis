@@ -1,0 +1,39 @@
+#!/bin/env python
+from __future__ import print_function
+from ROOT import gROOT, gSystem
+import ROOT
+
+ROOT.PyConfig.IgnoreCommandLineOptions = True
+gROOT.SetBatch(1)
+ROOT.TH1.SetDefaultSumw2(True)
+#ROOT.gStyle.SetOptStat(0)
+
+
+
+print('='*80)
+print('Starting CMS L1T Analsysis benchmark')
+print('='*80)
+print()
+print("Work in progress")
+
+# add 'external' folder to include path
+gROOT.ProcessLine(".include external")
+gSystem.Load('build/L1TAnalysisDataformats.so')
+
+print("Compiling Legacy macros")
+gSystem.CompileMacro(
+    "legacy/MakePlots/makeJetResolutions.cxx", 'kOs', 'build/makeJetResolutions')
+
+
+
+print("Running legacy")
+n_chunks = 1
+n_jobs = 2
+n_events = 10000
+combine = False
+ROOT.makeJetResolutions(n_chunks, n_jobs, n_events, combine)
+
+
+print()
+print('='*80)
+print()
