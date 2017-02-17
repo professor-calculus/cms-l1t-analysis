@@ -1,8 +1,4 @@
 [submodule "legacy"]
 	path = legacy
-	url = https://github.com/shane-breeze/l1t-macros
-[submodule "L1Trigger"]
-	path = cmssw
-	url = https://github.com/cms-sw/cmssw.git
-	branch = CMSSW_9_0_X
-	shallow = true
+	url = https://github.com/kreczko/l1t-macros
+	branch = fixed-compilation-error-and-warnings
