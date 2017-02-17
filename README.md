@@ -13,5 +13,10 @@ cd /vagrant
 source bin/env.sh
 # you will need your grid cert
 voms-proxy-init --voms cms
+make setup
+```
 
+### running benchmark
+```
+make benchmark
 ```
