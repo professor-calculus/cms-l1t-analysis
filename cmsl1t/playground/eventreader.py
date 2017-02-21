@@ -9,30 +9,33 @@ class Event(object):
     def __init__(self, trees):
         self._trees = trees
         # add names, aliases?
+        # lets assume fixed for now:
+        self._caloTower, self._emuCaloTower, self._jetReco, self._metFilterReco,\
+            self._muonReco, self._recoTree, self._upgrade, self._emuUpgrade = self._trees
 
     def test(self):
         # for tree in self._trees:
         #     print(tree)
-        print('>>>> nHCALTP', self._trees[0].CaloTP.nHCALTP)
-        print('>>>> nHCALTP (emu)', self._trees[1].CaloTP.nHCALTP)
-        print('>>>> nJets', self._trees[2].Jet.nJets)
-        print('>>>> met', self._trees[2].Sums.met)
-        print('>>>> hbheNoiseFilter', self._trees[3].MetFilters.hbheNoiseFilter)
-        print('>>>> nMuons', self._trees[4].Muon.nMuons)
-        print('>>>> nVtx', self._trees[5].Vertex.nVtx)
-        print('>>>> nJets (upgrade emu)', self._trees[6].L1Upgrade.nJets)
-        print('>>>> nJets (upgrade)', self._trees[7].L1Upgrade.nJets)
+        print('>>>> nHCALTP', self._caloTower.CaloTP.nHCALTP)
+        print('>>>> nHCALTP (emu)', self._emuCaloTower.CaloTP.nHCALTP)
+        print('>>>> nJets', self._jetReco.Jet.nJets)
+        print('>>>> met', self._jetReco.Sums.met)
+        print('>>>> hbheNoiseFilter',
+              self._metFilterReco.MetFilters.hbheNoiseFilter)
+        print('>>>> nMuons', self._muonReco.Muon.nMuons)
+        print('>>>> nVtx', self._recoTree.Vertex.nVtx)
+        print('>>>> nJets (upgrade emu)', self._upgrade.L1Upgrade.nJets)
+        print('>>>> nJets (upgrade)', self._emuUpgrade.L1Upgrade.nJets)
+
+    def getLeadingRecoJet(self):
+        pass
 
 
 class EventReader(object):
 
-    def __init__(self, trees, files):
-        self._tree_names = trees
-        self._files = files
-        self._trees = []
-        for name in self._tree_names:
-            # this is not efficient
-            self._trees.append(TreeChain(name, self._files))
+    def __init__(self, tree_names, files):
+        # this is not efficient
+        self._trees = [TreeChain(name, files) for name in tree_names]
 
     def __iter__(self):
         for trees in six.moves.zip(*self._trees):
@@ -57,10 +60,10 @@ if __name__ == '__main__':
     reader = EventReader(tree_names, files)
     i = 1
     for event in reader:
-        print('-'*80)
+        print('-' * 80)
         print('>> event', i)
         event.test()
-        print('-'*80)
+        print('-' * 80)
         i += 1
         if i > 3:
             break
