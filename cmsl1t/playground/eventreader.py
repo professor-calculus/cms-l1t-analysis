@@ -2,7 +2,9 @@ from __future__ import print_function
 from rootpy.tree import Tree, TreeChain
 #from six.moves import zip
 import six
+import inspect
 
+from jetfilters import defaultJetFilter
 
 class Event(object):
 
@@ -12,6 +14,10 @@ class Event(object):
         # lets assume fixed for now:
         self._caloTower, self._emuCaloTower, self._jetReco, self._metFilterReco,\
             self._muonReco, self._recoTree, self._upgrade, self._emuUpgrade = self._trees
+
+        self._jets = []
+        for i in range(self._jetReco.Jet.nJets):
+            self._jets.append(Jet(self._jetReco.Jet, i))
 
     def test(self):
         # for tree in self._trees:
@@ -24,11 +30,64 @@ class Event(object):
               self._metFilterReco.MetFilters.hbheNoiseFilter)
         print('>>>> nMuons', self._muonReco.Muon.nMuons)
         print('>>>> nVtx', self._recoTree.Vertex.nVtx)
-        print('>>>> nJets (upgrade emu)', self._upgrade.L1Upgrade.nJets)
-        print('>>>> nJets (upgrade)', self._emuUpgrade.L1Upgrade.nJets)
+        print('>>>> nJets (upgrade)', self._upgrade.L1Upgrade.nJets)
+        print('>>>> nJets (upgrade emu)', self._emuUpgrade.L1Upgrade.nJets)
+        print(self._jets[0].eta)
+        print('>>>> Leading reco jet ET', self.getLeadingRecoJet().etCorr)
+        print('>>>> Lowest good jet ET', self.goodJets()[-1].etCorr)
 
-    def getLeadingRecoJet(self):
-        pass
+        # print(dir(self._jetReco.Jet))
+        # members = inspect.getmembers(self._jetReco.Jet)
+        # print('>>>> Jet members')
+        # for m in members:
+        #     print('>' * 6, m[0], ':', m[1])
+
+    def goodJets(self, jetFilter = defaultJetFilter):
+        '''
+            filters and ET orders the jet collection
+        '''
+        goodJets = filter(jetFilter, self._jets)
+        sorted_jets = sorted(
+            goodJets, key=lambda jet: jet.etCorr, reverse=True)
+        return sorted_jets
+
+    def getLeadingRecoJet(self, jetFilter = defaultJetFilter):
+        goodJets = self.goodJets(jetFilter)
+        leadingRecoJet = goodJets[0]
+        if leadingRecoJet.etCorr > 10.0:
+            return leadingRecoJet
+        return None
+
+    def getMatchedL1Jet(self, l1Type):
+        l1Jets = None
+        if l1Type == 'HW':
+            l1Jets = self._upgrade.L1Upgrade
+        if l1Type == 'EMU':
+            l1Jets = self._emuUpgrade.L1Upgrade
+
+
+class Jet(object):
+    '''
+        Create a simple python wrapper for
+        L1Analysis::L1AnalysisRecoJetDataFormat
+    '''
+
+    def __init__(self, jets, index):
+        # this could be simplified with a list of attributes
+        read_attributes = [
+            'etCorr', 'muMult', 'eta', 'phi', 'nhef', 'pef', 'mef', 'chMult',
+            'elMult', 'nhMult', 'phMult', 'chef', 'eef'
+        ]
+        for attr in read_attributes:
+            setattr(self, attr, getattr(jets, attr)[index])
+
+    @property
+    def sumMult(self):
+        return self.chMult + self.chMult + self.elMult
+
+    @property
+    def allMult(self):
+        return self.sumMult + self.nhMult + self.phMult
 
 
 class EventReader(object):
