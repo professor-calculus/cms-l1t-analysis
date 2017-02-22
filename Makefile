@@ -63,5 +63,5 @@ endif
 
 run-benchmark:
 	@sed -i "s/return singleMuRun276243();/return benchmark_cfg();/g" $(NTUPLE_CFG)
-	@time ./bin/run_benchmark
+	@time python -m memory_profiler bin/run_benchmark
 	@sed -i 's/return benchmark_cfg();/return singleMuRun276243();/g' $(NTUPLE_CFG)
