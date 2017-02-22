@@ -18,5 +18,7 @@ make setup
 
 ### running benchmark
 ```
+# install python requirements
+pip install -r requirements.txt --user
 make benchmark
 ```
