@@ -1,17 +1,14 @@
 import ROOT
 import os
-import rootpy
-from rootpy.io import root_open
-from rootpy.tree import Tree
 from rootpy.plotting import Hist
 import glob
 import six
 import math
 import numpy as np
 import logging
-logging.getLogger("rootpy.tree.chain").setLevel(logging.WARNING)
-
 from eventreader import EventReader
+
+logging.getLogger("rootpy.tree.chain").setLevel(logging.WARNING)
 
 
 FILES = glob.glob('data/*.root')
@@ -65,7 +62,7 @@ def main(nEvents, output_folder):
         if not matchedL1Jet:
             continue
 
-        pu = event.nVertex
+        # pu = event.nVertex
 
         recoEt = leadingRecoJet.etCorr
         recoEta = leadingRecoJet.eta
@@ -118,6 +115,7 @@ def main(nEvents, output_folder):
 
 def foldPhi(phi):
     return min([abs(phi), abs(2 * math.pi - phi)])
+
 
 if __name__ == "__main__":
     from datetime import datetime

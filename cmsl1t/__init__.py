@@ -6,15 +6,15 @@ import logging
 __version__ = '0.0.1'
 
 
-if not 'PROJECT_ROOT' in os.environ:
+if 'PROJECT_ROOT' not in os.environ:
     print("Could not find environmental variable 'PROJECT_ROOT'")
     print("You need to run 'source bin/env.sh' first!")
     sys.exit(-1)
 PROJECT_ROOT = os.environ['PROJECT_ROOT']
 
 # logging
-LOG = logging.getLogger(__name__)
-LOG.setLevel(logging.DEBUG)
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
 
 # add loggers
 ch = logging.StreamHandler()
@@ -26,4 +26,4 @@ else:
 formatter = logging.Formatter(
     '%(asctime)s [%(name)s]  %(levelname)s: %(message)s')
 ch.setFormatter(formatter)
-LOG.addHandler(ch)
+logger.addHandler(ch)

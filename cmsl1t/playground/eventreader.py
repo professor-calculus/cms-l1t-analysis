@@ -1,8 +1,7 @@
 from __future__ import print_function
-from rootpy.tree import Tree, TreeChain
-#from six.moves import zip
+from rootpy.tree import TreeChain
 import six
-import inspect
+# import inspect
 import math
 
 from jetfilters import defaultJetFilter
@@ -14,8 +13,9 @@ class Event(object):
         self._trees = trees
         # add names, aliases?
         # lets assume fixed for now:
-        self._caloTower, self._emuCaloTower, self._jetReco, self._metFilterReco,\
-            self._muonReco, self._recoTree, self._upgrade, self._emuUpgrade = self._trees
+        self._caloTower, self._emuCaloTower, self._jetReco,\
+            self._metFilterReco, self._muonReco, self._recoTree,\
+            self._upgrade, self._emuUpgrade = self._trees
 
         self._jets = []
         for i in range(self._jetReco.Jet.nJets):
@@ -132,6 +132,7 @@ class EventReader(object):
     def __iter__(self):
         for trees in six.moves.zip(*self._trees):
             yield Event(trees)
+
 
 if __name__ == '__main__':
     import glob
