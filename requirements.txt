@@ -1,2 +1,4 @@
 memory_profiler
 #tqdm?
+flake8
+pep8

@@ -47,6 +47,8 @@ endif
 pep8:
 		@pep8 --exclude=.git,external examples cmsl1t
 
+flake8:
+	@flake8 cmsl1t test
 
 # benchmarks
 NTUPLE_CFG := "legacy/Config/ntuple_cfg.h"
