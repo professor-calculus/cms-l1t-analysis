@@ -37,8 +37,10 @@ setup-data-dir:
 ifeq ($(wildcard data),)
 		@mkdir data
 endif
-ifeq ($(wildcard data/L1Ntuple_test.root),)
-	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/L1Menu2016/Stage2/Collision2016-wRECO-l1t-integration-v86p4/SingleMuon/crab_Collision2016-wRECO-l1t-integration-v86p4__281693_SingleMuon/161005_194247/0000/L1Ntuple_979.root data/L1Ntuple_test.root
+ifeq ($(wildcard data/L1Ntuple_test_1.root),)
+	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/L1Menu2016/Stage2/Collision2016-wRECO-l1t-integration-v86p4/SingleMuon/crab_Collision2016-wRECO-l1t-integration-v86p4__281693_SingleMuon/161005_194247/0000/L1Ntuple_979.root data/L1Ntuple_test_1.root
+	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/L1Menu2016/Stage2/Collision2016-wRECO-l1t-integration-v86p4/SingleMuon/crab_Collision2016-wRECO-l1t-integration-v86p4__281693_SingleMuon/161005_194247/0000/L1Ntuple_980.root data/L1Ntuple_test_2.root
+	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/L1Menu2016/Stage2/Collision2016-wRECO-l1t-integration-v86p4/SingleMuon/crab_Collision2016-wRECO-l1t-integration-v86p4__281693_SingleMuon/161005_194247/0000/L1Ntuple_981.root data/L1Ntuple_test_3.root
 endif
 
 
