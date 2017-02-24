@@ -124,10 +124,14 @@ class L1Jet(object):
 
 
 class EventReader(object):
+    '''
+        There are many ways to tune the reader:
+        http://rootpy-log.readthedocs.io/en/latest/_modules/rootpy/tree/chain.html
+    '''
 
-    def __init__(self, tree_names, files):
+    def __init__(self, tree_names, files, events=-1):
         # this is not efficient
-        self._trees = [TreeChain(name, files) for name in tree_names]
+        self._trees = [TreeChain(name, files, cache=True, events=events) for name in tree_names]
 
     def __iter__(self):
         for trees in six.moves.zip(*self._trees):

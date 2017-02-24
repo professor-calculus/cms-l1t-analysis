@@ -48,11 +48,11 @@ def main(nEvents, output_folder):
         'JetPhiE': Hist(position_bins, name='JetPhiE'),
     }
 
-    reader = EventReader(TREE_NAMES, FILES)
+    reader = EventReader(TREE_NAMES, FILES, events=nEvents)
 
     for entry, event in enumerate(reader):
-        if entry >= nEvents:
-            break
+        # if entry >= nEvents:
+        #     break
 
         leadingRecoJet = event.getLeadingRecoJet()
         matchedL1Jet = event.getMatchedL1Jet(leadingRecoJet)
@@ -111,6 +111,7 @@ def main(nEvents, output_folder):
         hist.Draw()
         c.SaveAs(os.path.join(output_folder, file_name + '.pdf'))
         c.SaveAs(os.path.join(output_folder, file_name + '.root'))
+    print('Processed', entry, 'events')
 
 
 def foldPhi(phi):
