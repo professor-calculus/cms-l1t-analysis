@@ -5,6 +5,7 @@ import six
 import math
 
 from jetfilters import defaultJetFilter
+from cmsl1t.playground.cache import CachedIndexedTree
 
 
 class Event(object):
@@ -13,9 +14,11 @@ class Event(object):
         self._trees = trees
         # add names, aliases?
         # lets assume fixed for now:
-        self._caloTower, self._emuCaloTower, self._jetReco,\
+        self._caloTowers, self._emuCaloTower, self._jetReco,\
             self._metFilterReco, self._muonReco, self._recoTree,\
             self._upgrade, self._emuUpgrade = self._trees
+
+        self._caloTowers = CachedIndexedTree(self._caloTowers, index='nTower')
 
         self._jets = []
         for i in range(self._jetReco.Jet.nJets):
@@ -24,7 +27,7 @@ class Event(object):
     def test(self):
         # for tree in self._trees:
         #     print(tree)
-        print('>>>> nHCALTP', self._caloTower.CaloTP.nHCALTP)
+        print('>>>> nHCALTP', self._caloTowers.CaloTP.nHCALTP)
         print('>>>> nHCALTP (emu)', self._emuCaloTower.CaloTP.nHCALTP)
         print('>>>> nJets', self._jetReco.Jet.nJets)
         print('>>>> met', self._jetReco.Sums.met)
@@ -88,6 +91,10 @@ class Event(object):
     def nVertex(self):
         return self._recoTree.Vertex.nVtx
 
+    @property
+    def caloTowers(self):
+        return self._caloTowers
+
 
 class Jet(object):
     '''
@@ -131,7 +138,8 @@ class EventReader(object):
 
     def __init__(self, tree_names, files, events=-1):
         # this is not efficient
-        self._trees = [TreeChain(name, files, cache=True, events=events) for name in tree_names]
+        self._trees = [TreeChain(name, files, cache=True, events=events)
+                       for name in tree_names]
 
     def __iter__(self):
         for trees in six.moves.zip(*self._trees):
