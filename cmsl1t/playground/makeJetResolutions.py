@@ -1,12 +1,11 @@
+from __future__ import print_function
 import ROOT
 import os
-from rootpy.plotting import Hist
 import glob
-import six
 import math
-import numpy as np
 import logging
 from eventreader import EventReader
+from cmsl1t.collections import ResolutionCollection
 
 logging.getLogger("rootpy.tree.chain").setLevel(logging.WARNING)
 
@@ -29,30 +28,15 @@ def main(nEvents, output_folder):
     ROOT.gROOT.SetBatch(1)
     ROOT.TH1.SetDefaultSumw2(True)
     ROOT.gStyle.SetOptStat(0)
-    energy_bins = np.arange(-1, 1.5, 0.05)
-    position_bins = np.arange(-0.3, 0.3, 0.005)
-    histograms = {
-        'JetEtHF': Hist(energy_bins, name='JetEtHF'),
-        'JetEtB': Hist(energy_bins, name='JetEtB'),
-        'JetEtBE': Hist(energy_bins, name='JetEtBE'),
-        'JetEtE': Hist(energy_bins, name='JetEtF'),
-        #
-        'JetEtaHF': Hist(position_bins, name='JetEtaHF'),
-        'JetEtaB': Hist(position_bins, name='JetEtaB'),
-        'JetEtaBE': Hist(position_bins, name='JetEtaBE'),
-        'JetEtaE': Hist(position_bins, name='JetEtaE'),
-        #
-        'JetPhiHF': Hist(position_bins, name='JetPhiHF'),
-        'JetPhiB': Hist(position_bins, name='JetPhiB'),
-        'JetPhiBE': Hist(position_bins, name='JetPhiBE'),
-        'JetPhiE': Hist(position_bins, name='JetPhiE'),
-    }
+    histograms = ResolutionCollection(pileupBins=[0, 13, 20, 999])
+    histograms.add_variable('JetEt', vtype='energy')
+    histograms.add_variable('JetEta', vtype='position')
+    histograms.add_variable('JetPhi', vtype='position')
 
     reader = EventReader(TREE_NAMES, FILES, events=nEvents)
 
     for entry, event in enumerate(reader):
-        # if entry >= nEvents:
-        #     break
+        pileup = event.nVertex
 
         leadingRecoJet = event.getLeadingRecoJet()
         matchedL1Jet = event.getMatchedL1Jet(leadingRecoJet)
@@ -79,39 +63,47 @@ def main(nEvents, output_folder):
         # resolution_eta = abs(l1Et - recoEta)
         # ?
         resolution_phi = l1Phi - recoPhi
-
-        if abs(recoEta) <= 1.479:
-            histograms['JetEtB'].Fill(resolution_et)
-            histograms['JetEtBE'].Fill(resolution_et)
-            histograms['JetEtaB'].Fill(resolution_eta)
-            histograms['JetEtaBE'].Fill(resolution_eta)
-            histograms['JetPhiB'].Fill(resolution_phi)
-            histograms['JetPhiBE'].Fill(resolution_phi)
-        elif abs(recoEta) <= 3.0:
-            histograms['JetEtBE'].Fill(resolution_et)
-            histograms['JetEtE'].Fill(resolution_et)
-            histograms['JetEtaBE'].Fill(resolution_eta)
-            histograms['JetEtaE'].Fill(resolution_eta)
-            histograms['JetPhiBE'].Fill(resolution_phi)
-            histograms['JetPhiE'].Fill(resolution_phi)
-        else:
-            if recoEt >= 30. and l1Et != 0:
-                histograms['JetEtHF'].Fill(resolution_et)
-                histograms['JetEtaHF'].Fill(resolution_eta)
-                histograms['JetPhiHF'].Fill(resolution_phi)
+        histograms.set_pileup(pileup)
+        histograms.set_region_by_eta(recoEta)
+        histograms.fill('JetEt', resolution_et)
+        histograms.fill('JetEta', resolution_eta)
+        histograms.fill('JetPhi', resolution_phi)
 
     if not os.path.exists(output_folder):
         os.makedirs(output_folder)
-    for name, hist in six.iteritems(histograms):
-        file_name = 'res_SingleMu_reco{name}_l1{name}'.format(name=name)
-        canvas_name = file_name.replace('SingleMu', 'Energy')
-        if 'JetEta' in name or 'JetPhi' in name:
-            canvas_name.replace('Energy', 'Position')
-        c = ROOT.TCanvas(canvas_name)
-        hist.Draw()
-        c.SaveAs(os.path.join(output_folder, file_name + '.pdf'))
-        c.SaveAs(os.path.join(output_folder, file_name + '.root'))
-    print('Processed', entry, 'events')
+
+    output_file = os.path.join(output_folder, 'jetResolutions.root')
+    histograms.to_root(output_file)
+
+    # plotting should be separate, this is just here as an example
+    from rootpy.io import root_open
+    with root_open(output_file) as f:
+        # our collections are flat, need only the objects
+        for _, _, objects in f.walk():
+            for name in objects:
+                if 'pickle' in name:
+                    continue
+                obj = f.get(name)
+                plot(obj, name, output_folder)
+    print('Processed', entry + 1, 'events')
+
+
+def plot(hist, name, output_folder):
+    pu = ''
+    if '_pu' in name:
+        pu = name.split('_')[-1]
+        name = name.replace('_' + pu, '')
+    file_name = 'res_SingleMu_reco{name}_l1{name}'.format(name=name)
+    if 'nVertex' in name:
+        file_name = 'nVertex'
+    if pu:
+        file_name += '_' + pu
+    canvas_name = file_name.replace('SingleMu', 'Energy')
+    if 'JetEta' in name or 'JetPhi' in name:
+        canvas_name.replace('Energy', 'Position')
+    c = ROOT.TCanvas(canvas_name)
+    hist.Draw()
+    c.SaveAs(os.path.join(output_folder, file_name + '.pdf'))
 
 
 def foldPhi(phi):
