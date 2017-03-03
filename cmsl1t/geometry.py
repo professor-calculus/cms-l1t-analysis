@@ -4,7 +4,7 @@ logger = logging.getLogger(__name__)
 
 
 # detector regions in eta
-regions = {
+eta_regions = {
     # barrel
     'B': lambda x: abs(x) < 1.479,
     # endcap
@@ -18,7 +18,7 @@ regions = {
 # could add aliases
 
 
-def isInRegion(region, eta):
+def is_in_region(region, eta, regions=eta_regions):
     if region not in regions:
         msg = 'Unknown detector region {0}'.format(region)
         logger.error(msg)

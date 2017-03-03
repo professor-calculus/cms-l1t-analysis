@@ -22,15 +22,14 @@ class Resolution(object):
 
     def save(self, output_file):
         '''
-            @output_file_template: needs to contain '{name}'
-            placeholder
+            Saves the instance into a ROOT file
         '''
         from rootpy.io.pickler import dump
         if not output_file.endswith('.root'):
             output_file += '.root'
         dump(self._hists, output_file)
 
-    def add_hist_set(self, prefix, regions=geo.regions, bins=[]):
+    def add_hist_set(self, prefix, regions=geo.eta_regions, bins=[]):
         if not bins:
             bins = Resolution.BINS['position']
 
