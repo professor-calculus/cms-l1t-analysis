@@ -1,4 +1,4 @@
-from cmsl1t.plotting.resolution import Resolution
+from cmsl1t.playground.resolution import Resolution
 import cmsl1t.geometry as geo
 import unittest
 
