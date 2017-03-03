@@ -5,7 +5,6 @@ import numpy as np
 from rootpy.plotting import Hist
 
 import cmsl1t.geometry as geo
-from cmsl1t.io import to_root
 from cmsl1t.utils.iterators import pairwise
 from . import HistogramsByPileUpCollection
 
@@ -46,11 +45,6 @@ class ResolutionCollection(HistogramsByPileUpCollection):
         self._currentRegions = []
         self._pileUpBins = pileupBins
         self._regions = regions
-        self._pileupHist = Hist(100, 0, 100, name='nVertex')
-
-    def set_pileup(self, pileUp):
-        self._pileUp = pileUp
-        self._pileupHist.fill(pileUp)
 
     def set_region_by_eta(self, eta):
         self._currentRegions = [name for name in six.iterkeys(
@@ -87,17 +81,3 @@ class ResolutionCollection(HistogramsByPileUpCollection):
                     self[puBinLower][variable][region] = Hist(bins, name=name)
         logger.debug('Created {0} histograms: {1}'.format(
             len(hist_names), ', '.join(hist_names)))
-
-    def to_root(self, output_file):
-        '''
-            Saves the instance into a ROOT file
-        '''
-        # need to add pileupHist manually
-        to_root([self, self._pileupHist], output_file)
-
-    @staticmethod
-    def from_root(input_file):
-        from rootpy.io.pickler import load
-        instance, pileupHist = load(input_file)
-        instance._pileupHist = pileupHist
-        return instance

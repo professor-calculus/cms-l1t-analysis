@@ -1,6 +1,9 @@
-from . import BaseHistCollection
-from cmsl1t.utils.iterators import pairwise
 from collections import defaultdict
+from rootpy.plotting import Hist
+
+from cmsl1t.utils.iterators import pairwise
+from cmsl1t.io import to_root
+from . import BaseHistCollection
 
 
 class HistogramsByPileUpCollection(BaseHistCollection):
@@ -17,6 +20,11 @@ class HistogramsByPileUpCollection(BaseHistCollection):
     def __init__(self, pileupBins, dimensions=1, initiaValue=0):
         BaseHistCollection.__init__(self, dimensions, initiaValue)
         self._pileupBins = pileupBins
+        self._pileupHist = Hist(100, 0, 100, name='nVertex')
+
+    def set_pileup(self, pileUp):
+        self._pileUp = pileUp
+        self._pileupHist.fill(pileUp)
 
     def _get_pu_bin(self, pileup):
         '''
@@ -46,3 +54,17 @@ class HistogramsByPileUpCollection(BaseHistCollection):
             Sums histograms across PU bins
         '''
         raise NotImplementedError
+
+    def to_root(self, output_file):
+        '''
+            Saves the instance into a ROOT file
+        '''
+        # need to add pileupHist manually
+        to_root([self, self._pileupHist], output_file)
+
+    @staticmethod
+    def from_root(input_file):
+        from rootpy.io.pickler import load
+        instance, pileupHist = load(input_file)
+        instance._pileupHist = pileupHist
+        return instance
