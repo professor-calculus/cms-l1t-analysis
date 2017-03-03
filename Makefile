@@ -71,5 +71,7 @@ run-benchmark:
 	@time python -m memory_profiler bin/run_benchmark
 	@sed -i 's/return benchmark_cfg();/return singleMuRun276243();/g' $(NTUPLE_CFG)
 
+test: test-code flake8
+
 test-code:
 	@$(NOSETESTS) -v -a '!slow' -s test
