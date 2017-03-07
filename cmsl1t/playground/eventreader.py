@@ -6,9 +6,43 @@ import math
 
 from jetfilters import defaultJetFilter
 from cmsl1t.playground.cache import CachedIndexedTree
+import ROOT
+if not 'L1TAnalysisDataformats.so' in ROOT.gSystem.GetLibraries():
+    ROOT.gSystem.Load('build/L1TAnalysisDataformats.so')
+sumTypes = ROOT.l1t.EtSum
+
+# some quick classes
+from collections import namedtuple
+Sum = namedtuple('Sum', ['et'])
+Met = namedtuple('Met', ['et', 'phi'])
+Mex = namedtuple('Mex', ['ex'])
+Mey = namedtuple('Mey', ['ey'])
+
+TREE_NAMES = [
+    'l1CaloTowerTree/L1CaloTowerTree',
+    'l1CaloTowerEmuTree/L1CaloTowerTree',
+    'l1JetRecoTree/JetRecoTree',
+    'l1MetFilterRecoTree/MetFilterRecoTree',
+    'l1MuonRecoTree/Muon2RecoTree',
+    'l1RecoTree/RecoTree',
+    'l1UpgradeTree/L1UpgradeTree',
+    'l1UpgradeEmuTree/L1UpgradeTree',
+]
 
 
 class Event(object):
+
+    energySumTypes = {
+        sumTypes.kTotalEt: {'name': 'Ett', 'type': Sum},
+        sumTypes.kTotalEtHF: {'name': 'EttHF', 'type': Sum},
+        sumTypes.kTotalHt: {'name': 'Htt', 'type': Sum},
+        sumTypes.kTotalHtHF: {'name': 'HttHF', 'type': Met},
+        sumTypes.kMissingEt: {'name': 'Met', 'type': Met},
+        sumTypes.kMissingHt: {'name': 'Mht', 'type': Met},
+        sumTypes.kMissingEtHF: {'name': 'MhtHF', 'type': Met},
+        sumTypes.kTotalEtx: {'name': 'Mex', 'type': Mex},
+        sumTypes.kTotalEty: {'name': 'Mey', 'type': Mey},
+    }
 
     def __init__(self, trees):
         self._trees = trees
@@ -18,11 +52,43 @@ class Event(object):
             self._metFilterReco, self._muonReco, self._recoTree,\
             self._upgrade, self._emuUpgrade = self._trees
 
-        self._caloTowers = CachedIndexedTree(self._caloTowers, index='nTower')
+        self._caloTowers = CachedIndexedTree(self._caloTowers, 'nTower')
+        self._emuCaloTower = CachedIndexedTree(self._emuCaloTower, 'nTower')
+        self._upgrade = self._upgrade.L1Upgrade
+        self._emuUpgrade = self._emuUpgrade.L1Upgrade
 
         self._jets = []
         for i in range(self._jetReco.Jet.nJets):
             self._jets.append(Jet(self._jetReco.Jet, i))
+
+        self._l1Sums = {}
+        self._readUpgradeSums()
+        self._readEmuUpgradeSums()
+
+    def _readUpgradeSums(self):
+        self._readSums(self._upgrade, prefix='L1')
+
+    def _readEmuUpgradeSums(self):
+        self._readSums(self._emuUpgrade, prefix='L1Emu')
+
+    def _readSums(self, tree, prefix='L1'):
+        sums = {}
+        for i in range(tree.nSums):
+            bx = tree.sumBx[i]
+            if bx != 0:
+                continue
+
+            sumType = tree.sumType[i]
+            et = tree.sumEt[i]
+            phi = tree.sumPhi[i]
+            if sumType in Event.energySumTypes:
+                name = Event.energySumTypes[sumType]['name']
+                obj =  Event.energySumTypes[sumType]['type']
+                if obj == Met:
+                    sums[prefix + name] = obj(et, phi)
+                else:
+                    sums[prefix + name] = obj(et)
+        self._l1Sums.update(sums)
 
     def test(self):
         # for tree in self._trees:
@@ -35,11 +101,20 @@ class Event(object):
               self._metFilterReco.MetFilters.hbheNoiseFilter)
         print('>>>> nMuons', self._muonReco.Muon.nMuons)
         print('>>>> nVtx', self._recoTree.Vertex.nVtx)
-        print('>>>> nJets (upgrade)', self._upgrade.L1Upgrade.nJets)
-        print('>>>> nJets (upgrade emu)', self._emuUpgrade.L1Upgrade.nJets)
+        print('>>>> nJets (upgrade)', self._upgrade.nJets)
+        print('>>>> nJets (upgrade emu)', self._emuUpgrade.nJets)
+        print('>>>> nSums (upgrade)', self._upgrade.nSums)
+        print('>>>> nSums (upgrade emu)', self._emuUpgrade.nSums)
+        print('>>>> L1 energy sums:')
+        for name, value in six.iteritems(self.l1Sums):
+            print('>>>>>>>> {0} = {1}'.format(name, value))
         print(self._jets[0].eta)
-        print('>>>> Leading reco jet ET', self.getLeadingRecoJet().etCorr)
-        print('>>>> Lowest good jet ET', self.goodJets()[-1].etCorr)
+        leadingJet = self.getLeadingRecoJet()
+        if leadingJet:
+            print('>>>> Leading reco jet ET', leadingJet.etCorr)
+        goodJets = self.goodJets()
+        if goodJets:
+            print('>>>> Lowest good jet ET', goodJets[-1].etCorr)
 
         # print(dir(self._jetReco.Jet))
         # members = inspect.getmembers(self._jetReco.Jet)
@@ -95,6 +170,17 @@ class Event(object):
     def caloTowers(self):
         return self._caloTowers
 
+    @property
+    def sums(self):
+        return self._jetReco.Sums
+
+    def passesMETFilter(self):
+        return self._metFilterReco.MetFilters.hbheNoiseFilter
+
+    @property
+    def l1Sums(self):
+        return self._l1Sums
+
 
 class Jet(object):
     '''
@@ -136,10 +222,10 @@ class EventReader(object):
         http://rootpy-log.readthedocs.io/en/latest/_modules/rootpy/tree/chain.html
     '''
 
-    def __init__(self, tree_names, files, events=-1):
+    def __init__(self, files, events=-1):
         # this is not efficient
         self._trees = [TreeChain(name, files, cache=True, events=events)
-                       for name in tree_names]
+                       for name in TREE_NAMES]
 
     def __iter__(self):
         for trees in six.moves.zip(*self._trees):
@@ -148,21 +234,11 @@ class EventReader(object):
 
 if __name__ == '__main__':
     import glob
-    import ROOT
-    ROOT.gSystem.Load('build/L1TAnalysisDataformats.so')
+    # import ROOT
+    # ROOT.gSystem.Load('build/L1TAnalysisDataformats.so')
     files = glob.glob('data/*.root')
-    tree_names = [
-        'l1CaloTowerTree/L1CaloTowerTree',
-        'l1CaloTowerEmuTree/L1CaloTowerTree',
-        'l1JetRecoTree/JetRecoTree',
-        'l1MetFilterRecoTree/MetFilterRecoTree',
-        'l1MuonRecoTree/Muon2RecoTree',
-        'l1RecoTree/RecoTree',
-        'l1UpgradeEmuTree/L1UpgradeTree',
-        'l1UpgradeTree/L1UpgradeTree',
-    ]
 
-    reader = EventReader(tree_names, files)
+    reader = EventReader(files)
     i = 1
     for event in reader:
         print('-' * 80)

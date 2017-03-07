@@ -11,17 +11,6 @@ logging.getLogger("rootpy.tree.chain").setLevel(logging.WARNING)
 
 
 FILES = glob.glob('data/*.root')
-TREE_NAMES = [
-    'l1CaloTowerTree/L1CaloTowerTree',
-    'l1CaloTowerEmuTree/L1CaloTowerTree',
-    'l1JetRecoTree/JetRecoTree',
-    'l1MetFilterRecoTree/MetFilterRecoTree',
-    'l1MuonRecoTree/Muon2RecoTree',
-    'l1RecoTree/RecoTree',
-    'l1UpgradeEmuTree/L1UpgradeTree',
-    'l1UpgradeTree/L1UpgradeTree',
-]
-
 
 def main(nEvents, output_folder):
     ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -33,7 +22,7 @@ def main(nEvents, output_folder):
     histograms.add_variable('JetEta', vtype='position')
     histograms.add_variable('JetPhi', vtype='position')
 
-    reader = EventReader(TREE_NAMES, FILES, events=nEvents)
+    reader = EventReader(FILES, events=nEvents)
 
     for entry, event in enumerate(reader):
         pileup = event.nVertex
