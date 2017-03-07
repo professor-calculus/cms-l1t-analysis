@@ -59,18 +59,13 @@ content = []
 for header in output_files:
     header = header.replace('external/', '')
     content.append('#include "{0}"'.format(header))
-with open(combined_header, 'w+') as f:
-    f.write('\n'.join(content) + '\n')
-
 
 ETSUM_HEADER = """
 #ifndef DataFormats_L1Trigger_ETSum_h
 #define DataFormats_L1Trigger_ETSum_h
 
 namespace l1t {
-  class EtSum{
-
-  public:
+  struct EtSum{
 
     enum EtSumType {
       kTotalEt,
@@ -111,13 +106,18 @@ namespace l1t {
 
 
 # additional header needed by legacy for the enum EtSumType
-additional_header_url = 'https://raw.githubusercontent.com/cms-sw/cmssw/{0}/DataFormats/L1Trigger/interface/EtSum.h'.format(CMSSW_BRANCH)
+additional_header_url = 'https://raw.githubusercontent.com/cms-sw/cmssw/{0}/DataFormats/L1Trigger/interface/EtSum.h'.format(
+    CMSSW_BRANCH)
 additional_header = 'EtSum.h'
 destination = 'external/DataFormats/L1Trigger/interface/'
 if not os.path.exists(destination):
     os.makedirs(destination)
 # r = requests.get(additional_header_url)
-
-with open(os.path.join(destination, additional_header), 'wb') as f:
+etsum_h = os.path.join(destination, additional_header)
+with open(etsum_h, 'wb') as f:
     # f.write(r.content)
     f.write(ETSUM_HEADER)
+
+content.append('#include "{0}"'.format(etsum_h.replace('external/', '')))
+with open(combined_header, 'w+') as f:
+    f.write('\n'.join(content) + '\n')
