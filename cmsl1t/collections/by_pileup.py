@@ -6,6 +6,8 @@ from cmsl1t.io import to_root
 from . import BaseHistCollection
 
 
+# TODO: inherit from BinnedHistogramCollection
+
 class HistogramsByPileUpCollection(BaseHistCollection):
     '''
         Specialisation of BaseHistCollection to bin histograms by pileup

@@ -50,6 +50,8 @@ class BaseHistCollection(defaultdict):
         '''
             For each dimension create a dictionary
         '''
+        # TODO: add possibility for different lambda expresions for each
+        # dimension. This will allow to have custom dicts in certain dimensions
         defaultdict.__init__(self, lambda: create_n_dim_dict(
             dimensions - 1, initiaValue))
         self._dimensions = dimensions
