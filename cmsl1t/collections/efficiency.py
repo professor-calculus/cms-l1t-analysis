@@ -21,6 +21,7 @@ class _EfficiencyCurve(object):
         self._pass = Hist(bins, name=name + '_pass')
         #self._efficiency = Graph(name = name + '_efficiency')
         self._total = Hist(bins, name=name + '_total')
+        self._dist = Hist(bins, name=name + '_dist')
         self._threshold = threshold
         self._efficiency = None
 
@@ -34,13 +35,17 @@ class _EfficiencyCurve(object):
         :type weight: float
         """
         self._total.fill(recoValue, weight)
+        self._dist.fill(l1Value, weight)
         if l1Value > self._threshold:
-            self._pass.fill(l1Value, weight)
+            self._pass.fill(recoValue, weight)
+
+    def calculate_efficiency(self):
+        self._efficiency = asrootpy(TEfficiency(self._pass, self._total))
+        self._efficiency.SetName(self._total.GetName() + '_eff')
 
     def get_efficiency(self):
         if not self._efficiency:
-            efficiency = TEfficiency(self._pass, self._total)
-            self._efficiency = asrootpy(efficiency.GetPaitedGraph())
+            self.calculate_efficiency()
         return self._efficiency
 
 
@@ -108,3 +113,13 @@ class EfficiencyCollection(HistogramsByPileUpCollection):
                 'No valid current thresholds.')
         for threshold in self._thresholds[hist_name]:
             h[threshold].fill(recoValue, l1Value, w)
+
+    def _calculateEfficiencies(self):
+        for puBinLower, _ in pairwise(self._pileUpBins):
+            for hist in self[puBinLower].keys():
+                for threshold in self._thresholds[hist]:
+                    self[puBinLower][hist][threshold].calculate_efficiency()
+
+    def to_root(self, output_file):
+        self._calculateEfficiencies()
+        HistogramsByPileUpCollection.to_root(self, output_file)
