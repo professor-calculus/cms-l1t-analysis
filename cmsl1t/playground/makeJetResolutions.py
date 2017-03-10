@@ -12,7 +12,7 @@ logging.getLogger("rootpy.tree.chain").setLevel(logging.WARNING)
 
 FILES = glob.glob('data/*.root')
 
-def main(nEvents, output_folder):
+def main(n_events, output_folder):
     ROOT.PyConfig.IgnoreCommandLineOptions = True
     ROOT.gROOT.SetBatch(1)
     ROOT.TH1.SetDefaultSumw2(True)
@@ -22,7 +22,7 @@ def main(nEvents, output_folder):
     histograms.add_variable('JetEta', vtype='position')
     histograms.add_variable('JetPhi', vtype='position')
 
-    reader = EventReader(FILES, events=nEvents)
+    reader = EventReader(FILES, events=n_events)
 
     for entry, event in enumerate(reader):
         pileup = event.nVertex

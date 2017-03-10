@@ -38,8 +38,8 @@ class Event(object):
         sumTypes.kTotalHt: {'name': 'Htt', 'type': Sum},
         sumTypes.kTotalHtHF: {'name': 'HttHF', 'type': Met},
         sumTypes.kMissingEt: {'name': 'Met', 'type': Met},
+        sumTypes.kMissingEtHF: {'name': 'MetHF', 'type': Met},
         sumTypes.kMissingHt: {'name': 'Mht', 'type': Met},
-        sumTypes.kMissingEtHF: {'name': 'MhtHF', 'type': Met},
         sumTypes.kTotalEtx: {'name': 'Mex', 'type': Mex},
         sumTypes.kTotalEty: {'name': 'Mey', 'type': Mey},
     }
@@ -52,8 +52,10 @@ class Event(object):
             self._metFilterReco, self._muonReco, self._recoTree,\
             self._upgrade, self._emuUpgrade = self._trees
 
-        self._caloTowers = CachedIndexedTree(self._caloTowers, 'nTower')
-        self._emuCaloTower = CachedIndexedTree(self._emuCaloTower, 'nTower')
+        self._caloTowers = CachedIndexedTree(
+            self._caloTowers.L1CaloTower, 'nTower')
+        self._emuCaloTower = CachedIndexedTree(
+            self._emuCaloTower.L1CaloTower, 'nTower')
         self._upgrade = self._upgrade.L1Upgrade
         self._emuUpgrade = self._emuUpgrade.L1Upgrade
 
@@ -83,7 +85,7 @@ class Event(object):
             phi = tree.sumPhi[i]
             if sumType in Event.energySumTypes:
                 name = Event.energySumTypes[sumType]['name']
-                obj =  Event.energySumTypes[sumType]['type']
+                obj = Event.energySumTypes[sumType]['type']
                 if obj == Met:
                     sums[prefix + name] = obj(et, phi)
                 else:
@@ -143,11 +145,11 @@ class Event(object):
     def getMatchedL1Jet(self, recoJet, l1Type='HW'):
         l1Jets = None
         if l1Type == 'HW':
-            l1Jets = [L1Jet(self._upgrade.L1Upgrade, i)
-                      for i in range(self._upgrade.L1Upgrade.nJets)]
+            l1Jets = [L1Jet(self._upgrade, i)
+                      for i in range(self._upgrade.nJets)]
         if l1Type == 'EMU':
-            l1Jets = [L1Jet(self._emuUpgrade.L1Upgrade, i)
-                      for i in range(self._emuUpgrade.L1Upgrade.nJets)]
+            l1Jets = [L1Jet(self._emuUpgrade, i)
+                      for i in range(self._emuUpgrade.nJets)]
 
         if not l1Jets or not recoJet:
             return None
@@ -169,6 +171,10 @@ class Event(object):
     @property
     def caloTowers(self):
         return self._caloTowers
+
+    @property
+    def emuCaloTowers(self):
+        return self._emuCaloTower
 
     @property
     def sums(self):
