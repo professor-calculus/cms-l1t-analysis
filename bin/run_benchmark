@@ -1,0 +1,114 @@
+#!/bin/env python
+from __future__ import print_function
+import ROOT
+import time
+import os
+from datetime import datetime
+from cmsl1t.playground import makeJetResolutions, studyTower28MET
+TODAY = datetime.now().timetuple()
+ROOT.PyConfig.IgnoreCommandLineOptions = True
+ROOT.gROOT.SetBatch(1)
+ROOT.TH1.SetDefaultSumw2(True)
+# ROOT.gStyle.SetOptStat(0)
+
+
+def timerfunc(func):
+    """
+    A timer decorator
+    """
+    def function_timer(*args, **kwargs):
+        """
+        A nested function for timing other functions
+        """
+        start = time.time()
+        value = func(*args, **kwargs)
+        end = time.time()
+        runtime = end - start
+        msg = "The runtime for {func} took {time} seconds to complete"
+        print(msg.format(func=func.__name__,
+                         time=runtime))
+        return value
+    return function_timer
+
+
+def compile_legacy():
+    print(">> Compiling Legacy macros")
+    ROOT.gSystem.CompileMacro(
+        "legacy/MakePlots/makeJetResolutions.cxx", 'kOs', 'build/makeJetResolutions')
+    if os.path.exists("legacy/MakePlots/studyTower28MET.cxx"):
+        ROOT.gSystem.CompileMacro(
+            "legacy/MakePlots/studyTower28MET.cxx", 'kOs', 'build/studyTower28MET')
+
+
+def run_legacy(n_events):
+    print(">>>> Running legacy")
+    n_chunks = 0  # it is not what you think it is
+    n_jobs = 1
+    combine = False
+    run_jet_resolutions(n_chunks, n_jobs, n_events, combine)
+    run_met_study(n_chunks, n_jobs, n_events, combine)
+
+
+@timerfunc
+def run_jet_resolutions(n_chunks, n_jobs, n_events, combine):
+    ROOT.makeJetResolutions(n_chunks, n_jobs, n_events, combine)
+
+
+@timerfunc
+def run_met_study(n_chunks, n_jobs, n_events, combine):
+    ROOT.studyTower28MET(n_chunks, n_jobs, n_events, combine)
+
+
+def run_new(n_events, output_folder):
+    print(">>>> Running new")
+    run_new_jet_resolutions(n_events, output_folder)
+    run_new_met_study(n_events, output_folder)
+
+
+@timerfunc
+def run_new_jet_resolutions(n_events, output_folder):
+    makeJetResolutions.main(n_events, output_folder)
+
+
+@timerfunc
+def run_new_met_study(n_events, output_folder):
+    studyTower28MET.main(n_events, output_folder)
+
+
+# def validate(output_folder):
+#     root_files_new = glob.glob(os.path.join(output_folder, '*.root'))
+#     root_files_legacy = glob.glob(os.path.join(
+#         output_folder.replace('new', 'legacy'), '*.root'))
+#     root_files_new = sorted(root_files_new)
+#     root_files_legacy = sorted(root_files_legacy)
+#     for n,l in zip(root_files_new, root_files_legacy):
+#         pass
+
+if __name__ == '__main__':
+    welcome = ['{separator}', 'Starting CMS L1T Analsysis benchmark',
+               '{separator}', '', 'Work in progress']
+    welcome = '\n'.join(welcome)
+    print(welcome.format(separator='=' * 80))
+
+    # add 'external' folder to include path
+    ROOT.gROOT.ProcessLine(".include external")
+    ROOT.gSystem.Load('build/L1TAnalysisDataformats.so')
+
+    compile_legacy()
+    output_folder = os.path.join(
+        'benchmark', 'new',
+        '{y}{m:02d}{d:02d}_Data_run-276243_SingleMu_CHUNK0'.format(
+            y=TODAY.tm_year, m=TODAY.tm_mon, d=TODAY.tm_mday),
+        'Turnons'
+    )
+
+    n_events = 100000
+    run_legacy(n_events)
+
+    run_new(n_events, output_folder)
+
+    # validate(output_folder)
+
+    print()
+    print('=' * 80)
+    print()

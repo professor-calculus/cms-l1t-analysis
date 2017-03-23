@@ -1,0 +1,123 @@
+#!/bin/env python
+
+import os
+import requests
+
+# should we make this into a parameter
+CMSSW_BRANCH = 'CMSSW_9_0_X'
+BASE_URL = 'https://raw.githubusercontent.com/cms-sw/cmssw/{0}/L1Trigger/L1TNtuples/interface/'.format(
+    CMSSW_BRANCH)
+files_to_load = [
+    'L1AnalysisBMTFInputsDataFormat.h',
+    'L1AnalysisBMTFInputsDataFormat.h',
+    'L1AnalysisGeneratorDataFormat.h',
+    'L1AnalysisL1MenuDataFormat.h',
+    'L1AnalysisRecoJetDataFormat.h',
+    'L1AnalysisRecoTauDataFormat.h',
+    'L1AnalysisCaloTPDataFormat.h',
+    'L1AnalysisGMTDataFormat.h',
+    'L1AnalysisL1UpgradeDataFormat.h',
+    'L1AnalysisRecoMetDataFormat.h',
+    'L1AnalysisRecoTrackDataFormat.h',
+    'L1AnalysisCSCTFDataFormat.h',
+    'L1AnalysisGTDataFormat.h',
+    'L1AnalysisL1UpgradeTfMuonDataFormat.h',
+    'L1AnalysisRecoMetFilterDataFormat.h',
+    'L1AnalysisRecoVertexDataFormat.h',
+    'L1AnalysisDTTFDataFormat.h',
+    'L1AnalysisL1CaloClusterDataFormat.h',
+    'L1AnalysisRCTDataFormat.h',
+    'L1AnalysisRecoMuon2DataFormat.h',
+    'L1AnalysisSimulationDataFormat.h',
+    'L1AnalysisEventDataFormat.h',
+    'L1AnalysisL1CaloTowerDataFormat.h',
+    'L1AnalysisRecoClusterDataFormat.h',
+    'L1AnalysisRecoMuonDataFormat.h',
+    'L1AnalysisGCTDataFormat.h',
+    'L1AnalysisL1ExtraDataFormat.h',
+    'L1AnalysisRecoElectronDataFormat.h',
+    'L1AnalysisRecoRpcHitDataFormat.h',
+]
+DST = 'external/L1Trigger/L1TNtuples/interface'
+
+if not os.path.exists(DST):
+    os.makedirs(DST)
+
+output_files = []
+for f in files_to_load:
+    output_file = os.path.join(DST, f)
+    input_file = BASE_URL + f
+    r = requests.get(input_file)
+    with open(output_file, 'wb') as out:
+        out.write(r.content)
+    output_files.append(output_file)
+
+
+# create combined header for easier compilation
+combined_header = os.path.join(DST, 'L1AnalysisAllDataformats.h')
+content = []
+for header in output_files:
+    header = header.replace('external/', '')
+    content.append('#include "{0}"'.format(header))
+
+ETSUM_HEADER = """
+#ifndef DataFormats_L1Trigger_ETSum_h
+#define DataFormats_L1Trigger_ETSum_h
+
+namespace l1t {
+  struct EtSum{
+
+    enum EtSumType {
+      kTotalEt,
+      kTotalHt,
+      kMissingEt,
+      kMissingHt,
+      kTotalEtx,
+      kTotalEty,
+      kTotalHtx,
+      kTotalHty,
+      kMissingEtHF,
+      kTotalEtxHF,
+      kTotalEtyHF,
+      kMinBiasHFP0,
+      kMinBiasHFM0,
+      kMinBiasHFP1,
+      kMinBiasHFM1,
+      kTotalEtHF,
+      kTotalEtEm,
+      kTotalHtHF,
+      kTotalHtxHF,
+      kTotalHtyHF,
+      kMissingHtHF,
+      kTowerCount
+    };
+
+    EtSum(){}
+
+    ~EtSum();
+
+  };
+
+}
+
+#endif
+
+"""
+
+
+# additional header needed by legacy for the enum EtSumType
+additional_header_url = 'https://raw.githubusercontent.com/cms-sw/cmssw/{0}/DataFormats/L1Trigger/interface/EtSum.h'.format(
+    CMSSW_BRANCH)
+additional_header = 'EtSum.h'
+destination = 'external/DataFormats/L1Trigger/interface/'
+if not os.path.exists(destination):
+    os.makedirs(destination)
+# r = requests.get(additional_header_url)
+etsum_h = os.path.join(destination, additional_header)
+with open(etsum_h, 'wb') as f:
+    # f.write(r.content)
+    f.write(ETSUM_HEADER)
+
+content.append('#include "{0}"'.format(etsum_h.replace('external/', '')))
+with open(combined_header, 'w+') as f:
+    f.write('\n'.join(content) + '\n')
