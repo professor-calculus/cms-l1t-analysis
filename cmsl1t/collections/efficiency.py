@@ -19,7 +19,6 @@ class _EfficiencyCurve(object):
 
     def __init__(self, name, bins, threshold):
         self._pass = Hist(bins, name=name + '_pass')
-        #self._efficiency = Graph(name = name + '_efficiency')
         self._total = Hist(bins, name=name + '_total')
         self._dist = Hist(bins, name=name + '_dist')
         self._threshold = threshold

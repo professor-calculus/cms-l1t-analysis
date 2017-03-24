@@ -12,6 +12,7 @@ logging.getLogger("rootpy.tree.chain").setLevel(logging.WARNING)
 
 FILES = glob.glob('data/*.root')
 
+
 def main(n_events, output_folder):
     ROOT.PyConfig.IgnoreCommandLineOptions = True
     ROOT.gROOT.SetBatch(1)

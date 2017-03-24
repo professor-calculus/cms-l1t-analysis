@@ -7,12 +7,14 @@ import math
 from jetfilters import defaultJetFilter
 from cmsl1t.playground.cache import CachedIndexedTree
 import ROOT
-if not 'L1TAnalysisDataformats.so' in ROOT.gSystem.GetLibraries():
+from collections import namedtuple
+
+if 'L1TAnalysisDataformats.so' not in ROOT.gSystem.GetLibraries():
     ROOT.gSystem.Load('build/L1TAnalysisDataformats.so')
 sumTypes = ROOT.l1t.EtSum
 
 # some quick classes
-from collections import namedtuple
+
 Sum = namedtuple('Sum', ['et'])
 Met = namedtuple('Met', ['et', 'phi'])
 Mex = namedtuple('Mex', ['ex'])

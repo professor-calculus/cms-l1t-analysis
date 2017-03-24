@@ -45,5 +45,6 @@ unset JAVA_HOME
 
 git submodule init
 git submodule update
+pip install --user -r requirements.txt
 
 echo "Environment for ${PROJECT_NAME} is ready"
