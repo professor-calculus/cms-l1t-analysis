@@ -28,16 +28,16 @@ def main(nEvents, output_folder):
 
     map(add_met_variable, [
         'RecalcL1EmuMet',
-#         'RecalcL1EmuMetHF',
-#         'RecalcL1EmuMet28Only',
-#         'RecalcL1EmuMetNot28',
-#         'RecalcL1EmuMetPUS',
-#         'RecalcL1EmuMetPUSHF',
-#         'RecalcL1EmuMetPUS28',
-#         'RecalcL1EmuMetPUSThresh',
-#         'RecalcL1EmuMetPUSThreshHF',
-#         'RecalcL1Met',
-#         'RecalcL1Met28Only',
+        # 'RecalcL1EmuMetHF',
+        # 'RecalcL1EmuMet28Only',
+        # 'RecalcL1EmuMetNot28',
+        # 'RecalcL1EmuMetPUS',
+        # 'RecalcL1EmuMetPUSHF',
+        # 'RecalcL1EmuMetPUS28',
+        # 'RecalcL1EmuMetPUSThresh',
+        # 'RecalcL1EmuMetPUSThreshHF',
+        # 'RecalcL1Met',
+        # 'RecalcL1Met28Only',
     ])
 
     reader = EventReader(FILES, events=nEvents)
@@ -53,16 +53,16 @@ def main(nEvents, output_folder):
         l1Sums = event.l1Sums
         if 'L1Met' not in l1Sums:
             print(l1Sums)
-        l1Met = l1Sums['L1Met'].et
+        # l1Met = l1Sums['L1Met'].et
 
-        l1Met28Only = rmet.l1Met28Only(event.caloTowers)
-        metNot28HF = rmet.l1MetNot28HF(event.caloTowers)
-        metNot28 = rmet.l1MetNot28(event.caloTowers)
+        # l1Met28Only = rmet.l1Met28Only(event.caloTowers)
+        # metNot28HF = rmet.l1MetNot28HF(event.caloTowers)
+        # metNot28 = rmet.l1MetNot28(event.caloTowers)
 
         l1EmuMet = l1Sums['L1EmuMet'].et
-        l1EmuMetHF = l1Sums['L1EmuMetHF'].et
-        l1EmuMet28Only = rmet.l1Met28Only(event.emuCaloTowers)
-        l1EmuMetNot28 = rmet.l1MetNot28(event.emuCaloTowers)
+        # l1EmuMetHF = l1Sums['L1EmuMetHF'].et
+        # l1EmuMet28Only = rmet.l1Met28Only(event.emuCaloTowers)
+        # l1EmuMetNot28 = rmet.l1MetNot28(event.emuCaloTowers)
 
         histograms.fill('RecalcL1EmuMet', caloMetBE, l1EmuMet)
 
@@ -85,7 +85,7 @@ def main(nEvents, output_folder):
             for name in objects:
                 if 'pickle' in name:
                     continue
-                obj = f.get(name)
+                # obj = f.get(name)
 #                 plot(obj, name, output_folder)
     print('Processed', entry + 1, 'events')
 

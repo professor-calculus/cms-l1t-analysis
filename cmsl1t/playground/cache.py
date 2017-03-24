@@ -19,7 +19,7 @@ class CachedIndexedTree(object):
         self._indexName = indexName
 
     def __getitem__(self, index):
-        if not index in self._cache:
+        if index not in self._cache:
             self._cache[index] = _CachedItem(self._tree, index)
         return self._cache[index]
 

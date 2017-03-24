@@ -9,6 +9,7 @@ class TestTree(object):
         self.eta = np.random.rand(size)
         self.size = size
 
+
 class TestEvent(object):
     def __init__(self):
         self._tree = CachedIndexedTree(TestTree(3), 'size')
