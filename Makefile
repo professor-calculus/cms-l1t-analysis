@@ -12,7 +12,7 @@ clean-external:
 	@rm -fr external
 
 clean-so:
-	@find external -name "*.so" -exec rm {} \;
+	@[ -d external ] && find external -name "*.so" -exec rm {} \;
 	@find legacy -name "*.so" -exec rm {} \;
 
 clean-pyc:
@@ -30,9 +30,7 @@ setup-external:
 	@./bin/compile_l1Analysis
 
 setup-build-dir:
-ifeq ($(wildcard build),)
-		@mkdir build
-endif
+	@mkdir -p build
 
 create-data-dir:
 		@mkdir -p data
@@ -51,7 +49,7 @@ data/L1Ntuple_test_3.root:
 
 # tests
 pep8:
-		@pep8 --exclude=.git,external examples cmsl1t
+	@pep8 --exclude=.git,external examples cmsl1t
 
 flake8:
 	@flake8 cmsl1t test --ignore=F401 --max-line-length=120
