@@ -1,9 +1,10 @@
-```
-res[pu]['jetEt'][region].fill(jet.et()) > res.fill('jetEt', jet.et())
+# Notes from 24th of March
+```python
+res[pu]['jetEt'][region].fill(jet.et()) -> res.fill('jetEt', jet.et())
 ```
 
 
-```
+```python
 hists = MyHistCollection(pileupBins=[0, 13, 20, 999])
 hists.add_variable('jetEt')
 with Session(events, hists=[...]) as s:
@@ -20,11 +21,12 @@ for event in events:
 ```
 Separate event loop and code to run
 user defined function:
+
 ```
 def myThing(event)
 ```
 
-```yaml
+```YAML
 
 files:
   - /eos/..../*.root
@@ -42,7 +44,7 @@ modifiers:
 
 histograms:
   Resolution:
-    pile_up_bins: 0, 13, 20, 999
+    pile_up_bins: [0, 13, 20, 999]
     variables:
       - jetEt: 'jets[0].et()'
       - jetEtvsEta:
@@ -59,5 +61,30 @@ histograms:
       - jetEt:
         - reco: 'jets[0].et()'
         - l1: 'l1Jets[0].et()'
-        - thresholds: 20, 30, 50, 100, 200
+        - thresholds: [20, 30, 50, 100, 200]
   Rates:
+    pile_up_bins: [0, 13, 20, 999]
+
+```
+
+# Current L1NTuple format
+15 separate trees meant to be read as one
+ - l1CaloTowerTree/L1CaloTowerTree #<- in use, contains 3 trees
+ - l1CaloTowerEmuTree/L1CaloTowerTree  #<- in use
+ - l1ElectronRecoTree/ElectronRecoTree
+ - l1EventTree/L1EventTree
+ - 1JetRecoTree/JetRecoTree # <- in use
+ - l1MetFilterRecoTree/MetFilterRecoTree # <- in use
+ - l1MuonRecoTree/Muon2RecoTree # <- in use
+ - l1RecoTree/RecoTree # <- in use
+ - l1TauRecoTree/TauRecoTree
+ - l1UpgradeEmuTree/L1UpgradeTree # <- in use
+ - l1UpgradeTfMuonEmuTree/L1UpgradeTfMuonTree # contains 4 trees
+ - l1UpgradeTfMuonTree/L1UpgradeTfMuonTree # contains 4 trees
+ - l1UpgradeTree/L1UpgradeTree # <- in use
+ - l1uGTEmuTree/L1uGT
+ - l1uGTTree/L1uGT
+
+
+# Benchmark
+http://stefaanlippens.net/python_profiling_with_pstats_interactive_mode/
