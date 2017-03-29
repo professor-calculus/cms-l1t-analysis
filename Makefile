@@ -75,3 +75,6 @@ test: test-code flake8
 
 test-code:
 	@$(NOSETESTS) -v -a '!slow' -s test
+
+changelog:
+	@github_changelog_generator -u cms-l1t-offline -p cms-l1t-analysis --base docs/initial_changelog.md
