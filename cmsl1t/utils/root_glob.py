@@ -44,7 +44,7 @@ def glob(pathname):
                 continue
             if not fnmatch.fnmatchcase(file, basename):
                 continue
-            files.append(os.path.join(dirname,file))
+            files.append(os.path.join(dirname, file))
         gSystem.FreeDirectory(directory)
     return files
 
@@ -56,22 +56,19 @@ def iglob(pathname):
 
 if __name__ == "__main__":
     test_paths = [
-            "data/*root",
-
-            "data/L1Ntuple_test_3.root",
-
-            """root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/"""
-            """comm_trigger/L1Trigger/L1Menu2016/Stage2/"""
-            """l1t-integration-v88p1-CMSSW-8021/SingleMuon/"""
-            """crab_l1t-integration-v88p1-CMSSW-8021__SingleMuon_2016H_v2/"""
-            """161031_120512/0000/L1Ntuple_999.root""",
-
-            """root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/"""
-            """comm_trigger/L1Trigger/L1Menu2016/Stage2/"""
-            """l1t-integration-v88p1-CMSSW-8021/SingleMuon/"""
-            """crab_l1t-integration-v88p1-CMSSW-8021__SingleMuon_2016H_v2/"""
-            """161031_120512/0000/L1Ntuple_99*.root""",
-            ]
+        "data/*root",
+        "data/L1Ntuple_test_3.root",
+        """root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/"""
+        """comm_trigger/L1Trigger/L1Menu2016/Stage2/"""
+        """l1t-integration-v88p1-CMSSW-8021/SingleMuon/"""
+        """crab_l1t-integration-v88p1-CMSSW-8021__SingleMuon_2016H_v2/"""
+        """161031_120512/0000/L1Ntuple_999.root""",
+        """root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/"""
+        """comm_trigger/L1Trigger/L1Menu2016/Stage2/"""
+        """l1t-integration-v88p1-CMSSW-8021/SingleMuon/"""
+        """crab_l1t-integration-v88p1-CMSSW-8021__SingleMuon_2016H_v2/"""
+        """161031_120512/0000/L1Ntuple_99*.root""",
+    ]
     for i, path in enumerate(test_paths):
         expanded = glob(path)
         print(i, path)
