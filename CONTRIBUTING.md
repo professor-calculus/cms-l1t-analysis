@@ -27,3 +27,8 @@
 # Additional Resources
 * [General GitHub documentation](https://help.github.com/)
 * [GitHub pull request documentation](https://help.github.com/articles/creating-a-pull-request/)
+* Plugins/extensions for PEP8 formatting
+  * [Atom beautify](https://atom.io/packages/atom-beautify)
+  * [Eclipse PyDEV](http://www.pydev.org/)
+  * [Emacs pep8](http://avilpage.com/2015/05/automatically-pep8-your-python-code.html)
+  * [VIM pep8 formatter](https://github.com/nvie/vim-flake8)
