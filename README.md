@@ -6,8 +6,7 @@ Software package to analyse L1TNtuples
 
 
 ## DEV
-
- 1. Fork the project on https://github.com/cms-l1t-offline/cms-l1t-analysis
+ 1. Read [CONTRIBUTING.md](https://github.com/cms-l1t-offline/cms-l1t-analysis/blob/master/CONTRIBUTING.md)
  2. Follow the instructions below
 
 ### On Scientific Linux 6 with CVMFS available
