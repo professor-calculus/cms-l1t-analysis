@@ -1,9 +1,9 @@
 import unittest
 from cmsl1t.utils.root_glob import glob as root_glob
-import glob as py_glob
+from glob import glob as py_glob
 
 
-class TestGlob(unittest.TestCase):
+class TestRootGlob(unittest.TestCase):
 
     def test_glob_local_single(self):
         filename = "data/L1Ntuple_test_3.root"
