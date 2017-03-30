@@ -3,6 +3,7 @@ Software package to analyse L1TNtuples
 
  - [![Build Status](https://travis-ci.org/cms-l1t-offline/cms-l1t-analysis.svg?branch=master)](https://travis-ci.org/cms-l1t-offline/cms-l1t-analysis)
  - [![DOI](https://zenodo.org/badge/80877637.svg)](https://zenodo.org/badge/latestdoi/80877637)
+ - [![Code Health](https://landscape.io/github/cms-l1t-offline/cms-l1t-analysis/master/landscape.svg?style=flat)](https://landscape.io/github/cms-l1t-offline/cms-l1t-analysis/master)
 
 
 ## DEV
