@@ -31,6 +31,9 @@ else
    PYTHONPATH=${PROJECT_ROOT}:$PYTHONPATH; export PYTHONPATH
 fi
 
+# add local bin to PATH (for local flake8 installations, etc)
+export PATH=~/.local/bin:$PATH
+
 unset old_projectbase
 unset envscript
 
