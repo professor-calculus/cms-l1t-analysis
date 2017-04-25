@@ -1,4 +1,4 @@
 [submodule "legacy"]
 	path = legacy
 	url = https://github.com/kreczko/l1t-macros
-	branch = fixed-compilation-error-and-warnings
+	branch = master
