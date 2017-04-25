@@ -3,13 +3,40 @@ from __future__ import print_function
 import ROOT
 import os
 from datetime import datetime
+from contextlib import contextmanager
+
 from cmsl1t.playground import makeJetResolutions, studyTower28MET
 from cmsl1t.utils.timers import timerfunc
+
+
 TODAY = datetime.now().timetuple()
 ROOT.PyConfig.IgnoreCommandLineOptions = True
 ROOT.gROOT.SetBatch(1)
 ROOT.TH1.SetDefaultSumw2(True)
 # ROOT.gStyle.SetOptStat(0)
+PROJECT_ROOT = os.environ.get('PROJECT_ROOT')
+BENCHMARK_OUTPUT_FOLDER = os.path.join(PROJECT_ROOT, 'benchmark', 'legacy')
+BENCHMARK_DATA = os.path.join(PROJECT_ROOT, 'data')
+
+
+@contextmanager
+def adjust_ntuple_cfg():
+    print(">> Adjusting legacy config")
+    ntuple_cfg_file = os.path.join(
+        PROJECT_ROOT, 'legacy', 'Config', 'ntuple_cfg.h')
+    with open(ntuple_cfg_file) as f:
+        content = f.read()
+    new_content = content.replace('{{BENCHMARK_DATA}}', BENCHMARK_DATA)
+    new_content = new_content.replace(
+        '{{BENCHMARK_OUTPUT_FOLDER}}', BENCHMARK_OUTPUT_FOLDER)
+    new_content = new_content.replace('return singleMuRun276243();', 'return benchmark_cfg();')
+    with open(ntuple_cfg_file, 'w') as f:
+        f.write(new_content)
+    yield
+    print(">> Restoring legacy config")
+    with open(ntuple_cfg_file, 'w') as f:
+        f.write(content)
+
 
 def compile_legacy():
     print(">> Compiling Legacy macros")
@@ -74,20 +101,21 @@ if __name__ == '__main__':
     ROOT.gROOT.ProcessLine(".include external")
     ROOT.gSystem.Load('build/L1TAnalysisDataformats.so')
 
-    compile_legacy()
-    output_folder = os.path.join(
-        'benchmark', 'new',
-        '{y}{m:02d}{d:02d}_Data_run-276243_SingleMu_CHUNK0'.format(
-            y=TODAY.tm_year, m=TODAY.tm_mon, d=TODAY.tm_mday),
-        'Turnons'
-    )
+    with adjust_ntuple_cfg():
+        compile_legacy()
+        output_folder = os.path.join(
+            'benchmark', 'new',
+            '{y}{m:02d}{d:02d}_Data_run-276243_SingleMu_CHUNK0'.format(
+                y=TODAY.tm_year, m=TODAY.tm_mon, d=TODAY.tm_mday),
+            'Turnons'
+        )
 
-    n_events = 100000
-    run_legacy(n_events)
+        n_events = 100000
+        run_legacy(n_events)
 
-    run_new(n_events, output_folder)
+        run_new(n_events, output_folder)
 
-    # validate(output_folder)
+        # validate(output_folder)
 
     print()
     print('=' * 80)
