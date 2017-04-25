@@ -4,12 +4,28 @@
 
 [Full Changelog](https://github.com/cms-l1t-offline/cms-l1t-analysis/compare/v0.1.0...HEAD)
 
+**Implemented enhancements:**
+
+- Fixing issue \#22 [\#26](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/26) ([kreczko](https://github.com/kreczko))
+
+**Closed issues:**
+
+- demo\_analyzer can not be run [\#24](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/24)
+- rootpy's TreeChain doesn't work with globbing and xrootd access [\#16](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/16)
+
 **Merged pull requests:**
 
+- Split timerfunc decorator for different call-signatures [\#25](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/25) ([benkrikler](https://github.com/benkrikler))
+- Fixes for decorator and flake8 [\#21](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/21) ([kreczko](https://github.com/kreczko))
+- Update README.md [\#20](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/20) ([benkrikler](https://github.com/benkrikler))
+- Add an initial draft of the sort of 'analyzer' I would suggest we use [\#19](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/19) ([benkrikler](https://github.com/benkrikler))
+- Add first working version of a root\_glob object [\#18](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/18) ([benkrikler](https://github.com/benkrikler))
+- Add the tower widths in eta to geometry. [\#17](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/17) ([benkrikler](https://github.com/benkrikler))
 - Move timerfunc from run\_benchmark into a util file [\#15](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/15) ([benkrikler](https://github.com/benkrikler))
 - Ignore vim and emacs backup files [\#13](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/13) ([benkrikler](https://github.com/benkrikler))
 - Changes to makefile [\#12](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/12) ([benkrikler](https://github.com/benkrikler))
 - Changes to Makefile to pull data files as proper makefile targets [\#11](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/11) ([benkrikler](https://github.com/benkrikler))
+- Documentation [\#7](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/7) ([kreczko](https://github.com/kreczko))
 
 ## [v0.1.0](https://github.com/cms-l1t-offline/cms-l1t-analysis/tree/v0.1.0) (2017-03-24)
 [Full Changelog](https://github.com/cms-l1t-offline/cms-l1t-analysis/compare/details of first-draft...v0.1.0)

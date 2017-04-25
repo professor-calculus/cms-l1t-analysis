@@ -20,8 +20,8 @@ fi
 
 # clean PATH and PYTHONPATH
 if [ -n "${old_projectbase}" ] ; then
-  PATH=`python ${PROJECT_ROOT}/bin/remove_from_env.py "$PATH" "${old_projectbase}"`
-  PYTHONPATH=`python ${PROJECT_ROOT}/bin/remove_from_env.py "$PYTHONPATH" "${old_projectbase}"`
+  PATH=`python ${PROJECT_ROOT}/bin/remove_from_path.py "$PATH" "${old_projectbase}"`
+  PYTHONPATH=`python ${PROJECT_ROOT}/bin/remove_from_path.py "$PYTHONPATH" "${old_projectbase}"`
 fi
 
 # add project to PYTHONPATH
