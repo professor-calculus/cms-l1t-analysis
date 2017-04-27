@@ -42,10 +42,15 @@ def process_tuples(config, nevents, analyzers):
 
     click.echo(section.format("Processing events"))
     # Fill the histograms from the tuples
-    counter_rate = nevents / 10 if nevents <= 10000 else 1000
+    counter_rate = 1000
+    if nevents <= 10000 and not nevents < 0:
+        counter_rate = nevents/10
     for entry, event in enumerate(reader):
         if entry % counter_rate == 0:
-            click.echo("{} of {}".format(entry, nevents))
+            if nevents > 0:
+                click.echo("{} of {}".format(entry, nevents))
+            else:
+                click.echo("{} of <all>".format(entry))
         results = [analyzer.process_event(entry, event)
                    for analyzer in analyzers]
         check(results, analyzers, 'process_event')
@@ -95,16 +100,14 @@ def check(results, analyzers, method):
 
 
 @click.command()
-@click.option('-c', '--config_file', help='YAML style config file', type=click.File())
+@click.option('-c', '--config_file', help='YAML style config file', type=click.File(), required=True)
 @click.option('-n', '--nevents', default=-1, help='Number of events to process.')
 @click.option('-r', '--reload-histograms', is_flag=True,
               help="Reload histograms from a file and skip the input tuples")
 def analyze(config_file, nevents, reload_histograms):
     click.echo(section.format("Starting CMS L1T Analsysis"))
-    click.echo([config_file, nevents, reload_histograms])
     config = ConfigParser()
     config.read(config_file)
-    click.echo(config)
 
     isok = run(config, nevents, reload_histograms)
 
