@@ -3,3 +3,5 @@ memory_profiler
 flake8
 pep8
 nose
+click
+click-log

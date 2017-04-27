@@ -7,7 +7,7 @@ class BaseAnalyzer(object):
     """
     def __init__(self, name, config):
         self.name = name
-        self.output_folder = config.out_dir
+        self.output_folder = config.get('output', 'folder')
         os.makedirs(self.output_folder)
 
     def prepare_for_events(self, reader):

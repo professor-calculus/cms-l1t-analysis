@@ -31,6 +31,8 @@ else
    PYTHONPATH=${PROJECT_ROOT}:$PYTHONPATH; export PYTHONPATH
 fi
 
+# add project to PATH
+PATH=${PROJECT_ROOT}/bin:$PATH; export PATH
 # add local bin to PATH (for local flake8 installations, etc)
 export PATH=~/.local/bin:$PATH
 

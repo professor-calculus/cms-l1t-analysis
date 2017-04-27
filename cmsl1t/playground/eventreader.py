@@ -231,8 +231,15 @@ class EventReader(object):
     '''
 
     def __init__(self, files, events=-1):
+        from cmsl1t.utils.root_glob import glob
+        input_files = []
+        for f in files:
+            if '*' in f:
+                input_files.extend(glob(f))
+            else:
+                input_files.append(f)
         # this is not efficient
-        self._trees = [TreeChain(name, files, cache=True, events=events)
+        self._trees = [TreeChain(name, input_files, cache=True, events=events)
                        for name in TREE_NAMES]
 
     def __iter__(self):
