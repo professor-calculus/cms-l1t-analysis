@@ -1,4 +1,4 @@
-#!/bin/env python
+#!/usr/bin/env python
 from __future__ import print_function
 import ROOT
 import os
@@ -126,7 +126,7 @@ def load_analyzer(analyzer):
         module = import_module(analyzer)
     except ImportError:
         msg = "Cannot find module, '{}', from the analyzers directory"
-        ArgumentParser.error(msg.format(analyzer))
+        logger.error(msg.format(analyzer))
     return module.Analyzer
 
 if __name__ == '__main__':
