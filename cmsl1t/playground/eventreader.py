@@ -58,6 +58,9 @@ class Event(object):
             self._caloTowers.L1CaloTower, 'nTower')
         self._emuCaloTower = CachedIndexedTree(
             self._emuCaloTower.L1CaloTower, 'nTower')
+        self.muons = CachedIndexedTree(
+            self._muonReco.Muon, 'nMuons'
+        )
         self._upgrade = self._upgrade.L1Upgrade
         self._emuUpgrade = self._emuUpgrade.L1Upgrade
 
