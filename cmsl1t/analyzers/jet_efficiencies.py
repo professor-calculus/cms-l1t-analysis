@@ -2,35 +2,49 @@
 Study the MET distibutions and various PUS schemes
 """
 
-from BaseAnalyzer import BaseAnalyzer
-from cmsl1t.collections import ResolutionCollection
 import math
 import ROOT
 import os
+import numpy as np
+from functools import partial
+
+from cmsl1t.analyzers.BaseAnalyzer import BaseAnalyzer
+from cmsl1t.collections import EfficiencyCollection
 from cmsl1t.filters import muonfilter
+from cmsl1t.geometry import is_in_region
 
 
 class Analyzer(BaseAnalyzer):
 
     def __init__(self, config):
-        super(Analyzer, self).__init__("jet_resolution_analyzer", config)
+        super(Analyzer, self).__init__(__name__, config)
         self.triggerName = self.config.get('input', 'trigger')['name']
 
     def prepare_for_events(self, reader):
-        # bins = np.arange(0, 200, 25)
-        # thresholds = [70, 90, 110]
+        bins = list(np.arange(0, 100, 2))
+        bins.extend(np.arange(100, 200, 5))
+        bins.extend(np.arange(200, 300, 10))
+        bins.extend(np.arange(300, 400, 20))
+        bins.extend(np.arange(400, 500, 25))
+        print(bins)
+
+        thresholds = [36., 68., 128., 200.]
         puBins = range(0, 50, 10) + [999]
 
-        self.resolutions = ResolutionCollection(pileupBins=puBins)
-        self.resolutions.add_variable('JetEt', vtype='energy')
-        self.resolutions.add_variable('JetEta', vtype='position')
-        self.resolutions.add_variable('JetPhi', vtype='position')
+        self.efficiencies = EfficiencyCollection(pileupBins=puBins)
+        self.efficiencies.add_variable(
+            'JetEt', bins=bins, thresholds=thresholds)
+        add_jet_variable = partial(
+            self.efficiencies.add_variable,
+            bins=bins, thresholds=thresholds)
+        map(add_jet_variable, ['JetEtBarrel',
+                               'JetEtCentral', 'JetEtEndcap', 'JetEtHF'])
 
         return True
 
     def reload_histograms(self, input_file):
         # Something like this needs to be implemented still
-        # self.resolutions = ResolutionCollection.from_root(input_file)
+        # self.efficiencies = EfficiencyCollection.from_root(input_file)
         return True
 
     def fill_histograms(self, entry, event):
@@ -47,29 +61,23 @@ class Analyzer(BaseAnalyzer):
 
         recoEt = leadingRecoJet.etCorr
         recoEta = leadingRecoJet.eta
-        recoPhi = foldPhi(leadingRecoJet.phi)
 
         l1Et = matchedL1Jet.et
-        l1Eta = matchedL1Jet.eta
-        l1Phi = foldPhi(matchedL1Jet.phi)
 
-        resolution_et = (l1Et - recoEt) / recoEt if recoEt != 0 else 0
-
-        resolution_eta = l1Eta - recoEta
-        # should it not be
-        # resolution_eta = abs(l1Et - recoEta)
-        # ?
-        resolution_phi = l1Phi - recoPhi
-        self.resolutions.set_pileup(pileup)
-        self.resolutions.set_region_by_eta(recoEta)
-        self.resolutions.fill('JetEt', resolution_et)
-        self.resolutions.fill('JetEta', resolution_eta)
-        self.resolutions.fill('JetPhi', resolution_phi)
+        self.efficiencies.set_pileup(pileup)
+        if is_in_region('B', recoEta):
+            self.efficiencies.fill('JetEtBarrel', recoEt, l1Et)
+        elif is_in_region('BE', recoEta):
+            self.efficiencies.fill('JetEtCentral', recoEt, l1Et)
+        elif is_in_region('E', recoEta):
+            self.efficiencies.fill('JetEtEndcap', recoEt, l1Et)
+        else:
+            self.efficiencies.fill('JetEtHF', recoEt, l1Et)
 
         return True
 
     def write_histograms(self):
-        self.resolutions.to_root(self.get_histogram_filename())
+        self.efficiencies.to_root(self.get_histogram_filename())
         return True
 
     def make_plots(self):
@@ -90,7 +98,7 @@ def plot(hist, name, output_folder):
     if '_pu' in name:
         pu = name.split('_')[-1]
         name = name.replace('_' + pu, '')
-    file_name = 'res_SingleMu_reco{name}_l1{name}'.format(name=name)
+    file_name = 'turnon_SingleMu_reco{name}'.format(name=name)
     if 'nVertex' in name:
         file_name = 'nVertex'
     if pu:
