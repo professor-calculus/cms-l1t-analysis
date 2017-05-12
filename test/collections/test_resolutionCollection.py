@@ -10,6 +10,6 @@ class TestResolutionCollection(unittest.TestCase):
         hists = ResolutionCollection(
             pileupBins=pileupBins, regions=geo.eta_regions)
         # this should create 1 entry for every pileup bin and every region
-        hists.add_variable('jetEt')
+        hists.add_variable('jetEt', [0, 30, 50, 100])
         expected_len = (len(pileupBins) - 1) * len(geo.eta_regions)
         self.assertEqual(len(hists), expected_len)
