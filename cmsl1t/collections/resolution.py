@@ -61,11 +61,7 @@ class ResolutionCollection(HistogramsByPileUpCollection):
         for region in self._currentRegions:
             h[region].fill(x, w)
 
-    def add_variable(self, variable, vtype='position'):
-        bins = ResolutionCollection.BINS['default']
-        if vtype in ResolutionCollection.BINS:
-            bins = ResolutionCollection.BINS[vtype]
-
+    def add_variable(self, variable, bins= ResolutionCollection.BINS['default']):
         if variable in self.keys():
             logger.warn('Variable {0} already exists!')
             return
