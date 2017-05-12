@@ -10,6 +10,7 @@ from . import BaseHistCollection
 logger = logging.getLogger(__name__)
 # TODO: inherit from BinnedHistogramCollection
 
+
 class HistogramsByPileUpCollection(BaseHistCollection):
     '''
         Specialisation of BaseHistCollection to bin histograms by pileup
@@ -33,7 +34,8 @@ class HistogramsByPileUpCollection(BaseHistCollection):
         '''
         bins = np.array(bins)
         if bins.size == 0:
-            logger.error('No bins specified for histogram {0}'.format(hist_name))
+            logger.error(
+                'No bins specified for histogram {0}'.format(hist_name))
 
         if hist_name in self[self._pileupBins[0]].keys():
             logger.warn('Histogram {0} already exists!'.format(hist_name))
@@ -42,11 +44,11 @@ class HistogramsByPileUpCollection(BaseHistCollection):
         add_name = hist_names.append
 
         for puBinLower, puBinUpper in pairwise(self._pileupBins):
-                name = '{0}_pu{1}To{2}'.format(
-                    hist_name, puBinLower, puBinUpper)
-                if not self[puBinLower] or not self[puBinLower][hist_name]:
-                    add_name(name)
-                    self[puBinLower][hist_name] = Hist(bins, name=name)
+            name = '{0}_pu{1}To{2}'.format(
+                hist_name, puBinLower, puBinUpper)
+            if not self[puBinLower] or not self[puBinLower][hist_name]:
+                add_name(name)
+                self[puBinLower][hist_name] = Hist(bins, name=name)
         logger.debug('Created {0} histograms: {1}'.format(
             len(hist_names), ', '.join(hist_names)))
 

@@ -69,10 +69,10 @@ class Event(object):
             self._jets.append(Jet(self._jetReco.Jet, i))
 
         self._l1Jets = [L1Jet(self._upgrade, i)
-                  for i in range(self._upgrade.nJets)]
+                        for i in range(self._upgrade.nJets)]
 
         self._l1EmuJets = [L1Jet(self._emuUpgrade, i)
-                  for i in range(self._emuUpgrade.nJets)]
+                           for i in range(self._emuUpgrade.nJets)]
 
         self._l1Sums = {}
         self._readUpgradeSums()

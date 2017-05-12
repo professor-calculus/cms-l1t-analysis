@@ -3,10 +3,8 @@ Study the MET distibutions and various PUS schemes
 """
 import numpy as np
 import six
-import math
 import ROOT
 import os
-from cmsl1t.filters import muonfilter
 from cmsl1t.analyzers.BaseAnalyzer import BaseAnalyzer
 from cmsl1t.collections import HistogramsByPileUpCollection
 
@@ -72,7 +70,6 @@ class Analyzer(BaseAnalyzer):
         self.rates.to_root(self.get_histogram_filename())
         return True
 
-
     def make_plots(self):
         # TODO: implement this in BaseAnalyzer
         # make_plots -> make_plots(plot_func)
@@ -87,21 +84,25 @@ class Analyzer(BaseAnalyzer):
                     plot(obj, name, self.output_folder)
         return True
 
-def get_cumulative_hist( hist):
-    reverse = lambda a: np.array(np.flipud(a))
 
+def _reverse(a):
+    return np.array(np.flipud(a))
+
+
+def get_cumulative_hist(hist):
     h = hist.clone(hist.name + '_cumul')
-    arr = np.cumsum(reverse([bin.value for bin in hist]))
-    h.set_content(reverse(arr))
-    errors_sq = np.cumsum(reverse([bin.error**2 for bin in hist]))
-    h.set_error(reverse(np.sqrt(errors_sq)))
+    arr = np.cumsum(_reverse([bin.value for bin in hist]))
+    h.set_content(_reverse(arr))
+    errors_sq = np.cumsum(_reverse([bin.error**2 for bin in hist]))
+    h.set_error(_reverse(np.sqrt(errors_sq)))
 
     # now scale
     bin1 = h.get_bin_content(1)
     if bin1 != 0:
         h.GetSumw2()
-        h.Scale(4.0e7/bin1);
+        h.Scale(4.0e7 / bin1)
     return h
+
 
 def plot(hist, name, output_folder):
     pu = ''
