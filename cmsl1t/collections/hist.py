@@ -93,3 +93,6 @@ class HistogramCollection(object):
                 coll[pileup][eta][histname].fill(...)
         '''
         pass
+
+    def __len__(self):
+        return 0

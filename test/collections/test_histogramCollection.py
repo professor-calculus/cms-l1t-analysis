@@ -43,3 +43,21 @@ def test_region_binning():
     assert_equal(coll[-1.0], 2)
     assert_equal(coll[2.99], 42)
     assert_equal(coll[-999], 5)
+
+
+def test_collection_size_1D():
+    coll = HistogramCollection(dimensions=1)
+    coll.register_dim(1, segmentation_func=partial(
+        getter_region, bins=regions), bins=regions)
+    coll.add('histName', bins=[0, 10, 20, 30])
+    assert_equal(len(coll), len(regions))
+
+
+def test_collection_size_2D():
+    coll = HistogramCollection(dimensions=1)
+    coll.register_dim(1, segmentation_func=partial(
+        getter_pileup, bins=pileupBins), bins=pileupBins)
+    coll.register_dim(2, segmentation_func=partial(
+        getter_region, bins=regions), bins=regions)
+    coll.add('histName', bins=[0, 10, 20, 30])
+    assert_equal(len(coll), len(regions) * len(pileupBins))
