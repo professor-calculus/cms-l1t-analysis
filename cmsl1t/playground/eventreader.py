@@ -58,12 +58,21 @@ class Event(object):
             self._caloTowers.L1CaloTower, 'nTower')
         self._emuCaloTower = CachedIndexedTree(
             self._emuCaloTower.L1CaloTower, 'nTower')
+        self.muons = CachedIndexedTree(
+            self._muonReco.Muon, 'nMuons'
+        )
         self._upgrade = self._upgrade.L1Upgrade
         self._emuUpgrade = self._emuUpgrade.L1Upgrade
 
         self._jets = []
         for i in range(self._jetReco.Jet.nJets):
             self._jets.append(Jet(self._jetReco.Jet, i))
+
+        self._l1Jets = [L1Jet(self._upgrade, i)
+                        for i in range(self._upgrade.nJets)]
+
+        self._l1EmuJets = [L1Jet(self._emuUpgrade, i)
+                           for i in range(self._emuUpgrade.nJets)]
 
         self._l1Sums = {}
         self._readUpgradeSums()
@@ -147,11 +156,9 @@ class Event(object):
     def getMatchedL1Jet(self, recoJet, l1Type='HW'):
         l1Jets = None
         if l1Type == 'HW':
-            l1Jets = [L1Jet(self._upgrade, i)
-                      for i in range(self._upgrade.nJets)]
+            l1Jets = self._l1Jets
         if l1Type == 'EMU':
-            l1Jets = [L1Jet(self._emuUpgrade, i)
-                      for i in range(self._emuUpgrade.nJets)]
+            l1Jets = self._l1EmuJets
 
         if not l1Jets or not recoJet:
             return None

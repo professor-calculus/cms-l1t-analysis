@@ -19,9 +19,9 @@ def main(n_events, output_folder):
     ROOT.TH1.SetDefaultSumw2(True)
     ROOT.gStyle.SetOptStat(0)
     histograms = ResolutionCollection(pileupBins=[0, 13, 20, 999])
-    histograms.add_variable('JetEt', vtype='energy')
-    histograms.add_variable('JetEta', vtype='position')
-    histograms.add_variable('JetPhi', vtype='position')
+    histograms.add_variable('JetEt', ResolutionCollection.BINS['energy'])
+    histograms.add_variable('JetEta', ResolutionCollection.BINS['position'])
+    histograms.add_variable('JetPhi', ResolutionCollection.BINS['position'])
 
     reader = EventReader(FILES, events=n_events)
 

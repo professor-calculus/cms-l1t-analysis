@@ -8,6 +8,7 @@ class BaseAnalyzer(object):
     def __init__(self, name, config):
         self.name = name
         self.output_folder = config.get('output', 'folder')
+        self.config = config
         os.makedirs(self.output_folder)
 
     def prepare_for_events(self, reader):
@@ -82,4 +83,5 @@ class BaseAnalyzer(object):
         return True
 
     def get_histogram_filename(self):
-        return os.path.join(self.output_folder, "histograms.root")
+        output_file = "{}_histograms.root".format(self.name)
+        return os.path.join(self.output_folder, output_file)
