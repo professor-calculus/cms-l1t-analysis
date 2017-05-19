@@ -30,3 +30,7 @@ class CachedIndexedTree(object):
         indices = getattr(self._tree, self._indexName)
         for i in range(indices):
             yield self.__getitem__(i)
+
+    def __len__(self):
+        indices = getattr(self._tree, self._indexName)
+        return indices
