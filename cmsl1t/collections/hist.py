@@ -1,30 +1,39 @@
 import collections
-import bisect
-import cmsl1t.geometry as geom
 
 
-def bin_finder_sorted(value,bin_edges):
-    if value > max(bin_edges):
-        return -1
-    return bisect.bisect(bin_edges,value)
+class dimension_sorted():
+    import bisect
+    def __init__(self,bin_edges):
+        self.bin_edges = sorted(bin_edges)
+
+    def __getitem__(self,value):
+        if value > max(bin_edges):
+            return -1
+        return bisect.bisect(bin_edges,value)
 
 
-def bin_finder_multi(value,bins,bin_labels=None):
-    contained_in=[]
-    for i,(bin_low,bin_high) in enumerate(bins):
-        if value>=bin_low and value<bin_high:
-            contained_in.append(i)
-    if bin_labels is not None:
-        contained_in=[bin_labels[i] for i in contained_in]
-    return contained_in
+class dimension_overlapping_bins():
+    def __init__(self,bin_edges):
+        self.bin_edges = bin_edges
+
+    def __getitem__(self,value):
+        contained_in = []
+        for i,(bin_low,bin_high) in enumerate(bins):
+            if value >= bin_low and value < bin_high:
+                contained_in.append(i)
+        if bin_labels is not None:
+            contained_in = [bin_labels[i] for i in contained_in]
+        return contained_in
 
 
-def bin_finder_region(eta):
-    regions=[]
-    for region, is_contained in geom.eta_regions.iteritems():
-        if is_contained(eta): 
-            regions.append(region)
-    return regions
+class dimension_region():
+    def __getitem__(self,value):
+        import cmsl1t.geometry as geom
+        regions = []
+        for region, is_contained in geom.eta_regions.iteritems():
+            if is_contained(eta): 
+                regions.append(region)
+        return regions
 
 
 class HistogramCollection(object):
@@ -79,7 +88,7 @@ class HistogramCollection(object):
             and
                 coll[x, y, z]
         '''
-        if isinstance(key, collections.Sequence) and not isinstance(obj, basestring):
+        if isinstance(key, collections.Sequence) and not isinstance(key, basestring):
             pass
         else:
             '''
