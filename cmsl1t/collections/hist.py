@@ -1,4 +1,30 @@
 import collections
+import bisect
+import cmsl1t.geometry as geom
+
+
+def bin_finder_sorted(value,bin_edges):
+    if value > max(bin_edges):
+        return -1
+    return bisect.bisect(bin_edges,value)
+
+
+def bin_finder_multi(value,bins,bin_labels=None):
+    contained_in=[]
+    for i,(bin_low,bin_high) in enumerate(bins):
+        if value>=bin_low and value<bin_high:
+            contained_in.append(i)
+    if bin_labels is not None:
+        contained_in=[bin_labels[i] for i in contained_in]
+    return contained_in
+
+
+def bin_finder_region(eta):
+    regions=[]
+    for region, is_contained in geom.eta_regions.iteritems():
+        if is_contained(eta): 
+            regions.append(region)
+    return regions
 
 
 class HistogramCollection(object):
