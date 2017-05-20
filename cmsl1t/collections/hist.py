@@ -1,4 +1,5 @@
 import collections
+import bisect
 from exceptions import RuntimeError, KeyError, NotImplementedError
 
 
@@ -10,7 +11,7 @@ class DimensionBase():
         return self.n_bins
 
 
-class dimension_sorted(DimensionBase):
+class DimensionSorted(DimensionBase):
     import bisect
     def __init__(self,bin_edges):
         self.bins = sorted(bin_edges)
@@ -23,10 +24,11 @@ class dimension_sorted(DimensionBase):
             found_bin = self.underflow
         if found_bin==len(self.bins):
             found_bin = self.overflow
+        print("BEK:", value ,"-->",found_bin)
         return [found_bin]
 
 
-class dimension_overlapping_bins(DimensionBase):
+class DimensionOverlapping_bins(DimensionBase):
     def __init__(self,bins):
         self.bins = bins
         self.n_bins = len(self.bins)
@@ -41,7 +43,7 @@ class dimension_overlapping_bins(DimensionBase):
         return contained_in
 
 
-class dimension_region(DimensionBase):
+class DimensionRegion(DimensionBase):
     import cmsl1t.geometry as geom
     def __init__(self):
         self.n_bins = len(geom.eta_regions)
@@ -71,7 +73,7 @@ class HistogramCollection(object):
             if not isinstance(dim,DimensionBase):
                 raise RuntimeError("non-Dimension object given to histogram")
         self._dimensions = dimensions
-        self._hists = defaultdict(histogram_factory)
+        self._hists = collections.defaultdict(histogram_factory)
 
     def _flatten_bins(self,bins):
         flattened_bins = []
@@ -83,7 +85,10 @@ class HistogramCollection(object):
                 for previous in flattened_bins[:]:
                     new_bins = [ previous+[index] for index in dimension ]
                     flattened_bins.extend(new_bins)
-        return flattened_bins
+        output_bin_list = []
+        for bin in flattened_bins:
+            output_bin_list.append(tuple(bin))
+        return output_bin_list
 
     def _find_bins(self,keys):
         # In python 3.3, this becomes collections.abc.Sequence
@@ -101,10 +106,10 @@ class HistogramCollection(object):
         # Check every dimension if it contains these values
         bins = []
         for key, dimension in zip(keys, self._dimensions):
-             bins.append(dimensions[key])
+             bins.append(dimension[key])
 
         # Some dimensions might return multiple values, flatten returned arrays
-        bins = self.__flatten_bins(bins)
+        bins = self._flatten_bins(bins)
 
         return bins
 
@@ -115,12 +120,23 @@ class HistogramCollection(object):
             and
                 coll[x, y, z]
         '''
-        hist_indices = self.find_bins(keys)
+        hist_indices = self._find_bins(keys)
         if len(hist_indices) > 1:
              msg="""HistogramCollection.__getitem__ not fully implemented for
                     dimensions with overlapping bins"""
              raise NotImplementedError(msg)
         return self._hists[hist_indices[0]]
+
+    def __setitem__(self, keys,value):
+        '''
+            Supposed to handle
+                coll[x]
+            and
+                coll[x, y, z]
+        '''
+        index_list = self._find_bins(keys)
+        for indices in index_list:
+            self._hists[indices] = value
 
     def shape(self):
         _shape = [ len(dim) for dim in self._dimensions ]
