@@ -1,24 +1,39 @@
 import collections
+from exceptions import RuntimeError, KeyError, NotImplementedError
 
 
-class dimension_sorted():
+class DimensionBase():
+    overflow="overflow"
+    underflow="underflow"
+
+    def __len__(self):
+        return self.n_bins
+
+
+class dimension_sorted(DimensionBase):
     import bisect
     def __init__(self,bin_edges):
-        self.bin_edges = sorted(bin_edges)
+        self.bins = sorted(bin_edges)
+        self.n_bins = len(self.bins)
 
     def __getitem__(self,value):
-        if value > max(bin_edges):
-            return -1
-        return bisect.bisect(bin_edges,value)
+        found_bin = bisect.bisect(self.bins,value)
+        found_bin -= 1
+        if found_bin<0:
+            found_bin = self.underflow
+        if found_bin==len(self.bins):
+            found_bin = self.overflow
+        return [found_bin]
 
 
-class dimension_overlapping_bins():
-    def __init__(self,bin_edges):
-        self.bin_edges = bin_edges
+class dimension_overlapping_bins(DimensionBase):
+    def __init__(self,bins):
+        self.bins = bins
+        self.n_bins = len(self.bins)
 
     def __getitem__(self,value):
         contained_in = []
-        for i,(bin_low,bin_high) in enumerate(bins):
+        for i,(bin_low,bin_high) in enumerate(self.bins):
             if value >= bin_low and value < bin_high:
                 contained_in.append(i)
         if bin_labels is not None:
@@ -26,9 +41,12 @@ class dimension_overlapping_bins():
         return contained_in
 
 
-class dimension_region():
+class dimension_region(DimensionBase):
+    import cmsl1t.geometry as geom
+    def __init__(self):
+        self.n_bins = len(geom.eta_regions)
+
     def __getitem__(self,value):
-        import cmsl1t.geometry as geom
         regions = []
         for region, is_contained in geom.eta_regions.iteritems():
             if is_contained(eta): 
@@ -41,93 +59,72 @@ class HistogramCollection(object):
     The histogram collection needs a few things:
      - it needs to be able to essentially have binned maps of histograms
      - needs to know how to create new histograms
-
-    e.g.
-    def getter_pileup(value, bins)
-            if pileup > max(bins):
-                return -1
-            bins = pairwise(bins)
-            for i, (lowerEdge, upperEdge) in enumerate(bins):
-                if pileup >= lowerEdge and pileup < upperEdge:
-                    return i
-            return 0
-
-    def getter_region(eta, bins):
-        for region in regions:
-            if is_in_region(region, eta, regions=regions):
-                return region
-
-
-    def hist1D_factory(name, bins):
-        pass
-
-
-    hists = HistogramCollection(dimensions=2) #dimension 0 == histogram names?
-    hists.register_dim(1, getter_pileup, bins=[0, 10, 20, 30, 999])
-    hists.register_dim(2, getter_region, ['B', 'BE', 'E', 'HF'])
     '''
 
-    def __init__(self, dimensions):
+    def __init__(self, dimensions,histogram_factory):
         '''
             Should dimensions include or exclude histogram names?
         '''
+        if not isinstance(dimensions,list):
+            dimensions=[dimensions]
+        for dim in dimensions:
+            if not isinstance(dim,DimensionBase):
+                raise RuntimeError("non-Dimension object given to histogram")
         self._dimensions = dimensions
+        self._hists = defaultdict(histogram_factory)
 
-    def register_dim(self, dim_index, segmentation_func, bins):
-        '''
-            Does it make sense to include bins here or is it better to use
-            functools.partial and expect the segmentation_func to only handle 1
-            parameter? Unless we pass a setter, we need the bins to add histograms
-        '''
-        pass
+    def _flatten_bins(self,bins):
+        flattened_bins = []
+        for dimension in bins:
+            if len(flattened_bins) == 0:
+                for index in dimension:
+                    flattened_bins.append([index])
+            else:
+                for previous in flattened_bins[:]:
+                    new_bins = [ previous+[index] for index in dimension ]
+                    flattened_bins.extend(new_bins)
+        return flattened_bins
 
-    def __getitem__(self, key):
+    def _find_bins(self,keys):
+        # In python 3.3, this becomes collections.abc.Sequence
+        if not isinstance(keys, collections.Sequence) :
+            if len(self._dimensions)>1:
+                msg="Single key given when "+len(self._dimensions)+" needed"
+                raise KeyError(msg)
+            keys=[keys]
+        elif len(self._dimensions) != len(keys):
+            msg="Number of keys does not match no. of dimensions\n"
+            msg+="Given {0}, needed {1}".format(
+                    len(keys), len(seef._dimeesions))
+            raise KeyError(msg)
+
+        # Check every dimension if it contains these values
+        bins = []
+        for key, dimension in zip(keys, self._dimensions):
+             bins.append(dimensions[key])
+
+        # Some dimensions might return multiple values, flatten returned arrays
+        bins = self.__flatten_bins(bins)
+
+        return bins
+
+    def __getitem__(self, keys):
         '''
             Supposed to handle
                 coll[x]
             and
                 coll[x, y, z]
         '''
-        if isinstance(key, collections.Sequence) and not isinstance(key, basestring):
-            pass
-        else:
-            '''
-                This bit also needs to support
-                    coll[x][y][z]
-            '''
-            pass
+        hist_indices = self.find_bins(keys)
+        if len(hist_indices) > 1:
+             msg="""HistogramCollection.__getitem__ not fully implemented for
+                    dimensions with overlapping bins"""
+             raise NotImplementedError(msg)
+        return self._hists[hist_indices[0]]
 
-    def __setitem__(self, key, value):
-        '''
-            Same requirements as __getitem__
-        '''
-        pass
-
-    def add(self, name, bins):
-        '''
-            coll.add('1Dhistogram', bins=[1,2,3])
-            coll.add('2Dhistogram', bins=[[1,2,3], [1,2,3]])
-            coll.add('3Dhistogram', bins=[[1,2,3], [1,2,3], [1,2,3]])
-        '''
-        # get the segmentation of the current dimensions
-        # create a histogram for each segment
-        pass
-
-    def fill(self, x, weight):
-        '''
-            Do we want this? It could only work if we have setters for each
-            dimension:
-                coll.set_dim(1, pileup)
-                coll.set_dim(2, region)
-
-
-                coll.fill('1Dhistogram', x=42, w=1)
-                coll.fill('2Dhistogram', x=[42, 1], w=1)
-
-            alternative is
-                coll[pileup][eta][histname].fill(...)
-        '''
-        pass
+    def shape(self):
+        _shape = [ len(dim) for dim in self._dimensions ]
+        return tuple(_shape)
 
     def __len__(self):
-        return 0
+        return len(self._dimensions[0])
