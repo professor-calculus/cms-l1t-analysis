@@ -6,6 +6,8 @@ from functools import partial
 
 
 pileup = hist.DimensionSorted([0, 10, 15, 20, 30, 999])
+multi = hist.DimensionOverlappingBins([(0,10),(100,110),(5,15)])
+regions = hist.DimensionRegion()
 dummy_factory = lambda: print("making histogram")
 
 
@@ -17,10 +19,26 @@ def test_dimension_sorted():
     assert_equal(pileup[9999],[hist.DimensionBase.overflow])
 
 
+def test_dimension_multi():
+    assert_equal(multi[3],[0])
+    assert_equal(multi[7],[0,2])
+    assert_equal(multi[105],[1])
+    assert_equal(multi[70],[hist.DimensionBase.overflow])
+
+
+def test_dimension_region():
+    assert_equal(regions[0],["BE", "B"])
+    assert_equal(regions[2],["BE", "E"])
+    assert_equal(regions[3.1],["HF"])
+
+
 def test_flatten_bin_list():
     bin_list = [ [1] ]
     flat_list = hist.HistogramCollection._flatten_bins(bin_list)
     assert_equal(flat_list, [ (1,) ] )
+    bin_list = [ [1],[2,3] ]
+    flat_list = hist.HistogramCollection._flatten_bins(bin_list)
+    assert_equal(flat_list, [ (1,2),(1,3) ] )
 
 
 def test_find_bins():
@@ -51,31 +69,12 @@ def test_pileup_binning():
     assert_equal(coll[9999], 49 )
 
 
-def test_region_binning():
-    coll = hist.HistogramCollection(dimensions=1)
-    coll.register_dim(1, segmentation_func=partial(
-        hist.bin_finder_region, bins=regions), bins=regions)
-    coll[0] = 2
-    coll[2.1] = 42
-    coll[5] = 234
-    assert_equal(coll[-1.0], 2)
-    assert_equal(coll[2.99], 42)
-    assert_equal(coll[-999], 5)
-
-
-def test_collection_size_1D():
-    coll = hist.HistogramCollection(dimensions=1)
-    coll.register_dim(1, segmentation_func=partial(
-        hist.bin_finder_region, bins=regions), bins=regions)
-    coll.add('histName', bins=[0, 10, 20, 30])
-    assert_equal(len(coll), len(regions))
-
-
-def test_collection_size_2D():
-    coll = hist.HistogramCollection(dimensions=1)
-    coll.register_dim(1, segmentation_func=partial(
-        hist.bin_finder_sorted, bins=pileupBins), bins=pileupBins)
-    coll.register_dim(2, segmentation_func=partial(
-        hist.bin_finder_region, bins=regions), bins=regions)
-    coll.add('histName', bins=[0, 10, 20, 30])
-    assert_equal(len(coll), len(regions) * len(pileupBins))
+def test_collection_2D():
+    coll = hist.HistogramCollection(
+            dimensions=[pileup,multi],
+            histogram_factory=dummy_factory
+            )
+    coll[-3,4] = 6
+    coll[11,105] = 49
+    assert_equal(coll[-20,2], 6)
+    assert_equal(coll[13,108], 49 )

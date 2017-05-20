@@ -27,7 +27,7 @@ class DimensionSorted(DimensionBase):
         return [found_bin]
 
 
-class DimensionOverlapping_bins(DimensionBase):
+class DimensionOverlappingBins(DimensionBase):
     def __init__(self,bins):
         self.bins = bins
         self.n_bins = len(self.bins)
@@ -37,20 +37,20 @@ class DimensionOverlapping_bins(DimensionBase):
         for i,(bin_low,bin_high) in enumerate(self.bins):
             if value >= bin_low and value < bin_high:
                 contained_in.append(i)
-        if bin_labels is not None:
-            contained_in = [bin_labels[i] for i in contained_in]
+        if len(contained_in) == 0:
+            contained_in = [self.overflow]
         return contained_in
 
 
 class DimensionRegion(DimensionBase):
-    import cmsl1t.geometry as geom
+    from cmsl1t.geometry import eta_regions
     def __init__(self):
-        self.n_bins = len(geom.eta_regions)
+        self.n_bins = len(self.eta_regions)
 
     def __getitem__(self,value):
         regions = []
-        for region, is_contained in geom.eta_regions.iteritems():
-            if is_contained(eta): 
+        for region, is_contained in self.eta_regions.iteritems():
+            if is_contained(value): 
                 regions.append(region)
         return regions
 
@@ -82,9 +82,10 @@ class HistogramCollection(object):
                 for index in dimension:
                     flattened_bins.append([index])
             else:
-                for previous in flattened_bins[:]:
-                    new_bins = [ previous+[index] for index in dimension ]
-                    flattened_bins.extend(new_bins)
+                new_bins = []
+                for previous in flattened_bins:
+                    new_bins += [ previous+[index] for index in dimension ]
+                flattened_bins = new_bins
         output_bin_list = []
         for bin in flattened_bins:
             output_bin_list.append(tuple(bin))
