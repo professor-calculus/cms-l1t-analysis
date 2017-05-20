@@ -18,13 +18,12 @@ class DimensionSorted(DimensionBase):
         self.n_bins = len(self.bins)
 
     def __getitem__(self,value):
-        found_bin = bisect.bisect(self.bins,value)
-        found_bin -= 1
-        if found_bin<0:
+        if value < self.bins[0]:
             found_bin = self.underflow
-        if found_bin==len(self.bins):
+        elif value >= self.bins[-1]:
             found_bin = self.overflow
-        print("BEK:", value ,"-->",found_bin)
+        else:
+            found_bin = bisect.bisect(self.bins,value) - 1
         return [found_bin]
 
 
@@ -75,6 +74,7 @@ class HistogramCollection(object):
         self._dimensions = dimensions
         self._hists = collections.defaultdict(histogram_factory)
 
+    @classmethod
     def _flatten_bins(self,bins):
         flattened_bins = []
         for dimension in bins:
