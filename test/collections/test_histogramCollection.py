@@ -43,10 +43,8 @@ def test_flatten_bin_list():
 
 
 def test_find_bins():
-    coll = hist.HistogramCollection(
-                                   dimensions=[pileup],
-                                   histogram_factory=dummy_factory
-                                   )
+    coll = hist.HistogramCollection(dimensions=[pileup],
+                                    histogram_factory=dummy_factory)
     coll[11] = 2
     coll[42] = 42
     assert_equal(coll._find_bins(-20), [(hist.DimensionBase.underflow, )])
@@ -56,10 +54,8 @@ def test_find_bins():
 
 
 def test_pileup_binning():
-    coll = hist.HistogramCollection(
-                                   dimensions=[pileup],
-                                   histogram_factory=dummy_factory
-                                   )
+    coll = hist.HistogramCollection(dimensions=[pileup],
+                                    histogram_factory=dummy_factory)
     coll[-3] = 6
     coll[11] = 2
     coll[42] = 42
@@ -71,10 +67,8 @@ def test_pileup_binning():
 
 
 def test_collection_2D():
-    coll = hist.HistogramCollection(
-                                   dimensions=[pileup],
-                                   histogram_factory=dummy_factory
-                                   )
+    coll = hist.HistogramCollection(dimensions=[pileup, multi],
+                                    histogram_factory=dummy_factory)
     coll[-3, 4] = 6
     coll[11, 105] = 49
     assert_equal(coll[-20, 2], 6)
