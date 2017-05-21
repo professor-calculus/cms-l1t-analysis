@@ -86,7 +86,7 @@ class HistogramCollection(object):
             else:
                 new_bins = []
                 for previous in flattened_bins:
-                    new_bins += [previous+[index] for index in dimension]
+                    new_bins += [previous + [index] for index in dimension]
                 flattened_bins = new_bins
         output_bin_list = []
         for bin in flattened_bins:
@@ -97,13 +97,13 @@ class HistogramCollection(object):
         # In python 3.3, this becomes collections.abc.Sequence
         if not isinstance(keys, collections.Sequence):
             if len(self._dimensions) > 1:
-                msg = "Single key given when "+len(self._dimensions)+" needed"
+                msg = "Single key given when %d needed" % len(self._dimensions)
                 raise KeyError(msg)
             keys = [keys]
         elif len(self._dimensions) != len(keys):
             msg = "Number of keys does not match no. of dimensions\n"
             msg += "Given {0}, needed {1}".format(
-                    len(keys), len(self._dimeesions))
+                   len(keys), len(self._dimensions))
             raise KeyError(msg)
 
         # Check every dimension if it contains these values
