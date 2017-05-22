@@ -1,24 +1,54 @@
 import collections
 import bisect
 from exceptions import RuntimeError, KeyError, NotImplementedError
+from copy import deepcopy
+import logging
 
 
-class DimensionBase():
+logger = logging.getLogger(__name__)
+
+
+class BinningBase():
     overflow = "overflow"
     underflow = "underflow"
+
+    def __init__(self, label):
+        self.label = label
+
+    def set_contained_obj(self, contains):
+        self.values = {}
+        for i in range(self.n_bins) + [self.overflow, self.underflow]:
+            self.values[i] = deepcopy(contains)
 
     def __len__(self):
         return self.n_bins
 
+    def get_bin_contents(self, bin_index):
+        contents = self.values.get(bin_index, None)
+        if contents is None:
+            msg = "Cannot find bin for index, {0}, for binning called '{1}'"
+            logger.error(msg.format(bin_index, self.label))
+            raise KeyError(bin_index)
+        return contents
 
-class DimensionSorted(DimensionBase):
+    def __getitem__(self, value):
+        bins = self.find_bins(value)
+        return [self.get_bin_contents(i) for i in bins]
+
+    def __iter__(self):
+        for i in range(self.n_bins):
+            yield i
+
+
+class Binning(BinningBase):
     import bisect
 
-    def __init__(self, bin_edges):
+    def __init__(self, bin_edges, label=None):
+        BinningBase.__init__(self, label)
         self.bins = sorted(bin_edges)
         self.n_bins = len(self.bins)
 
-    def __getitem__(self, value):
+    def find_bins(self, value):
         if value < self.bins[0]:
             found_bin = self.underflow
         elif value >= self.bins[-1]:
@@ -28,12 +58,13 @@ class DimensionSorted(DimensionBase):
         return [found_bin]
 
 
-class DimensionOverlappingBins(DimensionBase):
-    def __init__(self, bins):
+class BinningOverlapped(BinningBase):
+    def __init__(self, bins, label=None):
+        BinningBase.__init__(self, label)
         self.bins = bins
         self.n_bins = len(self.bins)
 
-    def __getitem__(self, value):
+    def find_bins(self, value):
         contained_in = []
         for i, (bin_low, bin_high) in enumerate(self.bins):
             if value >= bin_low and value < bin_high:
@@ -43,13 +74,14 @@ class DimensionOverlappingBins(DimensionBase):
         return contained_in
 
 
-class DimensionRegion(DimensionBase):
+class BinningEtaRegions(BinningBase):
     from cmsl1t.geometry import eta_regions
 
-    def __init__(self):
+    def __init__(self, label=None):
+        BinningBase.__init__(self, label)
         self.n_bins = len(self.eta_regions)
 
-    def __getitem__(self, value):
+    def find_bins(self, value):
         regions = []
         for region, is_contained in self.eta_regions.iteritems():
             if is_contained(value):
@@ -71,10 +103,16 @@ class HistogramCollection(object):
         if not isinstance(dimensions, list):
             dimensions = [dimensions]
         for dim in dimensions:
-            if not isinstance(dim, DimensionBase):
+            if not isinstance(dim, BinningBase):
                 raise RuntimeError("non-Dimension object given to histogram")
         self._dimensions = dimensions
-        self._hists = collections.defaultdict(histogram_factory)
+        last_dim = None
+        for dimension in reversed(self._dimensions):
+            if last_dim is None:
+                dimension.set_contained_obj(histogram_factory())
+            else:
+                dimension.set_contained_obj(last_dim)
+            last_dim = dimension
 
     @classmethod
     def _flatten_bins(self, bins):
@@ -96,25 +134,27 @@ class HistogramCollection(object):
     def _find_bins(self, keys):
         # In python 3.3, this becomes collections.abc.Sequence
         if not isinstance(keys, collections.Sequence):
-            if len(self._dimensions) > 1:
-                msg = "Single key given when %d needed" % len(self._dimensions)
-                raise KeyError(msg)
             keys = [keys]
-        elif len(self._dimensions) != len(keys):
-            msg = "Number of keys does not match no. of dimensions\n"
-            msg += "Given {0}, needed {1}".format(
-                   len(keys), len(self._dimensions))
-            raise KeyError(msg)
+
+        n_keys = len(keys)
 
         # Check every dimension if it contains these values
         bins = []
-        for key, dimension in zip(keys, self._dimensions):
-            bins.append(dimension[key])
+        for key, dimension in zip(keys, self._dimensions[:n_keys]):
+            bins.append(dimension.find_bins(key))
 
         # Some dimensions might return multiple values, flatten returned arrays
         bins = self._flatten_bins(bins)
 
         return bins
+
+    def get_bin_contents(self, bin_list):
+        if isinstance(bin_list, int):
+            bin_list = [bin_list]
+        value = self._dimensions[0]
+        for index in bin_list:
+            value = value.get_bin_contents(index)
+        return value
 
     def __getitem__(self, keys):
         '''
@@ -123,23 +163,12 @@ class HistogramCollection(object):
             and
                 coll[x, y, z]
         '''
-        hist_indices = self._find_bins(keys)
-        if len(hist_indices) > 1:
+        bin_indices = self._find_bins(keys)
+        if len(bin_indices) > 1:
             msg = """HistogramCollection.__getitem__ not fully implemented for
                    dimensions with overlapping bins"""
             raise NotImplementedError(msg)
-        return self._hists[hist_indices[0]]
-
-    def __setitem__(self, keys, value):
-        '''
-            Supposed to handle
-                coll[x]
-            and
-                coll[x, y, z]
-        '''
-        index_list = self._find_bins(keys)
-        for indices in index_list:
-            self._hists[indices] = value
+        return self.get_bin_contents(bin_indices[0])
 
     def shape(self):
         _shape = [len(dim) for dim in self._dimensions]
@@ -147,3 +176,9 @@ class HistogramCollection(object):
 
     def __len__(self):
         return len(self._dimensions[0])
+
+    def __iter__(self):
+        # # In python >3.3 we should do
+        # yield from self._dimensions[0]
+        for bin in self._dimensions[0]:
+            yield bin
