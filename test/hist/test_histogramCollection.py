@@ -1,6 +1,6 @@
 from __future__ import print_function
 from nose.tools import assert_equal
-import cmsl1t.collections.hist as hist
+import cmsl1t.hist.hist_collection as hist
 import numpy as np
 
 
