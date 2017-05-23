@@ -1,30 +1,26 @@
 from cmsl1t.hist import BaseHistogram
 import logging
-from importlib import import_module
+import rootpy.plotting.hist as rootpy_hists
 
 
 logger = logging.getLogger(__name__)
 
 
-def build_hist(self, histogram, name, title, *vargs, **kwargs):
-    histograms=[]
+def build_hist(hist_type, *vargs, **kwargs):
+    histograms = []
     for hist in BaseHistogram.__subclasses__():
-        if hist.__name__ == histogram:
-            histogram.append(hist)
-    try:
-        hist = import_module("rootpy.plotting."+histogram)
-        if hist:
+        if hist.__name__ == hist_type:
             histograms.append(hist)
-    except ImportError:
-        pass
+    if hasattr(rootpy_hists, hist_type):
+        histograms.append(getattr(rootpy_hists, hist_type))
     if len(histograms) == 0:
         msg = "Error: No valid histogram type called: '{0}'"
-        logger.error(msg.format(histogram))
+        logger.error(msg.format(hist_type))
         return None
-    elif len(histogram) > 1:
+    elif len(histograms) > 1:
         msg = "Error: Multiple histogram types are called: '{0}'"
-        logger.error(msg.format(histogram))
+        logger.error(msg.format(hist_type))
         return None
 
-    hist = histograms[0](name, title, *vargs, **kwargs)
+    hist = histograms[0](*vargs, **kwargs)
     return hist
