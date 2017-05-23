@@ -9,7 +9,10 @@ Welcome to cms-l1t-analysis's documentation!
 Contents:
 
 .. toctree::
-   :maxdepth: 2
+   :maxdepth: 3
+
+   introduction
+   tutorial
 
 
 
