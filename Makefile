@@ -77,3 +77,9 @@ test-code:
 
 changelog:
 	@github_changelog_generator -u cms-l1t-offline -p cms-l1t-analysis --base docs/initial_changelog.md
+
+docs-html:
+	cd docs; make html; cd -
+
+docs-latex:
+	cd docs; make latexpdf; cd -
