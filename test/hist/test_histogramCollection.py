@@ -2,6 +2,7 @@ from __future__ import print_function
 from nose.tools import assert_equal
 import cmsl1t.hist.hist_collection as hist
 import numpy as np
+from cmsl1t.hist.factory import HistFactory
 
 
 pileup = hist.Binning([0, 10, 15, 20, 30, 999], "pileup")
@@ -64,7 +65,7 @@ def test_find_bins():
     assert_equal(coll._find_bins(9999), [(hist.BinningBase.overflow, )])
 
 
-def test_pileup_binning():
+def test_collection_1D():
     coll = hist.HistogramCollection(dimensions=[pileup],
                                     histogram_factory=dummy_factory)
     coll[-3].fill(6)
@@ -107,3 +108,13 @@ def test_iteration_2D():
     assert_equal(all_bins.shape, (len(pileup), len(multi), 2))
     assert_equal(total, len(pileup) * len(multi))
     assert_equal(coll[3, 13].value, 1)
+
+
+def test_coll1D_root_Hist1D():
+    histogram_factory = HistFactory("Hist1D", 10, 0, 5)
+    coll = hist.HistogramCollection(dimensions=[pileup],
+                                    histogram_factory=histogram_factory)
+    coll[13].fill(1)
+    coll[11].fill(2)
+    integral = coll[12].Integral()
+    assert_equal(integral, 2)

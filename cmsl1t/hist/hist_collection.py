@@ -3,6 +3,7 @@ import bisect
 from exceptions import RuntimeError, KeyError, NotImplementedError
 from copy import deepcopy
 import logging
+from cmsl1t.hist.factory import HistFactory
 
 
 logger = logging.getLogger(__name__)
@@ -96,7 +97,7 @@ class HistogramCollection(object):
      - needs to know how to create new histograms
     '''
 
-    def __init__(self, dimensions, histogram_factory):
+    def __init__(self, dimensions, histogram_factory, *vargs, **kwargs):
         '''
             Should dimensions include or exclude histogram names?
         '''
@@ -106,9 +107,19 @@ class HistogramCollection(object):
             if not isinstance(dim, BinningBase):
                 raise RuntimeError("non-Dimension object given to histogram")
         self._dimensions = dimensions
+
+        if isinstance(histogram_factory, str):
+            histogram_factory = HistFactory(histogram_factory,
+                                            *vargs, **kwargs)
+
         last_dim = None
+        # Build the linked list of dimension bins objects
         for dimension in reversed(self._dimensions):
             if last_dim is None:
+                # I would like to have the histogram factory passed bin labels
+                # which we reformat the names and titles of the histograms with
+                # Will add this in in the near future, by passing something
+                # into this method
                 dimension.set_contained_obj(histogram_factory())
             else:
                 dimension.set_contained_obj(last_dim)
