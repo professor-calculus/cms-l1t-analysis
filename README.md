@@ -54,6 +54,18 @@ make benchmark
 make changelog
 ```
 
+### Generating documentation (locally)
+Documentation is automatically updated on http://cms-l1t-analysis.readthedocs.io/en/latest/
+whenever a the master branch is updated. If you want to test documentation locally
+execute
+```bash
+# HTML version
+make docs-html # produces output in docs/_build/html
+make docs-latex # produces output in docs/_build/latex
+# you might need to
+# export PATH:/cvmfs/sft.cern.ch/lcg/external/texlive/2014/bin/x86_64-linux:$PATH
+# for docs-latex
+
 #### Prerequisites
 ```bash
 gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3
