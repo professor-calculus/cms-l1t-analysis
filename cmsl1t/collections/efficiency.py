@@ -1,8 +1,8 @@
 """
-.. module:: collections.efficiency
-    :synopsis: Module for creating efficiency(turnon)-curves
+    .. module:: collections.efficiency
+        :synopsis: Module for creating efficiency(turnon)-curves
 
-.. moduleauthor:: Luke Kreczko
+    .. moduleauthor:: Luke Kreczko
 """
 from collections import defaultdict
 from . import HistogramsByPileUpCollection
