@@ -1,7 +1,6 @@
 import numpy as np
 import logging
 from collections import defaultdict
-from rootpy.plotting import Hist
 
 from cmsl1t.utils.iterators import pairwise
 from cmsl1t.io import to_root
@@ -23,11 +22,13 @@ class HistogramsByPileUpCollection(BaseHistCollection):
     '''
 
     def __init__(self, pileupBins, dimensions=1, initialValue=0):
+        from rootpy.plotting import Hist
         BaseHistCollection.__init__(self, dimensions, initialValue)
         self._pileupBins = pileupBins
         self._pileupHist = Hist(100, 0, 100, name='nVertex')
 
     def add(self, hist_name, bins=[]):
+        from rootpy.plotting import Hist
         '''
             Specialisation for 2 dimensions
             TODO: generalise
