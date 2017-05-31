@@ -6,3 +6,4 @@ nose
 click
 click-log
 sphinx
+pyfakefs

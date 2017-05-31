@@ -16,6 +16,16 @@ def get_unique_out_dir(outdir=None, revision=1):
         return get_unique_out_dir(outdir, revision + 1)
     return full_outdir
 
+def resolve_input_files(input_files):
+    from cmsl1t.utils.root_glob import glob
+    all_files = []
+    for f in input_files:
+        if '*' in f:
+            all_files.extend(glob(f))
+        else:
+            all_files.append(f)
+    return all_files
+
 
 class ConfigParser(object):
     SECTIONS = ['general', 'input', 'analysis', 'output']
@@ -25,6 +35,9 @@ class ConfigParser(object):
 
     def read(self, input_file):
         cfg = yaml.load(input_file)
+        self._read_config(cfg)
+
+    def _read_config(self, cfg):
         cfg['general'] = dict(version=cfg['version'], name=cfg['name'])
         del cfg['version'], cfg['name']
 
@@ -32,6 +45,7 @@ class ConfigParser(object):
             # TODO: improve
             raise IOError('Invalid config')
 
+        cfg['input']['files']=resolve_input_files(cfg['input']['files'])
         self.config = cfg
         self.__fill_output_template()
 
