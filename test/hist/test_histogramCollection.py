@@ -72,10 +72,10 @@ def test_collection_1D():
     coll[11].fill(2)
     coll[42].fill(42)
     coll[10044].fill(49)
-    assert_equal(coll[-20].value, 6)
-    assert_equal(coll[13].value, 2)
-    assert_equal(coll[47].value, 42)
-    assert_equal(coll[9999].value, 49)
+    assert_equal(coll[-20].value, [6])
+    assert_equal(coll[13].value, [2])
+    assert_equal(coll[47].value, [42])
+    assert_equal(coll[9999].value, [49])
 
 
 def test_collection_2D():
@@ -83,8 +83,8 @@ def test_collection_2D():
                                     histogram_factory=dummy_factory)
     coll[-3, 4].fill(6)
     coll[11, 105].fill(49)
-    assert_equal(coll[-20, 2].value, 6)
-    assert_equal(coll[13, 108].value, 49)
+    assert_equal(coll[-20, 2].value, [6])
+    assert_equal(coll[13, 108].value, [49])
 
 
 def test_iteration_2D():
@@ -94,7 +94,7 @@ def test_iteration_2D():
     all_bins = []
     for i_first in coll:
         rows = []
-        for i_second in coll[i_first]:
+        for i_second in coll.get_bin_contents([i_first]):
             rows.append([i_first, i_second])
             coll.get_bin_contents([i_first, i_second]).fill(1)
         all_bins.append(rows)
@@ -102,12 +102,12 @@ def test_iteration_2D():
 
     total = 0
     for i_first in coll:
-        for i_second in coll[i_first]:
+        for i_second in coll.get_bin_contents([i_first]):
             total += coll.get_bin_contents([i_first, i_second]).value
 
     assert_equal(all_bins.shape, (len(pileup), len(multi), 2))
     assert_equal(total, len(pileup) * len(multi))
-    assert_equal(coll[3, 13].value, 1)
+    assert_equal(coll[3, 13].value, [1])
 
 
 def test_coll1D_root_Hist1D():
@@ -116,5 +116,5 @@ def test_coll1D_root_Hist1D():
                                     histogram_factory=histogram_factory)
     coll[13].fill(1)
     coll[11].fill(2)
-    integral = coll[12].Integral()
+    integral = sum([h.Integral() for h in coll[12]])
     assert_equal(integral, 2)
