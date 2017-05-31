@@ -13,8 +13,17 @@
 
 import sys
 import os
-sys.path.insert(0, os.path.abspath("/vagrant"))
-# sys.path.append(os.path.abspath('.'))
+
+from os import path
+import datetime
+now = datetime.datetime.now()
+
+HERE = path.dirname(path.abspath(__file__))
+cmsl1t_root = path.abspath(path.join(HERE, path.pardir))
+
+# put cmsl1t at the front of sys.path
+sys.path.insert(0, cmsl1t_root)
+
 import cmsl1t
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
