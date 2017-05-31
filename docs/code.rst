@@ -9,17 +9,24 @@
    :members:
    :no-inherited-members:
 
-:mod:`cmsl1t.filters`:  Filters
+:mod:`cmsl1t.collections`:  Collections
 ===============================================
-.. automodule:: cmsl1t.filters
-  :members:
-  :no-inherited-members:
+.. automodule:: cmsl1t.collections
+   :members:
+   :no-inherited-members:
 
-  :mod:`cmsl1t.io`:  IO
-  ===============================================
-  .. automodule:: cmsl1t.io
-    :members:
-    :no-inherited-members:
+:mod:`cmsl1t.hist`:  Hist
+===============================================
+.. automodule:: cmsl1t.hist
+   :members:
+   :no-inherited-members:
+
+
+:mod:`cmsl1t.io`:  IO
+===============================================
+.. automodule:: cmsl1t.io
+   :members:
+   :no-inherited-members:
 
 :mod:`cmsl1t.plotting`:  Plotting
 ===============================================
@@ -28,11 +35,6 @@
    :no-members:
    :no-inherited-members:
 
-:mod:`cmsl1t.collections`:  Collections
-===============================================
-.. automodule:: cmsl1t.collections
-   :members:
-   :no-inherited-members:
 
 :mod:`cmsl1t.playground`:  Playground
 ===============================================
@@ -40,10 +42,16 @@
   :members:
   :no-inherited-members:
 
-  :mod:`cmsl1t.utils`:  Utils
-  ===============================================
-  .. automodule:: cmsl1t.Utils
-    :members:
-    :no-inherited-members:
+:mod:`cmsl1t.recalc`:  Recalculations
+===============================================
+.. automodule:: cmsl1t.recalc
+   :members:
+   :no-inherited-members:
+
+:mod:`cmsl1t.utils`:  Utils
+===============================================
+.. automodule:: cmsl1t.utils
+  :members:
+  :no-inherited-members:
 
 .. currentmodule:: cmsl1t
