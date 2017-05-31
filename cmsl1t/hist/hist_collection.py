@@ -90,6 +90,28 @@ class BinningEtaRegions(BinningBase):
         return regions
 
 
+class HistCollectionView(object):
+    def __init__(self, hist_list):
+        self.histograms = hist_list
+
+    def __getattr__(self, attr):
+        return [getattr(hist, attr) for hist in self.histograms]
+
+    def __method(self, method_name, *vargs, **kwargs):
+        for hist in self.histograms:
+            getattr(hist, method_name)(*vargs, **kwargs)
+
+    def fill(self, *vargs, **kwargs):
+        self.__method("fill", *vargs, **kwargs)
+
+    def __iter__(self):
+        for hist in self.histograms:
+            yield hist
+
+    def __len__(self):
+        return len(self.histograms)
+
+
 class HistogramCollection(object):
     '''
     The histogram collection needs a few things:
@@ -175,11 +197,8 @@ class HistogramCollection(object):
                 coll[x, y, z]
         '''
         bin_indices = self._find_bins(keys)
-        if len(bin_indices) > 1:
-            msg = """HistogramCollection.__getitem__ not fully implemented for
-                   dimensions with overlapping bins"""
-            raise NotImplementedError(msg)
-        return self.get_bin_contents(bin_indices[0])
+        objects = [self.get_bin_contents(bins) for bins in bin_indices]
+        return HistCollectionView(objects)
 
     def shape(self):
         _shape = [len(dim) for dim in self._dimensions]
