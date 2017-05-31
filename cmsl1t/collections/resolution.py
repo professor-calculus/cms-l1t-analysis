@@ -2,7 +2,6 @@ from __future__ import absolute_import
 import six
 import logging
 import numpy as np
-from rootpy.plotting import Hist
 
 import cmsl1t.geometry as geo
 from cmsl1t.utils.iterators import pairwise
@@ -62,6 +61,7 @@ class ResolutionCollection(HistogramsByPileUpCollection):
             h[region].fill(x, w)
 
     def add_variable(self, variable, bins=[]):
+        from rootpy.plotting import Hist
         if variable in self.keys():
             logger.warn('Variable {0} already exists!')
             return

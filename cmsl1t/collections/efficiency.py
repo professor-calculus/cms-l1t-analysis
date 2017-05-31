@@ -1,14 +1,10 @@
 """
     .. module:: collections.efficiency
-        :synopsis: Module for creating efficiency(turnon)-curves
-
-    .. moduleauthor:: Luke Kreczko
+       :synopsis: Module for creating efficiency(turnon)-curves
 """
 from collections import defaultdict
 from . import HistogramsByPileUpCollection
-from rootpy.plotting import Hist
-from rootpy import asrootpy
-from ROOT import TEfficiency
+
 from cmsl1t.utils.iterators import pairwise
 import logging
 
@@ -18,6 +14,7 @@ logger = logging.getLogger(__name__)
 class _EfficiencyCurve(object):
 
     def __init__(self, name, bins, threshold):
+        from rootpy.plotting import Hist
         self._pass = Hist(bins, name=name + '_pass')
         self._total = Hist(bins, name=name + '_total')
         self._dist = Hist(bins, name=name + '_dist')
@@ -39,6 +36,8 @@ class _EfficiencyCurve(object):
             self._pass.fill(recoValue, weight)
 
     def calculate_efficiency(self):
+        from rootpy import asrootpy
+        from ROOT import TEfficiency
         self._efficiency = asrootpy(TEfficiency(self._pass, self._total))
         self._efficiency.SetName(self._total.GetName() + '_eff')
 
