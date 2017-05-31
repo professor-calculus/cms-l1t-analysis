@@ -5,3 +5,4 @@ pep8
 nose
 click
 click-log
+sphinx
