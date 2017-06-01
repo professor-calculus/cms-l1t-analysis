@@ -1,4 +1,4 @@
-from cmsl1t.config import (ConfigParser, resolve_input_files)
+from cmsl1t.config import (ConfigParser, resolve_file_paths)
 import yaml
 
 from nose.tools import (raises, assert_equal, assert_almost_equal,
@@ -59,9 +59,13 @@ output:
 fs = fake_fs.FakeFilesystem()
 
 # Do some setup on the faked file system
-fs.CreateFile('/tmp/l1t/L1Ntuple_1.root')
-fs.CreateFile('/tmp/l1t/L1Ntuple_2.root')
-fs.CreateFile('/tmp/l1t/L1Ntuple_3.root')
+ALL_EXISTING_FILES = [
+    '/tmp/l1t/L1Ntuple_1.root',
+    '/tmp/l1t/L1Ntuple_2.root',
+    '/tmp/l1t/L1Ntuple_3.root',
+]
+for f in ALL_EXISTING_FILES:
+    fs.CreateFile(f)
 
 glob = fake_glob.FakeGlobModule(fs)
 
@@ -75,24 +79,40 @@ def teardown_func():
 
 
 def test_general_section():
-    parser = ConfigParser()
-    parser._read_config(yaml.load(TEST_CONFIG))
-    assert_equal(parser.get('general', 'version'), '0.0.1')
-    assert_equal(parser.get('general', 'name'), 'Benchmark')
-
-
-def test_resolve_input_files():
     with patch('glob.glob', glob.glob):
-        input_files = resolve_input_files(['/tmp/l1t/L1Ntuple_*.root'])
-        assert_equal(input_files, [
-                 '/tmp/l1t/L1Ntuple_1.root', '/tmp/l1t/L1Ntuple_2.root', '/tmp/l1t/L1Ntuple_3.root'])
+        parser = ConfigParser()
+        parser._read_config(yaml.load(TEST_CONFIG))
+        assert_equal(parser.get('general', 'version'), '0.0.1')
+        assert_equal(parser.get('general', 'name'), 'Benchmark')
+
+
+def test_resolve_file_paths():
+    with patch('glob.glob', glob.glob):
+        input_files = resolve_file_paths(['/tmp/l1t/L1Ntuple_*.root'])
+        assert_equal(input_files, ALL_EXISTING_FILES)
+
+
+def test_resolve_file_paths_missing_file():
+    with patch('glob.glob', glob.glob):
+        input_files = resolve_file_paths(
+            ['/tmp/l1t/L1Ntuple_*.root', '/tmp/missingFile'])
+        assert_equal(input_files, ALL_EXISTING_FILES)
 
 
 def test_input_section():
     with patch('glob.glob', glob.glob):
         parser = ConfigParser()
         parser._read_config(yaml.load(TEST_CONFIG))
-        assert_equal(parser.get('input', 'files'), [
-                     '/tmp/l1t/L1Ntuple_1.root', '/tmp/l1t/L1Ntuple_2.root', '/tmp/l1t/L1Ntuple_3.root'])
+        assert_equal(parser.get('input', 'files'), ALL_EXISTING_FILES)
         assert_equal(parser.get('input', 'sample'), {
                      'name': 'Data', 'title': '2016 Data'})
+
+
+def test_input_section_missing_files():
+    with patch('glob.glob', glob.glob):
+        parser = ConfigParser()
+        bad_input_files = TEST_CONFIG.replace(
+            '/tmp/l1t/L1Ntuple_*.root', '/tmp/missingFile')
+        config_with_missing_files = yaml.load(bad_input_files)
+
+        assert_raises(IOError, parser._read_config, config_with_missing_files)

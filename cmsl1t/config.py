@@ -2,7 +2,9 @@ from __future__ import print_function
 import yaml
 import os
 from datetime import datetime
+import logging
 
+logger = logging.getLogger(__name__)
 TODAY = datetime.now().timetuple()
 
 
@@ -16,14 +18,12 @@ def get_unique_out_dir(outdir=None, revision=1):
         return get_unique_out_dir(outdir, revision + 1)
     return full_outdir
 
-def resolve_input_files(input_files):
+
+def resolve_file_paths(paths):
     from cmsl1t.utils.root_glob import glob
     all_files = []
-    for f in input_files:
-        if '*' in f:
-            all_files.extend(glob(f))
-        else:
-            all_files.append(f)
+    for p in paths:
+        all_files.extend(glob(p))
     return all_files
 
 
@@ -44,8 +44,16 @@ class ConfigParser(object):
         if not validate_sections(ConfigParser.SECTIONS, cfg):
             # TODO: improve
             raise IOError('Invalid config')
+        input_files = cfg['input']['files']
+        input_files = resolve_file_paths(input_files)
+        if not input_files:
+            msg = "Could not find any existing files.\n"
+            msg += "Given files:\n"
+            msg += '\n'.join(cfg['input']['files'])
+            logger.exception(msg)
+            raise IOError(msg)
+        cfg['input']['files'] = input_files
 
-        cfg['input']['files']=resolve_input_files(cfg['input']['files'])
         self.config = cfg
         self.__fill_output_template()
 
