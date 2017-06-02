@@ -35,10 +35,10 @@ analysis:
   analyzers:
     - cmsl1t.analyzers.demo_analyzer
   modifiers:
-    - cmsl1t.recalc.l1MetNot28:
+    - cmsl1t.recalc.met.l1MetNot28:
         in: event.caloTowers
         out: event.l1MetNot28
-    - cmsl1t.recalc.l1MetNot28HF:
+    - cmsl1t.recalc.met.l1MetNot28HF:
         in: event.caloTowers
         out: event.l1MetNot28HF
   progress_bar:
@@ -93,6 +93,24 @@ def test_invalid_section():
             TEST_CONFIG.replace('analysis:', 'ryan:'))
         assert_raises(IOError, parser._read_config,
                       config_with_invalid_section)
+
+
+def test_invalid_analyzer():
+    with patch('glob.glob', glob.glob):
+        parser = ConfigParser()
+        config_with_invalid_analyzer = yaml.load(
+            TEST_CONFIG.replace('cmsl1t.analyzers.demo_analyzer', 'ben'))
+        assert_raises(IOError, parser._read_config,
+                      config_with_invalid_analyzer)
+
+
+def test_invalid_modifier():
+    with patch('glob.glob', glob.glob):
+        parser = ConfigParser()
+        config_with_invalid_analyzer = yaml.load(
+            TEST_CONFIG.replace('cmsl1t.recalc.met.l1MetNot28', 'olivier'))
+        assert_raises(IOError, parser._read_config,
+                      config_with_invalid_analyzer)
 
 
 def test_resolve_file_paths():

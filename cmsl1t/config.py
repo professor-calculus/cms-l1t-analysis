@@ -66,17 +66,17 @@ These analyzers have to satisfy the same API as
        - cmsl1t.analyzers.demo_analyzer
 
 Modifiers are a way to enrich the event content by attaching objects to the
-event itself. E.g. ``cmsl1t.recalc.l1MetNot28`` reads in ``event.caloTowers``
-and creates a new object, ``event.l1MetNot28``, that can be accessed by all
-analyzers.
+event itself. E.g. ``cmsl1t.recalc.met.l1MetNot28`` reads in
+``event.caloTowers`` and creates a new object, ``event.l1MetNot28``, that can
+then be accessed by all analyzers.
 
 .. code-block:: yaml
 
      modifiers:
-       - cmsl1t.recalc.l1MetNot28:
+       - cmsl1t.recalc.met.l1MetNot28:
            in: event.caloTowers
            out: event.l1MetNot28
-       - cmsl1t.recalc.l1MetNot28HF:
+       - cmsl1t.recalc.met.l1MetNot28HF:
            in: event.caloTowers
            out: event.l1MetNot28HF
 
@@ -109,7 +109,8 @@ which are automatically filled by the config parser
 .. code-block:: yaml
 
    output:
-     # template is a list here that is joined (os.path.join) in the config parser
+     # template is a list here that is joined (os.path.join) in the config
+     # parser
      template:
         - benchmark/new
         - "{date}_{sample_name}_run-{run_number}_{trigger_name}"
@@ -119,6 +120,8 @@ import yaml
 import os
 from datetime import datetime
 import logging
+from cmsl1t.utils import module
+from copy import deepcopy
 
 logger = logging.getLogger(__name__)
 TODAY = datetime.now().timetuple()
@@ -177,6 +180,8 @@ class ConfigParser(object):
     def is_valid(self):
         results = [self.validate_sections()]
         results += [self.validate_input_files()]
+        results += [self.validate_analyzers()]
+        results += [self.validate_modifiers()]
         return all(results)
 
     def validate_sections(self):
@@ -218,6 +223,33 @@ class ConfigParser(object):
             msg += '\n'.join(self.config['input']['files'])
             self.config_errors += [msg]
         return input_files != []
+
+    def validate_analyzers(self):
+        return self.__validate_module_imports(['analysis', 'analyzers'])
+
+    def validate_modifiers(self):
+        return self.__validate_module_imports(['analysis', 'modifiers'])
+
+    def __validate_module_imports(self, config_keys):
+        modules = deepcopy(self.config)
+        for key in config_keys:
+            if key in modules:
+                modules = modules[key]
+            else:
+                return False
+        msg = []
+        results = []
+        for m in modules:
+            if isinstance(m, dict):
+                m = m.keys()[0]
+            if not module.exists(m):
+                msg += ['Module {0} does not exist!'.format(m)]
+                results += [False]
+            else:
+                results += [True]
+        if msg:
+            self.config_errors.append('\n'.join(msg))
+        return all(results)
 
     def __repr__(self):
         return self.config.__repr__()
