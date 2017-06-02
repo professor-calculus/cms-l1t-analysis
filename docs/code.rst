@@ -15,6 +15,13 @@
    :members:
    :no-inherited-members:
 
+:mod:`cmsl1t.config`:  ConfigParser
+===============================================
+.. automodule:: cmsl1t.config
+   :members:
+   :no-inherited-members:
+
+
 :mod:`cmsl1t.hist`:  Hist
 ===============================================
 .. automodule:: cmsl1t.hist
