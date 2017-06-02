@@ -86,6 +86,15 @@ def test_general_section():
         assert_equal(parser.get('general', 'name'), 'Benchmark')
 
 
+def test_invalid_section():
+    with patch('glob.glob', glob.glob):
+        parser = ConfigParser()
+        config_with_invalid_section = yaml.load(
+            TEST_CONFIG.replace('analysis:', 'ryan:'))
+        assert_raises(IOError, parser._read_config,
+                      config_with_invalid_section)
+
+
 def test_resolve_file_paths():
     with patch('glob.glob', glob.glob):
         input_files = resolve_file_paths(['/tmp/l1t/L1Ntuple_*.root'])

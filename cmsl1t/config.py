@@ -8,10 +8,6 @@ logger = logging.getLogger(__name__)
 TODAY = datetime.now().timetuple()
 
 
-def validate_sections(expectedSections, configPart):
-    return sorted(expectedSections) == sorted(configPart.keys())
-
-
 def get_unique_out_dir(outdir=None, revision=1):
     full_outdir = outdir + "-rev_{rev}".format(rev=revision)
     if os.path.isdir(full_outdir):
@@ -32,6 +28,7 @@ class ConfigParser(object):
 
     def __init__(self):
         self.config = {}
+        self.config_errors = []
 
     def read(self, input_file):
         cfg = yaml.load(input_file)
@@ -41,21 +38,16 @@ class ConfigParser(object):
         cfg['general'] = dict(version=cfg['version'], name=cfg['name'])
         del cfg['version'], cfg['name']
 
-        if not validate_sections(ConfigParser.SECTIONS, cfg):
-            # TODO: improve
-            raise IOError('Invalid config')
         input_files = cfg['input']['files']
         input_files = resolve_file_paths(input_files)
-        if not input_files:
-            msg = "Could not find any existing files.\n"
-            msg += "Given files:\n"
-            msg += '\n'.join(cfg['input']['files'])
-            logger.exception(msg)
-            raise IOError(msg)
         cfg['input']['files'] = input_files
-
         self.config = cfg
         self.__fill_output_template()
+
+        if not self.is_valid():
+            msg = '\n'.join(self.config_errors)
+            logger.exception(msg)
+            raise IOError(msg)
 
     def sections(self):
         return self.config.keys()
@@ -67,7 +59,48 @@ class ConfigParser(object):
         return self.config[section][option]
 
     def is_valid(self):
-        return validate_sections(ConfigParser.SECTIONS, self.config)
+        results = [self.validate_sections()]
+        results += [self.validate_input_files()]
+        return all(results)
+
+    def validate_sections(self):
+        expectedSections = sorted(ConfigParser.SECTIONS)
+        sections = sorted(self.config.keys())
+        hasValidSections = expectedSections == sections
+        if hasValidSections is not True:
+            msg = 'Configuration has missing or invalid sections.\n'
+            msg += self.__section_format(self.__compare_sections(expectedSections, sections))
+            self.config_errors += [msg]
+        return hasValidSections
+
+    def __section_format(self, sections):
+        section_template = ['  - {}' for _ in sections]
+        section_template = '\n'.join(section_template)
+        return section_template.format(*sections)
+
+    def __compare_sections(self, expected, current):
+        expected = set(expected)
+        current = set(current)
+        missing = expected.difference(current)
+        invalid = current.difference(expected)
+        decorated_sections = []
+        for e in expected:
+            if e in missing:
+                decorated_sections.append(e + ' (missing)')
+            else:
+                decorated_sections.append(e)
+        for i in invalid:
+            decorated_sections.append(i + ' (invalid)')
+        return sorted(decorated_sections)
+
+    def validate_input_files(self):
+        input_files = self.config['input']['files']
+        if not input_files:
+            msg = "Could not find any existing files.\n"
+            msg += "Given files:\n"
+            msg += '\n'.join(self.config['input']['files'])
+            self.config_errors += [msg]
+        return input_files != []
 
     def __repr__(self):
         return self.config.__repr__()
