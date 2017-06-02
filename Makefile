@@ -72,6 +72,8 @@ run-benchmark:
 
 test: test-code flake8
 
+test-all: test-code-full flake8
+
 test-code:
 	@$(NOSETESTS) -v -A "not slow and not grid_access" -s test
 

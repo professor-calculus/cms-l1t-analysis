@@ -40,6 +40,15 @@ voms-proxy-init --voms cms
 make setup
 ```
 
+### running tests
+Tests can be run either on an SL 6 machine or in the Vagrant box:
+```
+make test
+# if a grid proxy is provided (e.g. via voms-proxy-init --voms cms)
+# you can also run tests that require grid access:
+make test-all
+```
+
 ### running benchmark
 ```
 # install python requirements
