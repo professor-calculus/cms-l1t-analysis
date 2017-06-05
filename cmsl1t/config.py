@@ -29,6 +29,8 @@ while the title is meant to be used in string representations
 
 .. code-block:: yaml
 
+   input:
+     ...
      sample:
        name: Data
        title: 2016 Data
@@ -40,6 +42,8 @@ As the sample name and title, the trigger counterparts play a similar role.
 
 .. code-block:: yaml
 
+   input:
+     ...
      trigger:
        name: SingleMu
        title: Single Muon
@@ -62,6 +66,8 @@ These analyzers have to satisfy the same API as
 
 .. code-block:: yaml
 
+   analysis:
+     ...
      analyzers:
        - cmsl1t.analyzers.demo_analyzer
 
@@ -72,6 +78,8 @@ then be accessed by all analyzers.
 
 .. code-block:: yaml
 
+   analysis:
+     ...
      modifiers:
        - cmsl1t.recalc.met.l1MetNot28:
            in: event.caloTowers
@@ -86,6 +94,8 @@ events).
 
 .. code-block:: yaml
 
+   analysis:
+     ...
      progress_bar:
        report_every: 1000
      # or to switch it off
@@ -123,6 +133,7 @@ import logging
 from cmsl1t.utils import module
 from copy import deepcopy
 
+
 logger = logging.getLogger(__name__)
 TODAY = datetime.now().timetuple()
 
@@ -158,13 +169,24 @@ class ConfigParser(object):
         del cfg['version'], cfg['name']
 
         input_files = cfg['input']['files']
-        input_files = resolve_file_paths(input_files)
+        try:
+            input_files = resolve_file_paths(input_files)
+        except Exception, e:
+            msg = 'Could not resolve file paths:' + str(e)
+            logger.exception(msg)
+            raise IOError(msg)
         cfg['input']['files'] = input_files
         self.config = cfg
-        self.__fill_output_template()
 
         if not self.is_valid():
             msg = '\n'.join(self.config_errors)
+            logger.exception(msg)
+            raise IOError(msg)
+
+        try:
+            self.__fill_output_template()
+        except Exception, e:
+            msg = 'Could fill out output template:' + str(e)
             logger.exception(msg)
             raise IOError(msg)
 
