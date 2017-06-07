@@ -7,6 +7,18 @@ import rootpy.ROOT as ROOT
 from exceptions import RuntimeError
 
 
+"""
+I would rather not have had to do it this way, but I could see no alternative.
+The TColor header defines an enum for the palettes:
+https://root.cern.ch/doc/master/TColor_8h.html#acb46d776ab87271c3fc10b14c50b169c
+In rootpy (or pyROOT) these are accessible as attributes of ROOT however, since
+the enum is not defined within the TColor class, just in the header file the
+enums end up in the global ROOT namespace.  As a result, it would not really be
+possible to check that a given string is actually a root palette, and not just
+some method / class / variable in the ROOT namespace.  This solves this by
+copying in the valid list of strings from the above link so that we can
+validate that a requested palette actually exists in ROOT.
+"""
 __known_root_pallettes = set(["DeepSea", "GreyScale",
                               "DarkBodyRadiator", "BlueYellow",
                               "RainBow", "InvertedDarkBodyRadiator",
@@ -70,7 +82,7 @@ def __apply_colour_map(hists, colourmap, colour_values, change_colour):
     change_colour = [c.lower() for c in change_colour]
 
     with preserve_current_style():
-        # Resolve the requested pallette if it's not a function
+        # Resolve the requested palette if it's not a function
         if isinstance(colourmap, str):
             if colourmap in __known_root_pallettes:
                 gStyle.SetPalette(getattr(ROOT, "k" + colourmap))
@@ -83,7 +95,7 @@ def __apply_colour_map(hists, colourmap, colour_values, change_colour):
         for value, hist in enumerate(hists):
             if colour_values:
                 value, max = colour_values(value)
-            colour = colourmap(value, max)
+            colour = colourmap(value + 0.5, max)
             if "line" in change_colour:
                 hist.linecolor = colour
             if "marker" in change_colour:
@@ -92,6 +104,21 @@ def __apply_colour_map(hists, colourmap, colour_values, change_colour):
 
 def draw(hists, colourmap="RainBow", colour_values=None,
          change_colour=("line", "marker"), canvas_args={}, draw_args={}):
+    """
+    Create a standard canvas, fill it with the list of histograms and a legend.
+
+    keyword arguments:
+    hists -- a list of plottable objects (hists, graphs, etc)
+    colourmap -- a string to indicate which colour palette to use, see
+                 https://root.cern.ch/doc/master/TColor_8h.html
+    colour_values -- a function to give the colour map for a given histogram.
+                     If not provided, the colour is determined based on the
+                     position in the list of histograms.
+    change_colour -- a list of "line", "marker", "fill" to determine which parts
+                     of the plottable to change colour
+    canvas_args -- options to pass through to the rootpy Canvas constructor
+    draw_args -- options to pass through to the rootpy draw method
+    """
     canvas, style = __prepare_canvas(canvas_args)
     hists = __clean(hists)
     __apply_colour_map(hists, colourmap, colour_values, change_colour)
@@ -103,6 +130,14 @@ def draw(hists, colourmap="RainBow", colour_values=None,
 
 
 def label_canvas(sample_title=None, run=None, isData=False):
+    """
+    Put the standard labels on the current canvas
+
+    Keyword arguments:
+    sample_title -- (str) the name of the sample being studied, eg. SingleMu
+    run -- (str) the run number
+    isData -- (bool) whether or not the data is simulated or real
+    """
     latex = TLatex()
     latex.SetNDC()
     latex.SetTextFont(42)
