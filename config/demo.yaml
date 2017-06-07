@@ -44,10 +44,10 @@ analysis:
   analyzers:
     - cmsl1t.analyzers.demo_analyzer
   modifiers:
-    - cmsl1t.recalc.l1MetNot28:
+    - cmsl1t.recalc.met.l1MetNot28:
         in: event.caloTowers
         out: event.l1MetNot28
-    - cmsl1t.recalc.l1MetNot28HF:
+    - cmsl1t.recalc.met.l1MetNot28HF:
         in: event.caloTowers
         out: event.l1MetNot28HF
   progress_bar:

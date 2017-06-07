@@ -72,8 +72,13 @@ run-benchmark:
 
 test: test-code flake8
 
+test-all: test-code-full flake8
+
 test-code:
-	@$(NOSETESTS) -v -a '!slow' -s test
+	@$(NOSETESTS) -v -A "not slow and not grid_access" -s test
+
+test-code-full:
+	@$(NOSETESTS) -v -s test
 
 changelog:
 	@github_changelog_generator -u cms-l1t-offline -p cms-l1t-analysis --base docs/initial_changelog.md
