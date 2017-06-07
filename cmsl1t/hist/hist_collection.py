@@ -4,90 +4,13 @@ from exceptions import RuntimeError, KeyError, NotImplementedError
 from copy import deepcopy
 import logging
 from cmsl1t.hist.factory import HistFactory
+from cmsl1t.hist.binning import Base as BinningBase
+
+
+__all__ = ["HistCollectionView", "HistogramCollection"]
 
 
 logger = logging.getLogger(__name__)
-
-
-class BinningBase():
-    overflow = "overflow"
-    underflow = "underflow"
-
-    def __init__(self, label):
-        self.label = label
-
-    def set_contained_obj(self, contains):
-        self.values = {}
-        for i in range(self.n_bins) + [self.overflow, self.underflow]:
-            self.values[i] = deepcopy(contains)
-
-    def __len__(self):
-        return self.n_bins
-
-    def get_bin_contents(self, bin_index):
-        contents = self.values.get(bin_index, None)
-        if contents is None:
-            msg = "Cannot find bin for index, {0}, for binning called '{1}'"
-            logger.error(msg.format(bin_index, self.label))
-            raise KeyError(bin_index)
-        return contents
-
-    def __getitem__(self, value):
-        bins = self.find_bins(value)
-        return [self.get_bin_contents(i) for i in bins]
-
-    def __iter__(self):
-        for i in range(self.n_bins):
-            yield i
-
-
-class Binning(BinningBase):
-    import bisect
-
-    def __init__(self, bin_edges, label=None):
-        BinningBase.__init__(self, label)
-        self.bins = sorted(bin_edges)
-        self.n_bins = len(self.bins)
-
-    def find_bins(self, value):
-        if value < self.bins[0]:
-            found_bin = self.underflow
-        elif value >= self.bins[-1]:
-            found_bin = self.overflow
-        else:
-            found_bin = bisect.bisect(self.bins, value) - 1
-        return [found_bin]
-
-
-class BinningOverlapped(BinningBase):
-    def __init__(self, bins, label=None):
-        BinningBase.__init__(self, label)
-        self.bins = bins
-        self.n_bins = len(self.bins)
-
-    def find_bins(self, value):
-        contained_in = []
-        for i, (bin_low, bin_high) in enumerate(self.bins):
-            if value >= bin_low and value < bin_high:
-                contained_in.append(i)
-        if len(contained_in) == 0:
-            contained_in = [self.overflow]
-        return contained_in
-
-
-class BinningEtaRegions(BinningBase):
-    from cmsl1t.geometry import eta_regions
-
-    def __init__(self, label=None):
-        BinningBase.__init__(self, label)
-        self.n_bins = len(self.eta_regions)
-
-    def find_bins(self, value):
-        regions = []
-        for region, is_contained in self.eta_regions.iteritems():
-            if is_contained(value):
-                regions.append(region)
-        return regions
 
 
 class HistCollectionView(object):
@@ -128,24 +51,34 @@ class HistogramCollection(object):
         for dim in dimensions:
             if not isinstance(dim, BinningBase):
                 raise RuntimeError("non-Dimension object given to histogram")
-        self._dimensions = dimensions
+        self.__dimensions = dimensions
+        self.shape = tuple([len(dim) for dim in dimensions])
 
         if isinstance(histogram_factory, str):
             histogram_factory = HistFactory(histogram_factory,
-                                            *vargs, **kwargs)
+                                            *vargs,
+                                            **kwargs)
+        self.values = self._prepare_collection(dimensions, histogram_factory)
 
-        last_dim = None
-        # Build the linked list of dimension bins objects
-        for dimension in reversed(self._dimensions):
-            if last_dim is None:
-                # I would like to have the histogram factory passed bin labels
-                # which we reformat the names and titles of the histograms with
-                # Will add this in in the near future, by passing something
-                # into this method
-                dimension.set_contained_obj(histogram_factory())
-            else:
-                dimension.set_contained_obj(last_dim)
-            last_dim = dimension
+    def _prepare_collection(self, dimensions, histogram_factory,
+                            bin_indices=[], depth=0):
+            this_dim = deepcopy(dimensions[0])
+            remaining_dims = dimensions[1:]
+            for bin in this_dim.iter_all():
+                if remaining_dims:
+                    value = self._prepare_collection(remaining_dims,
+                                                     histogram_factory,
+                                                     bin_indices + [bin],
+                                                     depth + 1)
+                    this_dim.set_value(bin, value)
+                else:
+                    indices = bin_indices + [bin]
+                    labels = {d.label: index for d, index in
+                              zip(self.__dimensions, indices)}
+                    # TODO: Should fill proper bin labels here and pass through
+                    hist = histogram_factory(labels=labels)
+                    this_dim.set_value(bin, hist)
+            return this_dim
 
     @classmethod
     def _flatten_bins(self, bins):
@@ -173,8 +106,8 @@ class HistogramCollection(object):
 
         # Check every dimension if it contains these values
         bins = []
-        for key, dimension in zip(keys, self._dimensions[:n_keys]):
-            bins.append(dimension.find_bins(key))
+        for key, dimension in zip(keys, self.__dimensions[:n_keys]):
+            bins.append(dimension.find_all_bins(key))
 
         # Some dimensions might return multiple values, flatten returned arrays
         bins = self._flatten_bins(bins)
@@ -182,9 +115,9 @@ class HistogramCollection(object):
         return bins
 
     def get_bin_contents(self, bin_list):
-        if isinstance(bin_list, int):
+        if isinstance(bin_list, (str, int)):
             bin_list = [bin_list]
-        value = self._dimensions[0]
+        value = self.values
         for index in bin_list:
             value = value.get_bin_contents(index)
         return value
@@ -201,14 +134,19 @@ class HistogramCollection(object):
         return HistCollectionView(objects)
 
     def shape(self):
-        _shape = [len(dim) for dim in self._dimensions]
-        return tuple(_shape)
+        return self.shape
 
     def __len__(self):
-        return len(self._dimensions[0])
+        return len(self.__dimensions[0])
 
     def __iter__(self):
         # # In python >3.3 we should do
-        # yield from self._dimensions[0]
-        for bin in self._dimensions[0]:
+        # yield from self.__dimensions[0]
+        for bin in self.__dimensions[0]:
+            yield bin
+
+    def iter_all(self):
+        # # In python >3.3 we should do
+        # yield from self.__dimensions[0]
+        for bin in self.__dimensions[0].iter_all():
             yield bin
