@@ -77,10 +77,10 @@ class Analyzer(BaseAnalyzer):
         self.efficiencies.set_pileup(pileup)
 
         l1MetBE = event.l1Sums['L1Met'].et
-        l1MetBERecalc = np.linalg.norm(recalcMET(event.caloTowers))
+        l1MetBERecalc = recalcMET(event.caloTowers).mag
 
         l1MetBEEmu = event.l1Sums['L1EmuMet'].et
-        l1MetBERecalcEmu = np.linalg.norm(recalcMET(event.emuCaloTowers))
+        l1MetBERecalcEmu = recalcMET(event.emuCaloTowers).mag
 
         l1Htt = event.l1Sums['L1Htt'].et
 
