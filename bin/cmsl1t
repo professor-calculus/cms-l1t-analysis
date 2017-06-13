@@ -59,6 +59,19 @@ def process_tuples(config, nevents, analyzers):
             break
 
 
+@timerfunc_log_to(logger.info)
+def process_legacy(config, nevents, analyzers):
+    logger.info(section.format("Running in legacy mode"))
+    results = [analyzer.prepare_for_events(None) for analyzer in analyzers]
+    check(results, analyzers, 'prepare_for_events')
+
+    # setting entry = nevents  is ugly
+    results = [analyzer.process_event(nevents, None) for analyzer in analyzers]
+    check(results, analyzers, 'process_event')
+
+    return all(results)
+
+
 def run(config, nevents, reload_histograms):
     results = [False]
     # Fetch the analyzer
@@ -66,7 +79,11 @@ def run(config, nevents, reload_histograms):
     analyzers = [load_analyzer(analyzer, config) for analyzer in analyzers]
 
     if not reload_histograms:
-        process_tuples(config, nevents, analyzers)
+        analysis_mode = config.try_get('analysis', 'mode', default='new')
+        if analysis_mode == 'legacy':
+            process_legacy(config, nevents, analyzers)
+        else:
+            process_tuples(config, nevents, analyzers)
     else:
         # TODO: Support multiple input root histogram files
         pass
