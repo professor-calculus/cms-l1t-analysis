@@ -9,7 +9,8 @@ class BaseAnalyzer(object):
         self.name = name
         self.output_folder = config.get('output', 'folder')
         self.config = config
-        os.makedirs(self.output_folder)
+        if not os.path.exists(self.output_folder):
+            os.makedirs(self.output_folder)
 
     def prepare_for_events(self, reader):
         """
