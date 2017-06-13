@@ -5,7 +5,7 @@ class BaseAnalyzer(object):
     """
     A Base class to be used by the various analyzers
     """
-    def __init__(self, name, config):
+    def __init__(self, name, config, **kwargs):
         self.name = name
         self.output_folder = config.get('output', 'folder')
         self.config = config

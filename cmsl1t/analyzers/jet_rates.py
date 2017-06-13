@@ -11,7 +11,7 @@ from cmsl1t.collections import HistogramsByPileUpCollection
 
 class Analyzer(BaseAnalyzer):
 
-    def __init__(self, config):
+    def __init__(self, config, **kwargs):
         super(Analyzer, self).__init__("jet_rates", config)
         self.triggerName = self.config.get('input', 'trigger')['name']
 

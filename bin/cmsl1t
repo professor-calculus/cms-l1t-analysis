@@ -31,7 +31,7 @@ def process_tuples(config, nevents, analyzers):
 
     if len(input_files) > 10:
         logger.info(input_files[:10], "... and",
-                   len(input_files) - 10, "more files")
+                    len(input_files) - 10, "more files")
     else:
         logger.info(input_files)
 
@@ -45,7 +45,7 @@ def process_tuples(config, nevents, analyzers):
     # Fill the histograms from the tuples
     counter_rate = 1000
     if nevents <= 10000 and not nevents < 0:
-        counter_rate = nevents/10
+        counter_rate = nevents / 10
     for entry, event in enumerate(reader):
         if entry % counter_rate == 0:
             if nevents > 0:
@@ -63,7 +63,7 @@ def run(config, nevents, reload_histograms):
     results = [False]
     # Fetch the analyzer
     analyzers = config.get('analysis', 'analyzers')
-    analyzers = [load_analyzer(analyzer)(config) for analyzer in analyzers]
+    analyzers = [load_analyzer(analyzer, config) for analyzer in analyzers]
 
     if not reload_histograms:
         process_tuples(config, nevents, analyzers)
@@ -120,11 +120,16 @@ def analyze(config_file, nevents, reload_histograms):
         logger.info('\n' + separator + '\n')
 
 
-def load_analyzer(analyzer):
-    logger.info("Try loading analyzer:"+ analyzer)
-    module = import_module(analyzer)
-    logger.info("Successfully loaded analyzer:"+ analyzer)
-    return module.Analyzer
+def load_analyzer(analyzer, config):
+    name = analyzer
+    params = {}
+    if isinstance(analyzer, dict):
+        name = analyzer.keys()[0]
+        params = analyzer[name]
+    logger.info("Try loading analyzer:" + name)
+    module = import_module(name)
+    logger.info("Successfully loaded analyzer:" + name)
+    return module.Analyzer(config, **params)
 
 if __name__ == '__main__':
     analyze()

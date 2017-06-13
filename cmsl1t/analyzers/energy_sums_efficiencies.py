@@ -17,7 +17,7 @@ from cmsl1t.recalc.met import recalcMET
 
 class Analyzer(BaseAnalyzer):
 
-    def __init__(self, config):
+    def __init__(self, config, **kwargs):
         super(Analyzer, self).__init__(__name__, config)
         self.triggerName = self.config.get('input', 'trigger')['name']
 
