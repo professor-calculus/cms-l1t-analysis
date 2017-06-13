@@ -56,7 +56,7 @@ class Analyzer(BaseAnalyzer):
         offlineMetBE = event.sums.caloMetBE
         for name, config in self.met_calcs.items():
             onlineMet = config['calculate'](event.caloTowers)
-            onlineMet = np.linalg.norm(onlineMet)
+            onlineMet = onlineMet.mag
             self.efficiencies.fill(name, offlineMetBE, onlineMet)
         return True
 
