@@ -1,7 +1,7 @@
 from __future__ import print_function
 from rootpy.tree import TreeChain
 import six
-# import inspect
+import os
 import math
 
 from jetfilters import defaultJetFilter
@@ -12,8 +12,14 @@ from exceptions import RuntimeError
 import logging
 logger = logging.getLogger(__name__)
 
+PROJECT_ROOT = os.environ.get('PROJECT_ROOT', os.getcwd())
+EXTERNAL_PATH = os.path.join(PROJECT_ROOT, 'external')
+ROOT.gROOT.ProcessLine('.include {0}'.format(EXTERNAL_PATH))
+
 if 'L1TAnalysisDataformats.so' not in ROOT.gSystem.GetLibraries():
-    ROOT.gSystem.Load('build/L1TAnalysisDataformats.so')
+    path_to_lib = os.path.join(
+        PROJECT_ROOT, 'build', 'L1TAnalysisDataformats.so')
+    ROOT.gSystem.Load(path_to_lib)
 sumTypes = ROOT.l1t.EtSum
 
 # some quick classes

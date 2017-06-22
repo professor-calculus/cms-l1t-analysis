@@ -9,7 +9,7 @@ class MET(object):
 
     @property
     def mag(self):
-        return np.linalg.norm([self.metx, self.mety])
+        return np.linalg.norm([self.x, self.y])
 
 
 def recalcMET(caloTowers, exclude=None):
