@@ -12,7 +12,7 @@ import numpy as np
 
 class Analyzer(BaseAnalyzer):
 
-    def __init__(self, config):
+    def __init__(self, config, **kwargs):
         super(Analyzer, self).__init__("study_tower28_met", config)
         self.triggerName = self.config.get('input', 'trigger')['name']
 

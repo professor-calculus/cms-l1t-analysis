@@ -16,7 +16,7 @@ ROOT.TH1.SetDefaultSumw2(True)
 # ROOT.gStyle.SetOptStat(0)
 PROJECT_ROOT = os.environ.get('PROJECT_ROOT')
 BENCHMARK_OUTPUT_FOLDER = os.path.join(PROJECT_ROOT, 'benchmark', 'legacy')
-BENCHMARK_DATA = os.path.join(PROJECT_ROOT, 'data')
+BENCHMARK_DATA = os.path.join(PROJECT_ROOT, 'data', '*.root')
 
 
 @contextmanager

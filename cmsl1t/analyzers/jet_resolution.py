@@ -12,7 +12,7 @@ from cmsl1t.filters import muonfilter
 
 class Analyzer(BaseAnalyzer):
 
-    def __init__(self, config):
+    def __init__(self, config, **kwargs):
         super(Analyzer, self).__init__("jet_resolution_analyzer", config)
         self.triggerName = self.config.get('input', 'trigger')['name']
 

@@ -10,7 +10,7 @@ import numpy as np
 
 
 class Analyzer(BaseAnalyzer):
-    def __init__(self, config):
+    def __init__(self, config, **kwargs):
         super(Analyzer, self).__init__("study_met", config)
 
         self.eff_caloMET_BE = EfficiencyPlot()

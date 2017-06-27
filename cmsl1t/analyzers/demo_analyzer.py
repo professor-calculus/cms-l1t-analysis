@@ -10,7 +10,7 @@ import numpy as np
 
 
 class Analyzer(BaseAnalyzer):
-    def __init__(self, config):
+    def __init__(self, config, **kwargs):
         super(Analyzer, self).__init__("demo_analyzer", config)
 
         self.met_calcs = dict(
