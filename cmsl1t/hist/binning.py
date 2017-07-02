@@ -49,6 +49,11 @@ class Base():
     def __len__(self):
         return self.n_bins
 
+    def get_bin_center(self, bin_index):
+        if bin_index in [self.overflow, self.underflow, self.everything]:
+            return bin_index
+        return self._bin_center(bin_index)
+
     def get_bin_contents(self, bin_index):
         contents = self.values.get(bin_index, "DoesntExist")
         if contents is "DoesntExist":
@@ -108,6 +113,9 @@ class Sorted(Base):
             found_bin = bisect.bisect(self.bins, key) - 1
         return [found_bin]
 
+    def _bin_center(self, bin_index):
+        return (self.bins[bin_index + 1] + self.bins[bin_index]) * 0.5
+
 
 class GreaterThan(Base):
     """
@@ -128,6 +136,9 @@ class GreaterThan(Base):
         if len(contained_in) == 0:
             contained_in = [self.overflow]
         return contained_in
+
+    def _bin_center(self, bin_index):
+        return self.bins[bin_index]
 
 
 class Overlapped(Base):
@@ -150,6 +161,10 @@ class Overlapped(Base):
             contained_in = [self.overflow]
         return contained_in
 
+    def _bin_center(self, bin_index):
+        edges = self.bins[bin_index]
+        return (edges[1] + edges[0]) * 0.5
+
 
 class EtaRegions(Base):
     """
@@ -168,3 +183,6 @@ class EtaRegions(Base):
             if is_contained(key):
                 regions.append(region)
         return regions
+
+    def _bin_center(self, bin_index):
+        return bin_index
