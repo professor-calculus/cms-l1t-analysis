@@ -44,15 +44,6 @@ def test_fit_turnon_symmetric():
 
     params = fit_turnon(fake_turnon, 30, 10, False)
 
-    canvas = Canvas()
-    fake_turnon.Draw()
-    params["symmetric"].linecolor = "red"
-    params["symmetric"].Draw("same")
-    if "asymmetric" in params:
-            params["asymmetric"].linecolor = "blue"
-            params["asymmetric"].Draw("same")
-    canvas.Print("/afs/cern.ch/work/b/bkrikler/L1Trigger_studies/testing_fit_sym.png")
-
     mu = params["mu"][0]
     sigma = params["sigma"][0]
     mu_ratio = mu / in_mean if mu > in_mean else in_mean / mu
@@ -68,15 +59,6 @@ def test_fit_turnon_asymmetric():
     fake_turnon = FakeTurnon(in_mean, in_sigma)
 
     params = fit_turnon(fake_turnon, 30, 10, True)
-
-    canvas = Canvas()
-    fake_turnon.Draw()
-    params["symmetric"].linecolor = "red"
-    params["symmetric"].Draw("same")
-    if "asymmetric" in params:
-            params["asymmetric"].linecolor = "blue"
-            params["asymmetric"].Draw("same")
-    canvas.Print("/afs/cern.ch/work/b/bkrikler/L1Trigger_studies/testing_fit_asym.png")
 
     mu = params["mu"][0]
     sigma = params["sigma"][0]
