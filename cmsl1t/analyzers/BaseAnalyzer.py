@@ -45,6 +45,25 @@ class BaseAnalyzer(object):
         raise NotImplementedError("fill_histograms needs to be implemented")
         return True
 
+    def reload_histograms(self, input_file):
+        """
+        Has to be overloaded by users code.
+
+        Read back histograms from the given root file.
+        May need to append histograms 
+
+
+        returns:
+          Should return True if histograms were written without problem.
+          If anything else is returned, processing of the trees will stop
+        """
+        print "BEK reload_histograms"
+        results = []
+        for hist in self.all_plots:
+            results += hist.from_root(input_file)
+        return all(results)
+
+
     def write_histograms(self):
         """
         Called after all events have been read, so that histograms can be
@@ -56,9 +75,10 @@ class BaseAnalyzer(object):
           Should return True if histograms were written without problem.
           If anything else is returned, processing of the trees will stop
         """
+        results = []
         for hist in self.all_plots:
-            hist.to_root(self.get_histogram_filename())
-        return True
+            results += hist.to_root(self.get_histogram_filename())
+        return all(results)
 
     def make_plots(self):
         """
@@ -89,3 +109,10 @@ class BaseAnalyzer(object):
 
     def add_plotter(self, plotter):
         self.all_plots.append(plotter)
+
+    def might_contain_histograms(self, filename):
+        this_file = "{}_histograms.root".format(self.name)
+        base = os.path.basename(filename)
+        print "BEK base", base
+        print "BEK this_file", this_file
+        return  base == this_file

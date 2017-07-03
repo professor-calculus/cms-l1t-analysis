@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from __future__ import print_function
 import ROOT
+from rootpy.io import root_open
 import os
 from datetime import datetime
 from cmsl1t.utils.timers import timerfunc_log_to
@@ -61,6 +62,30 @@ def process_tuples(config, nevents, analyzers):
         if all(results) is not True:
             break
 
+@timerfunc_log_to(logger.info)
+def process_histogram_files(config, analyzers):
+    # Open the histogram files
+    logger.info(section.format("Reading back histograms"))
+
+    inputs = config.get('input', 'files')
+    logger.info("Inputs:")
+    if len(inputs) > 10:
+        logger.info(inputs[:10], "... and",
+                    len(inputs) - 10, "more")
+    else:
+        logger.info(inputs)
+
+    # Open the histogram file
+    results = []
+    for in_file in inputs:
+        for analyzer in analyzers:
+            if analyzer.might_contain_histograms(in_file):
+                print("BEK reloading", in_file)
+                results.append(analyzer.reload_histograms(in_file))
+
+    # Check for errors
+    return check(results, analyzers, 'process_histogram_files')
+
 
 @timerfunc_log_to(logger.info)
 def process_legacy(config, nevents, analyzers):
@@ -88,12 +113,8 @@ def run(config, nevents, reload_histograms):
         else:
             process_tuples(config, nevents, analyzers)
     else:
-        # TODO: Support multiple input root histogram files
-        pass
-        # isOK = analyzer.reload_histograms(args.inputs[0])
-        # if isOK is not True:
-        #     return "Problem in reload_histograms() with analyzer: " \
-        #         + str(args.analysis)
+        process_histogram_files(config, analyzers)
+
     # Write out the histograms
     for analyzer in analyzers:
         analyzer.write_histograms()
@@ -113,10 +134,12 @@ def run(config, nevents, reload_histograms):
 
 def check(results, analyzers, method):
     msg = 'Problem during {method}() with analyzer "{analyzer}"'
-    if all(results) is not True:
+    problem = all(results)
+    if problem:
         for i, r in enumerate(results):
             if r is not True:
                 logger.error(msg.format(method=method, analyzer=analyzers[i]))
+    return problem
 
 
 @click.command()

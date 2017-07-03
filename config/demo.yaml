@@ -27,7 +27,8 @@ name: Benchmark
 
 input:
   files:
-    - data/L1Ntuple_*.root
+      - /afs/cern.ch/work/b/bkrikler/L1Trigger_studies/20170628_Data_run-276243_SingleMu-rev_2/study_met_histograms.root
+      # - data/L1Ntuple_*.root
   sample:
     name: Data
     title: 2016 Data
@@ -42,7 +43,7 @@ analysis:
   pu_type: 0PU12,13PU19,20PU
   pu_bins: 0,13,20,999
   analyzers:
-    - cmsl1t.analyzers.demo_analyzer
+    - cmsl1t.analyzers.study_met
   modifiers:
     - cmsl1t.recalc.met.l1MetNot28:
         in: event.caloTowers

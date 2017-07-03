@@ -5,7 +5,7 @@ from cmsl1t.hist.factory import HistFactory
 import cmsl1t.hist.binning as bn
 from cmsl1t.utils.draw import draw, label_canvas
 from cmsl1t.utils.fit_efficiency import fit_efficiency
-from cmsl1t.io import to_root
+from cmsl1t.io import to_root, from_root
 
 from rootpy.plotting import Legend, HistStack, Efficiency
 from rootpy.context import preserve_current_style
@@ -44,6 +44,40 @@ class EfficiencyPlot(BasePlotter):
         self.efficiencies = HistogramCollection([self.pileup_bins, self.thresholds],
                                                 make_efficiency)
         self.filename_format = "{type}" + name
+
+    def reload_histograms(self, filename):
+        """ Reload histograms from existing files on disk """
+        print("BEK: self before ",self.__dict__)
+        things = from_root(filename)
+        new = things[0]
+        yields = things[1]
+        print("BEK: new before ",new.__dict__)
+        if hasattr(self, "online_name"):
+            if not self.__is_consistent(new):
+                return False
+            self.__append_yields(yields)
+        else:
+            final = new.__dict__
+            final.update(self.__dict__)
+            self.__dict__ = final
+            print("BEK: loaded new objects")
+
+            # Boiler plate to convert a given distribution to a turnon
+            def clone_hist(labels):
+                pileup_bin = labels["pileup"]
+                threshold_bin = labels["threshold"]
+                a_yield = yields.get_bin_contents([pileup_bin, threshold_bin])
+                print("BEK", pileup_bin, threshold_bin, a_yield)
+                if not a_yield:
+                    return None
+                return a_yield.Clone()
+
+            # Actually make the turnons
+            new_yields = HistogramCollection([self.pileup_bins, self.thresholds],
+                                               clone_hist)
+            self.yields = new_yields
+        print("BEK: self after ",self.__dict__)
+        return True
 
     def fill(self, pileup, online, offline):
         for bins, hist in self.efficiencies[pileup, online].items():
