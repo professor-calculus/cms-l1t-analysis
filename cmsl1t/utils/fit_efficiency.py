@@ -6,20 +6,20 @@ from rootpy import asrootpy
 import array
 
 
-def fit_turnon(turnon_graph, in_mean, in_sigma=10,
-               asymmetric=True, name="fit_turnon"):
+def fit_efficiency(efficiency_graph, in_mean, in_sigma=10,
+                   asymmetric=True, name="fit_efficiency"):
     """
-    Fit a turnon curve
+    Fit a efficiency curve
 
     params:
-    - turnon_graph -- a ROOT-based Efficiency plot containing the turnon curve
+    - efficiency_graph -- a ROOT-based Efficiency plot containing the efficiency curve
                       datapoints
     - asymmetric -- use the full asymmetric fit, the cumulative dist of an
                     Exponentially Modified Gaussian (EMG), as opposed to a pure
                     Gaussian
     returns: the parameters describing the fit
     """
-    turnon_graph = asrootpy(turnon_graph)
+    efficiency_graph = asrootpy(efficiency_graph)
     fit_functions = []
 
     fit_functions.append(get_symmetric_formula())
@@ -27,8 +27,8 @@ def fit_turnon(turnon_graph, in_mean, in_sigma=10,
     if asymmetric:
         fit_functions.append(get_asymmetric_formula())
 
-    x_min = turnon_graph.lowerbound(0)
-    x_max = turnon_graph.upperbound(0)
+    x_min = efficiency_graph.lowerbound(0)
+    x_max = efficiency_graph.upperbound(0)
 
     fits = []
     for i, func in enumerate(fit_functions):
@@ -52,20 +52,20 @@ def fit_turnon(turnon_graph, in_mean, in_sigma=10,
             fitFcn.SetParameters(p0, p1, p2)
             fitFcn.SetParNames("mu", "sigma_inv", "lambda_sigma")
 
-        success = do_fit(turnon_graph, fitFcn, x_min, x_max)
+        success = do_fit(efficiency_graph, fitFcn, x_min, x_max)
 
     # Create the output parameter dictionary
-    return _create_output_dict(success, fits, turnon_graph)
+    return _create_output_dict(success, fits, efficiency_graph)
 
 
-def do_fit(turnon_graph, fitFcn, x_min, x_max):
+def do_fit(efficiency_graph, fitFcn, x_min, x_max):
     from rootpy.ROOT import Fit, Math
 
     # Prepare the input data
     opt = Fit.DataOptions()
     # If we have errors, ignore empty bins
     have_errors = False
-    for a_bin in turnon_graph:
+    for a_bin in efficiency_graph:
         if a_bin.error != 0:
             have_errors = True
             break
@@ -77,7 +77,7 @@ def do_fit(turnon_graph, fitFcn, x_min, x_max):
     data_range = Fit.DataRange(x_min, x_max)
     data = Fit.BinData(opt, data_range)
 
-    Fit.FillData(data, turnon_graph)
+    Fit.FillData(data, efficiency_graph)
 
     # Create the model
     fitFunction = Math.WrappedMultiTF1(fitFcn, fitFcn.GetNdim())

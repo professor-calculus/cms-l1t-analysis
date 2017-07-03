@@ -3,7 +3,7 @@ from cmsl1t.hist.hist_collection import HistogramCollection
 from cmsl1t.hist.factory import HistFactory
 import cmsl1t.hist.binning as bn
 from cmsl1t.utils.draw import draw, label_canvas
-from cmsl1t.utils.fit_turnon import fit_turnon
+from cmsl1t.utils.fit_efficiency import fit_efficiency
 from cmsl1t.io import to_root
 
 from rootpy.plotting import Legend, HistStack
@@ -47,8 +47,8 @@ class EfficiencyPlot():
     def to_root(self, filename):
         """ Write histograms to disk """
         to_write = [self, self.yields]
-        if hasattr(self, "turnons"):
-            to_write += [self.turnons]
+        if hasattr(self, "efficiencies"):
+            to_write += [self.efficiencies]
         to_root(to_write, filename)
 
     def fill(self, pileup, online, offline):
@@ -56,12 +56,12 @@ class EfficiencyPlot():
 
     def draw(self, with_fits=True):
         # Calclate the efficiency for each threshold
-        self.__fill_turnons()
+        self.__fill_efficiencies()
         if with_fits:
-            self.__fit_turnons()
+            self.__fit_efficiencies()
 
         # Overlay the "all" pile-up bin for each threshold
-        all_pileup_effs = self.turnons.get_bin_contents([bn.Base.everything])
+        all_pileup_effs = self.efficiencies.get_bin_contents([bn.Base.everything])
         hists = []
         labels = []
         fits = []
@@ -82,7 +82,7 @@ class EfficiencyPlot():
             for pileup in self.pileup_bins.iter_all():
                 if not isinstance(pileup, int):
                     continue
-                hists.append(self.turnons.get_bin_contents([pileup, threshold]))
+                hists.append(self.efficiencies.get_bin_contents([pileup, threshold]))
                 if with_fits:
                     fits.append(self.fits.get_bin_contents([pileup, threshold]))
                 labels.append(str(self.pileup_bins.bins[pileup]))
@@ -92,36 +92,36 @@ class EfficiencyPlot():
         if with_fits:
             self.__summarize_fits()
 
-    def __fill_turnons(self):
-        # Boiler plate to convert a given distribution to a turnon
+    def __fill_efficiencies(self):
+        # Boiler plate to convert a given distribution to a efficiency
         def make_eff(labels):
             pileup_bin = labels["pileup"]
             threshold_bin = labels["threshold"]
             total = self.yields.get_bin_contents([pileup_bin, bn.Base.everything])
             passed = self.yields.get_bin_contents([pileup_bin, threshold_bin])
-            turnon = passed.Clone(passed.name.replace("yield", "turnon"))
-            turnon.Divide(total)
-            return turnon
+            efficiency = passed.Clone(passed.name.replace("yield", "efficiency"))
+            efficiency.Divide(total)
+            return efficiency
 
-        # Actually make the turnons
-        self.turnons = HistogramCollection([self.pileup_bins, self.thresholds],
-                                           make_eff)
+        # Actually make the efficiencies
+        self.efficiencies = HistogramCollection([self.pileup_bins, self.thresholds],
+                                                make_eff)
 
-    def __fit_turnons(self):
+    def __fit_efficiencies(self):
         def make_fit(labels):
             pileup_bin = labels["pileup"]
             threshold_bin = labels["threshold"]
-            turnon = self.turnons.get_bin_contents([pileup_bin, threshold_bin])
-            params = fit_turnon(turnon, self.thresholds.get_bin_center(threshold_bin))
+            efficiency = self.efficiencies.get_bin_contents([pileup_bin, threshold_bin])
+            params = fit_efficiency(efficiency, self.thresholds.get_bin_center(threshold_bin))
             return params
 
-        # Actually make the turnons
+        # Actually make the efficiencies
         self.fits = HistogramCollection([self.pileup_bins, self.thresholds],
                                         make_fit)
 
     def __make_overlay(self, pileup, threshold, hists, fits, labels, header):
         with preserve_current_style():
-            # Draw each turnon (with fit)
+            # Draw each efficiency (with fit)
             canvas = draw(hists, draw_args={"xtitle": self.offline_title,
                                             "ytitle": "Efficiency"})
             if len(fits) > 0:
@@ -140,7 +140,7 @@ class EfficiencyPlot():
 
             # Save canvas to file
             filename = self.filename_format
-            filename = filename.format(type="turnon_",
+            filename = filename.format(type="efficiency_",
                                        outdir=self.output_dir,
                                        pileup=pileup,
                                        threshold=threshold,
