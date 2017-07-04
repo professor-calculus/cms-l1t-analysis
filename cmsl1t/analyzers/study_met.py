@@ -14,7 +14,7 @@ class Analyzer(BaseAnalyzer):
         super(Analyzer, self).__init__("study_met", config)
 
         self.eff_caloMET_BE = EfficiencyPlot()
-        self.all_plots = [self.eff_caloMET_BE]
+        self.add_plotter(self.eff_caloMET_BE)
 
         file_format = config.try_get('output', 'plot_format', "png")
         for hist in self.all_plots:
@@ -30,9 +30,6 @@ class Analyzer(BaseAnalyzer):
                                   puBins, thresholds, 50, 0, 300)
         return True
 
-    def reload_histograms(self, input_file):
-        return True
-
     def fill_histograms(self, entry, event):
         pileup = event.nVertex
         if pileup < 5 or not event.passesMETFilter():
@@ -46,14 +43,4 @@ class Analyzer(BaseAnalyzer):
 
         self.eff_caloMET_BE.fill(pileup, offlineMetBE, onlineMet)
 
-        return True
-
-    def write_histograms(self):
-        for hist in self.all_plots:
-            hist.to_root(self.get_histogram_filename())
-        return True
-
-    def make_plots(self):
-        for plot in self.all_plots:
-            plot.draw()
         return True

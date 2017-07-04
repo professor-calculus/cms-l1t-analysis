@@ -11,6 +11,7 @@ class BaseAnalyzer(object):
         self.config = config
         if not os.path.exists(self.output_folder):
             os.makedirs(self.output_folder)
+        self.all_plots = []
 
     def prepare_for_events(self, reader):
         """
@@ -46,8 +47,6 @@ class BaseAnalyzer(object):
 
     def write_histograms(self):
         """
-        Has to be overloaded by users code.
-
         Called after all events have been read, so that histograms can be
         written to file).  Note that plots should not be drawn here, since this
         method will not be called if we are running off previously filled
@@ -57,13 +56,12 @@ class BaseAnalyzer(object):
           Should return True if histograms were written without problem.
           If anything else is returned, processing of the trees will stop
         """
-        raise NotImplementedError("write_histograms() needs to be implemented")
+        for hist in self.all_plots:
+            hist.to_root(self.get_histogram_filename())
         return True
 
     def make_plots(self):
         """
-        Has to be overloaded by users code.
-
         Called after all events have been read to convert histograms to actual
         plots Might be called on existing files of histograms (ie. without
         reading tuples in again)
@@ -72,7 +70,9 @@ class BaseAnalyzer(object):
           Should return True if plots were produced without problem.
           If anything else is returned, processing of the trees will stop
         """
-        raise NotImplementedError("make_plots needs to be implemented")
+        for plot in self.all_plots:
+            plot.draw()
+        return True
 
     def finalize(self):
         """
@@ -86,3 +86,6 @@ class BaseAnalyzer(object):
     def get_histogram_filename(self):
         output_file = "{}_histograms.root".format(self.name)
         return os.path.join(self.output_folder, output_file)
+
+    def add_plotter(self, plotter):
+        self.all_plots.append(plotter)

@@ -1,4 +1,5 @@
 from __future__ import print_function
+from cmsl1t.plotting.base import BasePlotter
 from cmsl1t.hist.hist_collection import HistogramCollection
 from cmsl1t.hist.factory import HistFactory
 import cmsl1t.hist.binning as bn
@@ -10,7 +11,7 @@ from rootpy.plotting import Legend, HistStack
 from rootpy.context import preserve_current_style
 
 
-class EfficiencyPlot():
+class EfficiencyPlot(BasePlotter):
     def build(self,
               online_name, offline_name,
               online_title, offline_title,
@@ -34,15 +35,7 @@ class EfficiencyPlot():
         self.yields = HistogramCollection([self.pileup_bins, self.thresholds],
                                           "Hist1D", n_bins, low, high,
                                           name="yield" + name, title=title)
-        self.filename_format = "{outdir}/{type}" + name + ".{fmt}"
-
-    def set_plot_output_cfg(self, outdir, fmt):
-        self.output_dir = outdir
-        self.output_format = fmt
-
-    def from_root(self, filename):
-        """ Reload histograms from existing files on disk """
-        pass
+        self.filename_format = "{type}" + name
 
     def to_root(self, filename):
         """ Write histograms to disk """
@@ -139,13 +132,11 @@ class EfficiencyPlot():
             legend.Draw()
 
             # Save canvas to file
-            filename = self.filename_format
-            filename = filename.format(type="efficiency_",
-                                       outdir=self.output_dir,
-                                       pileup=pileup,
-                                       threshold=threshold,
-                                       fmt="png")
-            canvas.SaveAs(filename)
+            name = self.filename_format.format(type="efficiency_",
+                                               pileup=pileup,
+                                               threshold=threshold)
+            self.save_canvas(canvas, name)
 
     def __summarize_fits(self):
+        """ Implement this to show fit evolution plots """
         pass
