@@ -30,6 +30,8 @@ def fit_efficiency(efficiency_graph, in_mean, in_sigma=10,
     x_min = efficiency_graph.lowerbound(0)
     x_max = efficiency_graph.upperbound(0)
 
+    # Sometimes the mean passed in is a string, eg. when the threshold bin is "overflow" or "underflow"
+    # In this case, choose a reasonable value, 50 GeV, as the starting point for the fit
     if isinstance(in_mean, str):
         in_mean = 50
 
