@@ -30,6 +30,9 @@ def fit_efficiency(efficiency_graph, in_mean, in_sigma=10,
     x_min = efficiency_graph.lowerbound(0)
     x_max = efficiency_graph.upperbound(0)
 
+    if isinstance(in_mean, str):
+        in_mean = 50
+
     fits = []
     for i, func in enumerate(fit_functions):
         this_name = "fit_{}_{}".format(name, i)
