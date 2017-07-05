@@ -14,8 +14,9 @@ logger = logging.getLogger(__name__)
 
 
 class HistCollectionView(object):
-    def __init__(self, hist_list):
+    def __init__(self, bin_indices, hist_list):
         self.histograms = hist_list
+        self.bin_indices = bin_indices
 
     def __getattr__(self, attr):
         return [getattr(hist, attr) for hist in self.histograms]
@@ -33,6 +34,10 @@ class HistCollectionView(object):
 
     def __len__(self):
         return len(self.histograms)
+
+    def items(self):
+        for bin_hist_pair in zip(self.bin_indices, self.histograms):
+            yield bin_hist_pair
 
 
 class HistogramCollection(object):
@@ -131,7 +136,7 @@ class HistogramCollection(object):
         '''
         bin_indices = self._find_bins(keys)
         objects = [self.get_bin_contents(bins) for bins in bin_indices]
-        return HistCollectionView(objects)
+        return HistCollectionView(bin_indices, objects)
 
     def shape(self):
         return self.shape
