@@ -1,34 +1,33 @@
 from collections import OrderedDict
 import math
 from rootpy.plotting.func import F1
-from rootpy.plotting.hist import _HistBase
+from rootpy.plotting.hist import _HistBase, Efficiency
+from rootpy.plotting.graph import _GraphBase
+from rootpy.ROOT import Fit, Math
 from rootpy import asrootpy
 import array
 
 
-def fit_efficiency(efficiency_graph, in_mean, in_sigma=10,
+def fit_efficiency(efficiency, in_mean, in_sigma=10,
                    asymmetric=True, name="fit_efficiency"):
     """
     Fit a efficiency curve
 
     params:
-    - efficiency_graph -- a ROOT-based Efficiency plot containing the efficiency curve
+    - efficiency -- a ROOT-based Efficiency plot containing the efficiency curve
                       datapoints
     - asymmetric -- use the full asymmetric fit, the cumulative dist of an
                     Exponentially Modified Gaussian (EMG), as opposed to a pure
                     Gaussian
     returns: the parameters describing the fit
     """
-    efficiency_graph = asrootpy(efficiency_graph)
+    efficiency = asrootpy(efficiency)
     fit_functions = []
 
     fit_functions.append(get_symmetric_formula())
 
     if asymmetric:
         fit_functions.append(get_asymmetric_formula())
-
-    x_min = efficiency_graph.lowerbound(0)
-    x_max = efficiency_graph.upperbound(0)
 
     # Sometimes the mean passed in is a string, eg. when the threshold bin is "overflow" or "underflow"
     # In this case, choose a reasonable value, 50 GeV, as the starting point for the fit
@@ -38,7 +37,7 @@ def fit_efficiency(efficiency_graph, in_mean, in_sigma=10,
     fits = []
     for i, func in enumerate(fit_functions):
         this_name = "fit_{}_{}".format(name, i)
-        fitFcn = F1(func, x_min, x_max, name=this_name)
+        fitFcn = F1(func, name=this_name)
         fits.append(fitFcn)
 
         if i == 0:
@@ -57,32 +56,24 @@ def fit_efficiency(efficiency_graph, in_mean, in_sigma=10,
             fitFcn.SetParameters(p0, p1, p2)
             fitFcn.SetParNames("mu", "sigma_inv", "lambda_sigma")
 
-        success = do_fit(efficiency_graph, fitFcn, x_min, x_max)
+        success = do_fit(efficiency, fitFcn)
 
     # Create the output parameter dictionary
-    return _create_output_dict(success, fits, efficiency_graph)
+    return _create_output_dict(success, fits, efficiency)
 
 
-def do_fit(efficiency_graph, fitFcn, x_min, x_max):
-    from rootpy.ROOT import Fit, Math
-
-    # Prepare the input data
-    opt = Fit.DataOptions()
-    # If we have errors, ignore empty bins
-    have_errors = False
-    for a_bin in efficiency_graph:
-        if a_bin.error != 0:
-            have_errors = True
-            break
-    if have_errors:
-        opt.fUseEmpty = False
+def do_fit(efficiency, fitFcn):
+    # Sometimes we're given a graph, others a histogram:
+    if isinstance(efficiency, _HistBase):
+        opt, data = prepare_data_hist(efficiency)
+    elif isinstance(efficiency, _GraphBase):
+        opt, data = prepare_data_graph(efficiency)
+    elif isinstance(efficiency, Efficiency):
+        graph = asrootpy(efficiency.CreateGraph("e0"))
+        opt, data = prepare_data_graph(graph)
     else:
-        opt.fUseEmpty = True
-
-    data_range = Fit.DataRange(x_min, x_max)
-    data = Fit.BinData(opt, data_range)
-
-    Fit.FillData(data, efficiency_graph)
+        print "fit_efficiency(): Unknown object to fit of type:", type(efficiency)
+        return False
 
     # Create the model
     fitFunction = Math.WrappedMultiTF1(fitFcn, fitFcn.GetNdim())
@@ -96,6 +87,61 @@ def do_fit(efficiency_graph, fitFcn, x_min, x_max):
     result = fitter.Result()
     success = result.IsValid()
     return success
+
+
+def prepare_data_hist(efficiency):
+
+    # What's the range of the data to fit
+    x_min = efficiency.lowerbound(0)
+    x_max = efficiency.upperbound(0)
+    data_range = Fit.DataRange(x_min, x_max)
+
+    # Prepare the fit options
+    opt = Fit.DataOptions()
+
+    # Do we have y error bars?
+    have_errors = False
+    for a_bin in efficiency:
+        if a_bin.error != 0:
+            have_errors = True
+            break
+
+    # If we have errors, ignore empty bins
+    if have_errors:
+        opt.fUseEmpty = False
+    else:
+        opt.fUseEmpty = True
+
+    data = Fit.BinData(opt, data_range)
+    Fit.FillData(data, efficiency)
+    return opt, data
+
+
+def prepare_data_graph(efficiency):
+    # What's the range of the data to fit
+    x_min = efficiency.x(1) - efficiency.xerrl(1)
+    x_max = efficiency.x(-2) + efficiency.xerrh(-2)
+    data_range = Fit.DataRange(x_min, x_max)
+
+    # Prepare the fit options
+    opt = Fit.DataOptions()
+
+    # Do we have y error bars?
+    have_errors = False
+    for i_point in range(len(efficiency)):
+        if efficiency.yerrh(i_point) != 0:
+            have_errors = True
+            break
+
+    # If we have errors, ignore empty bins
+    if have_errors:
+        opt.fUseEmpty = False
+    else:
+        opt.fUseEmpty = True
+
+    data = Fit.BinData(opt, data_range)
+    Fit.FillData(data, efficiency)
+    return opt, data
 
 
 def _create_output_dict(success, fits, input_data):
