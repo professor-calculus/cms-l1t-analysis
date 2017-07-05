@@ -31,7 +31,7 @@ Mey = namedtuple('Mey', ['ey'])
 
 ALL_TREE = {
     "caloTowers": 'l1CaloTowerTree/L1CaloTowerTree',
-    "emuCaloTower": 'l1CaloTowerEmuTree/L1CaloTowerTree',
+    "emuCaloTowers": 'l1CaloTowerEmuTree/L1CaloTowerTree',
     "jetReco": 'l1JetRecoTree/JetRecoTree',
     "metFilterReco": 'l1MetFilterRecoTree/MetFilterRecoTree',
     "muonReco": 'l1MuonRecoTree/Muon2RecoTree',
@@ -66,8 +66,8 @@ class Event(object):
                 self._caloTowers.L1CaloTower, 'nTower')
 
         if "emuCaloTowers" in tree_names:
-            self._emuCaloTower = CachedIndexedTree(
-                self._emuCaloTower.L1CaloTower, 'nTower')
+            self._emuCaloTowers = CachedIndexedTree(
+                self._emuCaloTowers.L1CaloTower, 'nTower')
 
         if "muonReco" in tree_names:
             self.muons = CachedIndexedTree(
@@ -120,7 +120,7 @@ class Event(object):
         # for tree in self._trees:
         #     print(tree)
         print('>>>> nHCALTP', self._caloTowers.CaloTP.nHCALTP)
-        print('>>>> nHCALTP (emu)', self._emuCaloTower.CaloTP.nHCALTP)
+        print('>>>> nHCALTP (emu)', self._emuCaloTowers.CaloTP.nHCALTP)
         print('>>>> nJets', self._jetReco.Jet.nJets)
         print('>>>> met', self._jetReco.Sums.met)
         print('>>>> hbheNoiseFilter',
@@ -196,7 +196,7 @@ class Event(object):
 
     @property
     def emuCaloTowers(self):
-        return self._emuCaloTower
+        return self._emuCaloTowers
 
     @property
     def sums(self):
