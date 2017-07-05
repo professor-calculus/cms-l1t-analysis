@@ -1,8 +1,10 @@
 from rootpy.plotting.utils import draw as r_draw
-from rootpy.plotting.hist import Efficiency
+from rootpy.plotting.hist import _HistBase, Efficiency
+from rootpy.plotting.graph import _GraphBase
 from rootpy.plotting import Style, Canvas
 from rootpy.context import preserve_current_style
 from rootpy.ROOT import gStyle, TLatex
+from rootpy import asrootpy
 import rootpy.ROOT as ROOT
 from exceptions import RuntimeError
 
@@ -72,9 +74,16 @@ def __clean(hists):
     cleaned_hists = []
     for hist in hists:
         if isinstance(hist, Efficiency):
-            hist = hist.graph
+            new = asrootpy(hist.CreateGraph("e0"))
+            new.decorate(hist)
+            hist = new
         cleaned_hists.append(hist)
-    return cleaned_hists
+
+    axis_hist = cleaned_hists[0]
+    if isinstance(axis_hist, _GraphBase):
+        axis_hist = asrootpy(axis_hist.GetHistogram())
+
+    return axis_hist, cleaned_hists
 
 
 def __apply_colour_map(hists, colourmap, colour_values, change_colour):
@@ -120,12 +129,14 @@ def draw(hists, colourmap="RainBow", colour_values=None,
     draw_args -- options to pass through to the rootpy draw method
     """
     canvas, style = __prepare_canvas(canvas_args)
-    hists = __clean(hists)
     __apply_colour_map(hists, colourmap, colour_values, change_colour)
-    xaxis = hists[0].axis(0)
-    yaxis = hists[0].axis(1)
-    hists[0].title = ""
-    r_draw(hists, canvas, same=True, xaxis=xaxis, yaxis=yaxis, **draw_args)
+    axis_hist, hists = __clean(hists)
+
+    xaxis = axis_hist.axis(0)
+    yaxis = axis_hist.axis(1)
+    axis_hist.title = ""
+
+    r_draw(hists, canvas, xaxis=xaxis, yaxis=yaxis, **draw_args)
     return canvas
 
 
