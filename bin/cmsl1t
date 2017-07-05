@@ -30,8 +30,11 @@ def process_tuples(config, nevents, analyzers):
     logger.info("Input files:")
 
     if len(input_files) > 10:
-        logger.info(input_files[:10], "... and",
-                    len(input_files) - 10, "more files")
+        file_msg = [input_files[:10], "... and",
+                    len(input_files) - 10, "more files"]
+        file_msg = map(str, file_msg)
+        file_msg = " ".join(file_msg)
+        logger.info(file_msg)
     else:
         logger.info(input_files)
 
