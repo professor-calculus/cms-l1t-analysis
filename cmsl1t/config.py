@@ -16,7 +16,7 @@ TODAY = datetime.now().timetuple()
 
 
 def get_unique_out_dir(outdir=None, revision=1):
-    full_outdir = outdir + "-rev_{rev}".format(rev=revision)
+    full_outdir = outdir + "-v{rev}".format(rev=revision)
     if os.path.isdir(full_outdir):
         return get_unique_out_dir(outdir, revision + 1)
     return full_outdir
@@ -37,11 +37,11 @@ class ConfigParser(object):
         self.config = {}
         self.config_errors = []
 
-    def read(self, input_file):
+    def read(self, input_file, reload_histograms=False):
         cfg = yaml.load(input_file)
-        self._read_config(cfg)
+        self._read_config(cfg, reload_histograms)
 
-    def _read_config(self, cfg):
+    def _read_config(self, cfg, reload_histograms):
         cfg['general'] = dict(version=cfg['version'], name=cfg['name'])
         del cfg['version'], cfg['name']
 
@@ -53,6 +53,7 @@ class ConfigParser(object):
             logger.exception(msg)
             raise IOError(msg)
         cfg['input']['files'] = input_files
+        cfg["input"]["reload_histograms"] = reload_histograms
         self.config = cfg
 
         if not self.is_valid():
@@ -172,10 +173,14 @@ class ConfigParser(object):
         trigger_name = cfg['input']['trigger']['name']
         run_number = cfg['input']['run_number']
 
-        ouput_folder = template.format(
+        output_folder = template.format(
             date=date, sample_name=sample_name, trigger_name=trigger_name,
             run_number=run_number)
-        cfg['output']['folder'] = get_unique_out_dir(ouput_folder)
+        if not cfg['input']['reload_histograms']:
+            output_folder = get_unique_out_dir(output_folder)
+        plots_folder = os.path.join(output_folder,"plots")
+        cfg['output']['folder'] = output_folder
+        cfg['output']['plots_folder'] = get_unique_out_dir(plots_folder)
 
     def describe(self):
         return __doc__

@@ -151,7 +151,7 @@ def check(results, analyzers, method):
 def analyze(config_file, nevents, reload_histograms):
     logger.info(section.format("Starting CMS L1T Analsysis"))
     config = ConfigParser()
-    config.read(config_file)
+    config.read(config_file, reload_histograms)
 
     isok = run(config, nevents, reload_histograms)
 
