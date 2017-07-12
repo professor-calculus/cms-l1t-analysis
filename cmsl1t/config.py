@@ -9,6 +9,7 @@ from datetime import datetime
 import logging
 from cmsl1t.utils import module
 from copy import deepcopy
+import re
 
 
 logger = logging.getLogger(__name__)
@@ -20,6 +21,21 @@ def get_unique_out_dir(outdir=None, revision=1):
     if os.path.isdir(full_outdir):
         return get_unique_out_dir(outdir, revision + 1)
     return full_outdir
+
+def get_last_version_of(outdir):
+    paths = resolve_file_paths([outdir+'*'])
+    max_version = -1
+    last_version_path = None
+    version_re = re.compile(r".*-v(\d+)$")
+    for path in paths:
+        v_match = version_re.match(path)
+        print ("BEK, get_last_version_of", path, v_match)
+        if v_match:
+            version = v_match.group(1)
+            if version > max_version:
+                max_version = version
+                last_version_path = path
+    return last_version_path
 
 
 def resolve_file_paths(paths):
@@ -67,6 +83,9 @@ class ConfigParser(object):
             msg = 'Could fill out output template:' + str(e)
             logger.exception(msg)
             raise IOError(msg)
+
+        if reload_histograms:
+            self._fill_reload_files()
 
     def sections(self):
         return self.config.keys()
@@ -176,7 +195,9 @@ class ConfigParser(object):
         output_folder = template.format(
             date=date, sample_name=sample_name, trigger_name=trigger_name,
             run_number=run_number)
-        if not cfg['input']['reload_histograms']:
+        if cfg['input']['reload_histograms']:
+            output_folder = get_last_version_of(output_folder)
+        else:
             output_folder = get_unique_out_dir(output_folder)
         plots_folder = os.path.join(output_folder,"plots")
         cfg['output']['folder'] = output_folder
@@ -184,6 +205,12 @@ class ConfigParser(object):
 
     def describe(self):
         return __doc__
+
+    def _fill_reload_files(self):
+        search_path = self.config['output']['folder'] 
+        search_path = os.path.join(search_path,"*.root")
+        print("BEK reload from",search_path)
+        self.config['input']['hist_files'] = resolve_file_paths([search_path])
 
 
 if __name__ == '__main__':
