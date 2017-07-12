@@ -52,7 +52,6 @@ class BaseAnalyzer(object):
         Read back histograms from the given root file.
         May need to append histograms 
 
-
         returns:
           Should return True if histograms were written without problem.
           If anything else is returned, processing of the trees will stop
@@ -60,7 +59,7 @@ class BaseAnalyzer(object):
         print "BEK reload_histograms"
         results = []
         for hist in self.all_plots:
-            results += hist.from_root(input_file)
+            results.append(hist.from_root(input_file))
         return all(results)
 
 
@@ -77,7 +76,7 @@ class BaseAnalyzer(object):
         """
         results = []
         for hist in self.all_plots:
-            results += hist.to_root(self.get_histogram_filename())
+            results.append(hist.to_root(self.get_histogram_filename()))
         return all(results)
 
     def make_plots(self):
