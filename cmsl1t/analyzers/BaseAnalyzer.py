@@ -1,5 +1,8 @@
 import os
 from rootpy.io import root_open
+from rootpy import ROOTError
+import logging
+logger = logging.getLogger(__name__)
 
 
 class BaseAnalyzer(object):
@@ -79,10 +82,16 @@ class BaseAnalyzer(object):
           If anything else is returned, processing of the trees will stop
         """
         results = []
-        with root_open(self.get_histogram_filename(), "w") as outfile:
-            for hist in self.all_plots:
-                outdir = outfile.mkdir(hist.directory_name)
-                results.append(hist.to_root(outdir))
+        outname = self.get_histogram_filename()
+        try:
+            with root_open(outname, "new") as outfile:
+                logger.info("Saving histograms to: " + outname)
+                for hist in self.all_plots:
+                    outdir = outfile.mkdir(hist.directory_name)
+                    results.append(hist.to_root(outdir))
+        except ROOTError:
+            # Root file already exists, not handled by root_open
+            pass
         return all(results)
 
     def make_plots(self):

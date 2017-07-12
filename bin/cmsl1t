@@ -114,6 +114,10 @@ def run(config, nevents, reload_histograms):
     else:
         process_histogram_files(config, analyzers)
 
+    # Write out the histograms
+    for analyzer in analyzers:
+        analyzer.write_histograms()
+
     # Turn the histograms to plots
     logger.info(section.format("Making plots"))
     results = [analyzer.make_plots() for analyzer in analyzers]

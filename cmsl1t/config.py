@@ -29,7 +29,6 @@ def get_last_version_of(outdir):
     version_re = re.compile(r".*-v(\d+)$")
     for path in paths:
         v_match = version_re.match(path)
-        print ("BEK, get_last_version_of", path, v_match)
         if v_match:
             version = v_match.group(1)
             if version > max_version:
@@ -209,7 +208,6 @@ class ConfigParser(object):
     def _fill_reload_files(self):
         search_path = self.config['output']['folder'] 
         search_path = os.path.join(search_path,"*.root")
-        print("BEK reload from",search_path)
         self.config['input']['hist_files'] = resolve_file_paths([search_path])
 
 
