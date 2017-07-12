@@ -10,26 +10,28 @@ from cmsl1t.utils.fit_efficiency import fit_efficiency
 from rootpy.plotting import Legend, HistStack, Efficiency
 from rootpy.context import preserve_current_style
 from rootpy import asrootpy, ROOT
-from rootpy.plotting import Legend, HistStack
 
 
 # Hack to fix Efficiency.__iadd__ for now
 def my_iadd(self, other):
     super(Efficiency, self).Add(other)
     return self
+
+
 setattr(Efficiency, "__iadd__", my_iadd)
 
 
 class EfficiencyPlot(BasePlotter):
     def __init__(self, online_name, offline_name):
         name = ["efficiency", online_name, offline_name]
-        super(EfficiencyPlot,self).__init__("__".join(name))
+        super(EfficiencyPlot, self).__init__("__".join(name))
         self.online_name = online_name
         self.offline_name = offline_name
 
     def create_histograms(self,
-              online_title, offline_title,
-              pileup_bins, thresholds, n_bins, low, high):
+                          online_title, offline_title,
+                          pileup_bins, thresholds,
+                          n_bins, low, high):
         """ This is not in an init function so that we can by-pass this in the
         case where we reload things from disk """
         self.online_title = online_title
@@ -149,7 +151,7 @@ class EfficiencyPlot(BasePlotter):
         pass
 
     def _is_consistent(self, new):
-        """ 
+        """
         Check the two plotters are the consistent, so same binning and same axis names
         """
         return (self.pileup_bins.bins == new.pileup_bins.bins) and \

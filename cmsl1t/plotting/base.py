@@ -64,7 +64,7 @@ class BasePlotter(object):
         Might be called multiple times, in which case histograms should be
         merged together with existing ones
         """
-        reloaded  = from_root(filename)
+        reloaded = from_root(filename)
 
         # Have already been initialised, so merge this in
         if self._is_built:
@@ -77,10 +77,9 @@ class BasePlotter(object):
         # Have not yet been initialised so need copy over values
         final = reloaded.__dict__
         final.update(self.__dict__)
-        self.__dict__ = deepcopy(final)
+        self.__dict__ = final
         self._is_built = True
         return True
-
 
     def fill(self):
         """

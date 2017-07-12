@@ -22,8 +22,9 @@ def get_unique_out_dir(outdir=None, revision=1):
         return get_unique_out_dir(outdir, revision + 1)
     return full_outdir
 
+
 def get_last_version_of(outdir):
-    paths = resolve_file_paths([outdir+'*'])
+    paths = resolve_file_paths([outdir + '*'])
     max_version = -1
     last_version_path = None
     version_re = re.compile(r".*-v(\d+)$")
@@ -56,7 +57,7 @@ class ConfigParser(object):
         cfg = yaml.load(input_file)
         self._read_config(cfg, reload_histograms)
 
-    def _read_config(self, cfg, reload_histograms):
+    def _read_config(self, cfg, reload_histograms=False):
         cfg['general'] = dict(version=cfg['version'], name=cfg['name'])
         del cfg['version'], cfg['name']
 
@@ -198,7 +199,7 @@ class ConfigParser(object):
             output_folder = get_last_version_of(output_folder)
         else:
             output_folder = get_unique_out_dir(output_folder)
-        plots_folder = os.path.join(output_folder,"plots")
+        plots_folder = os.path.join(output_folder, "plots")
         cfg['output']['folder'] = output_folder
         cfg['output']['plots_folder'] = get_unique_out_dir(plots_folder)
 
@@ -206,8 +207,8 @@ class ConfigParser(object):
         return __doc__
 
     def _fill_reload_files(self):
-        search_path = self.config['output']['folder'] 
-        search_path = os.path.join(search_path,"*.root")
+        search_path = self.config['output']['folder']
+        search_path = os.path.join(search_path, "*.root")
         self.config['input']['hist_files'] = resolve_file_paths([search_path])
 
 

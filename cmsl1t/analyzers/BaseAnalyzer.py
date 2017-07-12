@@ -57,7 +57,7 @@ class BaseAnalyzer(object):
         Has to be overloaded by users code.
 
         Read back histograms from the given root file.
-        May need to append histograms 
+        May need to append histograms
 
         returns:
           Should return True if histograms were written without problem.
@@ -132,4 +132,4 @@ class BaseAnalyzer(object):
     def might_contain_histograms(self, filename):
         this_file = "{}_histograms.root".format(self.name)
         base = os.path.basename(filename)
-        return  base == this_file
+        return base == this_file
