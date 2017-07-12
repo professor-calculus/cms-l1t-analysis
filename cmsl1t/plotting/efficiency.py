@@ -45,10 +45,14 @@ class EfficiencyPlot(BasePlotter):
                                                 make_efficiency)
         self.filename_format = "{type}" + name
 
-    def reload_histograms(self, filename):
+    def from_root(self, filename):
         """ Reload histograms from existing files on disk """
         print("BEK: self before ",self.__dict__)
         things = from_root(filename)
+        print("BEK things:", things)
+        print("BEK things[0].efficiencies:", things[0].efficiencies)
+        print("BEK things[0].efficiencies.get_bin_contents([0,0]):", things[0].efficiencies.get_bin_contents([0,0]))
+        return True
         new = things[0]
         yields = things[1]
         print("BEK: new before ",new.__dict__)
@@ -126,10 +130,9 @@ class EfficiencyPlot(BasePlotter):
         if with_fits:
             self.__summarize_fits()
 
-    def to_root(self, filename):
+    def to_root(self, outfile):
         """ Write histograms to disk """
-        to_write = [self, self.efficiencies]
-        to_root(to_write, filename)
+        to_root(self, outfile)
 
     def __fit_efficiencies(self):
         def make_fit(labels):
@@ -172,3 +175,12 @@ class EfficiencyPlot(BasePlotter):
     def __summarize_fits(self):
         """ Implement this to show fit evolution plots """
         pass
+
+    def __is_consistent(self, new):
+        """ 
+        Check the two plotters are the consistent, so same binning and same axis names
+        """
+        return (self.pileup_bins.bins == new.pileup_bins.bins) and \
+               (self.thresholds.bins == new.pileup_bins.bins) and \
+               (self.online_name == new.online_name) and \
+               (self.offline_name == new.offline_name)
