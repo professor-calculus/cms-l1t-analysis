@@ -42,13 +42,12 @@ class BasePlotter(object):
         """
         raise NotImplementedError("from_root() needs to be implemented")
 
-    def to_root(self, filename):
+    def to_root(self, outfile):
         """
-        Has to be overloaded by users code.
-
         Write histograms to a root file.
         """
-        raise NotImplementedError("to_root() needs to be implemented")
+        to_root(self, outfile)
+        return True
 
     def fill(self):
         """

@@ -130,10 +130,6 @@ class EfficiencyPlot(BasePlotter):
         if with_fits:
             self.__summarize_fits()
 
-    def to_root(self, outfile):
-        """ Write histograms to disk """
-        to_root(self, outfile)
-
     def __fit_efficiencies(self):
         def make_fit(labels):
             pileup_bin = labels["pileup"]
