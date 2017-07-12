@@ -1,4 +1,5 @@
 import os
+from rootpy.io import root_open
 
 
 class BaseAnalyzer(object):
@@ -45,7 +46,7 @@ class BaseAnalyzer(object):
         raise NotImplementedError("fill_histograms needs to be implemented")
         return True
 
-    def reload_histograms(self, input_file):
+    def reload_histograms(self, input_filename):
         """
         Has to be overloaded by users code.
 
@@ -56,12 +57,12 @@ class BaseAnalyzer(object):
           Should return True if histograms were written without problem.
           If anything else is returned, processing of the trees will stop
         """
-        print "BEK reload_histograms"
         results = []
-        for hist in self.all_plots:
-            results.append(hist.from_root(input_file))
+        with root_open(input_filename, "r") as input_file:
+            for hist in self.all_plots:
+                indir = input_file.GetDirectory(hist.directory_name)
+                results.append(hist.from_root(indir))
         return all(results)
-
 
     def write_histograms(self):
         """
@@ -75,8 +76,10 @@ class BaseAnalyzer(object):
           If anything else is returned, processing of the trees will stop
         """
         results = []
-        for hist in self.all_plots:
-            results.append(hist.to_root(self.get_histogram_filename()))
+        with root_open(self.get_histogram_filename(), "w") as outfile:
+            for hist in self.all_plots:
+                outdir = outfile.mkdir(hist.directory_name)
+                results.append(hist.to_root(outdir))
         return all(results)
 
     def make_plots(self):
@@ -107,11 +110,14 @@ class BaseAnalyzer(object):
         return os.path.join(self.output_folder, output_file)
 
     def add_plotter(self, plotter):
+        """
+        Register a plotter with this analyzer, and set up it's outputs
+        """
+        file_format = self.config.try_get('output', 'plot_format', "png")
+        plotter.set_plot_output_cfg(self.output_folder, file_format)
         self.all_plots.append(plotter)
 
     def might_contain_histograms(self, filename):
         this_file = "{}_histograms.root".format(self.name)
         base = os.path.basename(filename)
-        print "BEK base", base
-        print "BEK this_file", this_file
         return  base == this_file

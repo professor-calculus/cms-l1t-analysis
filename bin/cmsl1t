@@ -77,11 +77,10 @@ def process_histogram_files(config, analyzers):
 
     # Open the histogram file
     results = []
-    for in_file in inputs:
+    for filename in inputs:
         for analyzer in analyzers:
-            if analyzer.might_contain_histograms(in_file):
-                print("BEK reloading", in_file)
-                results.append(analyzer.reload_histograms(in_file))
+            if analyzer.might_contain_histograms(filename):
+                results.append(analyzer.reload_histograms(filename))
 
     # Check for errors
     return check(results, analyzers, 'process_histogram_files')

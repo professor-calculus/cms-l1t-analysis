@@ -5,22 +5,33 @@ from cmsl1t.hist.factory import HistFactory
 import cmsl1t.hist.binning as bn
 from cmsl1t.utils.draw import draw, label_canvas
 from cmsl1t.utils.fit_efficiency import fit_efficiency
-from cmsl1t.io import to_root, from_root
+
 
 from rootpy.plotting import Legend, HistStack, Efficiency
 from rootpy.context import preserve_current_style
 from rootpy import asrootpy, ROOT
+from rootpy.plotting import Legend, HistStack
+
+
+# Hack to fix Efficiency.__iadd__ for now
+def my_iadd(self, other):
+    super(Efficiency, self).Add(other)
+    return self
+setattr(Efficiency, "__iadd__", my_iadd)
 
 
 class EfficiencyPlot(BasePlotter):
-    def build(self,
-              online_name, offline_name,
+    def __init__(self, online_name, offline_name):
+        name = ["efficiency", online_name, offline_name]
+        super(EfficiencyPlot,self).__init__("__".join(name))
+        self.online_name = online_name
+        self.offline_name = offline_name
+
+    def create_histograms(self,
               online_title, offline_title,
               pileup_bins, thresholds, n_bins, low, high):
         """ This is not in an init function so that we can by-pass this in the
         case where we reload things from disk """
-        self.online_name = online_name
-        self.offline_name = offline_name
         self.online_title = online_title
         self.offline_title = offline_title
         self.pileup_bins = bn.Sorted(pileup_bins, "pileup",
@@ -28,11 +39,12 @@ class EfficiencyPlot(BasePlotter):
         self.thresholds = bn.GreaterThan(thresholds, "threshold",
                                          use_everything_bin=True)
 
-        name = [online_name, offline_name,
-                "thresh_{threshold}", "pu_{pileup}"]
+        name = ["efficiency", self.online_name, self.offline_name]
+        name += ["thresh_{threshold}", "pu_{pileup}"]
         name = "__".join(name)
-        title = " ".join([online_name, " in PU bin: {pileup}",
+        title = " ".join([self.online_name, " in PU bin: {pileup}",
                           "and passing threshold: {threshold}"])
+        self.filename_format = name
 
         def make_efficiency(labels):
             this_name = "efficiency" + name.format(**labels)
@@ -43,45 +55,6 @@ class EfficiencyPlot(BasePlotter):
             return eff
         self.efficiencies = HistogramCollection([self.pileup_bins, self.thresholds],
                                                 make_efficiency)
-        self.filename_format = "{type}" + name
-
-    def from_root(self, filename):
-        """ Reload histograms from existing files on disk """
-        print("BEK: self before ",self.__dict__)
-        things = from_root(filename)
-        print("BEK things:", things)
-        print("BEK things[0].efficiencies:", things[0].efficiencies)
-        print("BEK things[0].efficiencies.get_bin_contents([0,0]):", things[0].efficiencies.get_bin_contents([0,0]))
-        return True
-        new = things[0]
-        yields = things[1]
-        print("BEK: new before ",new.__dict__)
-        if hasattr(self, "online_name"):
-            if not self.__is_consistent(new):
-                return False
-            self.__append_yields(yields)
-        else:
-            final = new.__dict__
-            final.update(self.__dict__)
-            self.__dict__ = final
-            print("BEK: loaded new objects")
-
-            # Boiler plate to convert a given distribution to a turnon
-            def clone_hist(labels):
-                pileup_bin = labels["pileup"]
-                threshold_bin = labels["threshold"]
-                a_yield = yields.get_bin_contents([pileup_bin, threshold_bin])
-                print("BEK", pileup_bin, threshold_bin, a_yield)
-                if not a_yield:
-                    return None
-                return a_yield.Clone()
-
-            # Actually make the turnons
-            new_yields = HistogramCollection([self.pileup_bins, self.thresholds],
-                                               clone_hist)
-            self.yields = new_yields
-        print("BEK: self after ",self.__dict__)
-        return True
 
     def fill(self, pileup, online, offline):
         for bins, hist in self.efficiencies[pileup, online].items():
@@ -106,7 +79,9 @@ class EfficiencyPlot(BasePlotter):
         for threshold in all_pileup_effs.iter_all():
             if not isinstance(threshold, int):
                 continue
-            hists.append(all_pileup_effs.get_bin_contents(threshold))
+            hist = all_pileup_effs.get_bin_contents(threshold)
+            hist.drawstyle = "EP"
+            hists.append(hist)
             labels.append("> " + str(self.thresholds.bins[threshold]))
             if with_fits:
                 fits.append(self.fits.get_bin_contents([bn.Base.everything, threshold]))
@@ -120,7 +95,9 @@ class EfficiencyPlot(BasePlotter):
             for pileup in self.pileup_bins:
                 if not isinstance(pileup, int):
                     continue
-                hists.append(self.efficiencies.get_bin_contents([pileup, threshold]))
+                hist = self.efficiencies.get_bin_contents([pileup, threshold])
+                hist.drawstyle = "EP"
+                hists.append(hist)
                 if with_fits:
                     fits.append(self.fits.get_bin_contents([pileup, threshold]))
                 labels.append(str(self.pileup_bins.bins[pileup]))
@@ -163,8 +140,7 @@ class EfficiencyPlot(BasePlotter):
             legend.Draw()
 
             # Save canvas to file
-            name = self.filename_format.format(type="efficiency_",
-                                               pileup=pileup,
+            name = self.filename_format.format(pileup=pileup,
                                                threshold=threshold)
             self.save_canvas(canvas, name)
 
@@ -172,11 +148,17 @@ class EfficiencyPlot(BasePlotter):
         """ Implement this to show fit evolution plots """
         pass
 
-    def __is_consistent(self, new):
+    def _is_consistent(self, new):
         """ 
         Check the two plotters are the consistent, so same binning and same axis names
         """
         return (self.pileup_bins.bins == new.pileup_bins.bins) and \
-               (self.thresholds.bins == new.pileup_bins.bins) and \
+               (self.thresholds.bins == new.thresholds.bins) and \
                (self.online_name == new.online_name) and \
                (self.offline_name == new.offline_name)
+
+    def _merge(self, right):
+        """
+        Combine another plotter with this one
+        """
+        self.efficiencies += right.efficiencies

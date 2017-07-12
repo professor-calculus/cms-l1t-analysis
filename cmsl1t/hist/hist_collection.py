@@ -155,3 +155,20 @@ class HistogramCollection(object):
         # yield from self.__dimensions[0]
         for bin in self.__dimensions[0].iter_all():
             yield bin
+
+    def flat_items(self):
+        all_bin_indices = [list(dim) for dim in self.__dimensions]
+        flat_bins = self._flatten_bins(all_bin_indices)
+        for bin in flat_bins:
+            yield bin, self.get_bin_contents(bin)
+
+    def flat_items_all(self):
+        all_bin_indices = [list(dim.iter_all()) for dim in self.__dimensions]
+        flat_bins = self._flatten_bins(all_bin_indices)
+        for bin in flat_bins:
+            yield bin, self.get_bin_contents(bin)
+
+    def __iadd__(self, other):
+        for bin, hist in self.flat_items_all():
+            hist += other.get_bin_contents(bin)
+        return self
