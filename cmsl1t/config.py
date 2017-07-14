@@ -9,6 +9,7 @@ from datetime import datetime
 import logging
 from cmsl1t.utils import module
 from copy import deepcopy
+import re
 
 
 logger = logging.getLogger(__name__)
@@ -16,10 +17,25 @@ TODAY = datetime.now().timetuple()
 
 
 def get_unique_out_dir(outdir=None, revision=1):
-    full_outdir = outdir + "-rev_{rev}".format(rev=revision)
+    full_outdir = outdir + "-v{rev}".format(rev=revision)
     if os.path.isdir(full_outdir):
         return get_unique_out_dir(outdir, revision + 1)
     return full_outdir
+
+
+def get_last_version_of(outdir):
+    paths = resolve_file_paths([outdir + '*'])
+    max_version = -1
+    last_version_path = None
+    version_re = re.compile(r".*-v(\d+)$")
+    for path in paths:
+        v_match = version_re.match(path)
+        if v_match:
+            version = v_match.group(1)
+            if version > max_version:
+                max_version = version
+                last_version_path = path
+    return last_version_path
 
 
 def resolve_file_paths(paths):
@@ -37,11 +53,11 @@ class ConfigParser(object):
         self.config = {}
         self.config_errors = []
 
-    def read(self, input_file):
+    def read(self, input_file, reload_histograms=False, hist_files=None):
         cfg = yaml.load(input_file)
-        self._read_config(cfg)
+        self._read_config(cfg, reload_histograms, hist_files)
 
-    def _read_config(self, cfg):
+    def _read_config(self, cfg, reload_histograms=False, hist_files=None):
         cfg['general'] = dict(version=cfg['version'], name=cfg['name'])
         del cfg['version'], cfg['name']
 
@@ -53,6 +69,7 @@ class ConfigParser(object):
             logger.exception(msg)
             raise IOError(msg)
         cfg['input']['files'] = input_files
+
         self.config = cfg
 
         if not self.is_valid():
@@ -61,9 +78,9 @@ class ConfigParser(object):
             raise IOError(msg)
 
         try:
-            self.__fill_output_template()
+            self.__fill_outdir_and_reload_files(reload_histograms, hist_files)
         except Exception, e:
-            msg = 'Could fill out output template:' + str(e)
+            msg = 'Could not fill out output template: ' + str(e)
             logger.exception(msg)
             raise IOError(msg)
 
@@ -162,20 +179,55 @@ class ConfigParser(object):
     def __repr__(self):
         return self.config.__repr__()
 
-    def __fill_output_template(self):
+    def __fill_outdir_and_reload_files(self, reload_histograms, hist_files):
         cfg = self.config
-        template = os.path.join(*cfg['output']['template'])
 
-        date = '{y}{m:02d}{d:02d}'.format(
-            y=TODAY.tm_year, m=TODAY.tm_mon, d=TODAY.tm_mday)
-        sample_name = cfg['input']['sample']['name']
-        trigger_name = cfg['input']['trigger']['name']
-        run_number = cfg['input']['run_number']
+        # Deduce what sort of reload we want:
+        if reload_histograms:
+            if hist_files:
+                hist_files = resolve_file_paths(hist_files.split())
+                cfg['input']['hist_files'] = hist_files
+                if len(hist_files) > 1:
+                    reload_histograms = "merge"
+                else:
+                    reload_histograms = "plot specific"
+            else:
+                reload_histograms = "plot last"
+        cfg["input"]["reload_histograms"] = reload_histograms
 
-        ouput_folder = template.format(
-            date=date, sample_name=sample_name, trigger_name=trigger_name,
-            run_number=run_number)
-        cfg['output']['folder'] = get_unique_out_dir(ouput_folder)
+        if reload_histograms == "plot specific":
+            output_folder = os.path.dirname(hist_files[0])
+        else:
+            template = os.path.join(*cfg['output']['template'])
+
+            date = '{y}{m:02d}{d:02d}'.format(
+                y=TODAY.tm_year, m=TODAY.tm_mon, d=TODAY.tm_mday)
+            sample_name = cfg['input']['sample']['name']
+            trigger_name = cfg['input']['trigger']['name']
+            run_number = cfg['input']['run_number']
+
+            output_folder = template.format(
+                date=date, sample_name=sample_name, trigger_name=trigger_name,
+                run_number=run_number)
+
+            # Find the version of this output dir to use
+            if cfg['input']['reload_histograms'] == "plot last":
+                latest_version = get_last_version_of(output_folder)
+                if not latest_version:
+                    msg = "Cannot find valid input histogram-file directory."
+                    msg += " Looking for: " + output_folder
+                    logger.error(msg)
+                    raise IOError(msg)
+                search_path = os.path.join(latest_version, "*.root")
+                self.config['input']['hist_files'] = resolve_file_paths([search_path])
+            else:
+                # Either merging multiple hists, or we're reading trees
+                # Essentially, this is a new analysis output
+                output_folder = get_unique_out_dir(output_folder)
+
+        plots_folder = os.path.join(output_folder, "plots")
+        cfg['output']['folder'] = output_folder
+        cfg['output']['plots_folder'] = get_unique_out_dir(plots_folder)
 
     def describe(self):
         return __doc__

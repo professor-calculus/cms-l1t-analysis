@@ -13,20 +13,15 @@ class Analyzer(BaseAnalyzer):
     def __init__(self, config, **kwargs):
         super(Analyzer, self).__init__("study_met", config)
 
-        self.eff_caloMET_BE = EfficiencyPlot()
-        self.add_plotter(self.eff_caloMET_BE)
-
-        file_format = config.try_get('output', 'plot_format', "png")
-        for hist in self.all_plots:
-            hist.set_plot_output_cfg(self.output_folder, file_format)
+        self.eff_caloMET_BE = EfficiencyPlot("CaloMETBE", "OfflineMETBE")
+        self.register_plotter(self.eff_caloMET_BE)
 
     def prepare_for_events(self, reader):
         # TODO: Get these from a common place, and / or the config file
         puBins = range(0, 50, 10) + [999]
         thresholds = [70, 90, 110]
 
-        self.eff_caloMET_BE.build("CaloMETBE", "OfflineMETBE",
-                                  "CaloMET BE (GeV)", "Offline MET BE (GeV)",
+        self.eff_caloMET_BE.build("CaloMET BE (GeV)", "Offline MET BE (GeV)",
                                   puBins, thresholds, 50, 0, 300)
         return True
 

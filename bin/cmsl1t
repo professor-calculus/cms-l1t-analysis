@@ -61,6 +61,29 @@ def process_tuples(config, nevents, analyzers):
         if all(results) is not True:
             break
 
+@timerfunc_log_to(logger.info)
+def process_histogram_files(config, analyzers):
+    # Open the histogram files
+    logger.info(section.format("Reading back histograms"))
+
+    inputs = config.get('input', 'hist_files')
+    logger.info("Inputs:")
+    if len(inputs) > 10:
+        logger.info(inputs[:10], "... and",
+                    len(inputs) - 10, "more")
+    else:
+        logger.info(inputs)
+
+    # Open the histogram file
+    results = []
+    for filename in inputs:
+        for analyzer in analyzers:
+            if analyzer.might_contain_histograms(filename):
+                results.append(analyzer.reload_histograms(filename))
+
+    # Check for errors
+    return check(results, analyzers, 'process_histogram_files')
+
 
 @timerfunc_log_to(logger.info)
 def process_legacy(config, nevents, analyzers):
@@ -88,12 +111,8 @@ def run(config, nevents, reload_histograms):
         else:
             process_tuples(config, nevents, analyzers)
     else:
-        # TODO: Support multiple input root histogram files
-        pass
-        # isOK = analyzer.reload_histograms(args.inputs[0])
-        # if isOK is not True:
-        #     return "Problem in reload_histograms() with analyzer: " \
-        #         + str(args.analysis)
+        process_histogram_files(config, analyzers)
+
     # Write out the histograms
     for analyzer in analyzers:
         analyzer.write_histograms()
@@ -113,10 +132,12 @@ def run(config, nevents, reload_histograms):
 
 def check(results, analyzers, method):
     msg = 'Problem during {method}() with analyzer "{analyzer}"'
-    if all(results) is not True:
+    is_ok = all(results)
+    if not is_ok:
         for i, r in enumerate(results):
             if r is not True:
                 logger.error(msg.format(method=method, analyzer=analyzers[i]))
+    return is_ok
 
 
 @click.command()
@@ -124,12 +145,14 @@ def check(results, analyzers, method):
 @click.option('-n', '--nevents', default=-1, help='Number of events to process.')
 @click.option('-r', '--reload-histograms', is_flag=True,
               help="Reload histograms from a file and skip the input tuples")
+@click.option('--hist-files',  default=None,
+              help="Provide a list of files to reload histograms from")
 @click_log.simple_verbosity_option()
 @click_log.init(__name__)
-def analyze(config_file, nevents, reload_histograms):
+def analyze(config_file, nevents, reload_histograms, hist_files):
     logger.info(section.format("Starting CMS L1T Analsysis"))
     config = ConfigParser()
-    config.read(config_file)
+    config.read(config_file, reload_histograms, hist_files)
 
     isok = run(config, nevents, reload_histograms)
 

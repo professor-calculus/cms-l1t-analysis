@@ -1,4 +1,8 @@
 import os
+from rootpy.io import root_open
+from rootpy import ROOTError
+import logging
+logger = logging.getLogger(__name__)
 
 
 class BaseAnalyzer(object):
@@ -8,9 +12,12 @@ class BaseAnalyzer(object):
     def __init__(self, name, config, **kwargs):
         self.name = name
         self.output_folder = config.get('output', 'folder')
+        self.plots_folder = config.get('output', 'plots_folder')
         self.config = config
         if not os.path.exists(self.output_folder):
             os.makedirs(self.output_folder)
+        if not os.path.exists(self.plots_folder):
+            os.makedirs(self.plots_folder)
         self.all_plots = []
 
     def prepare_for_events(self, reader):
@@ -45,6 +52,22 @@ class BaseAnalyzer(object):
         raise NotImplementedError("fill_histograms needs to be implemented")
         return True
 
+    def reload_histograms(self, input_filename):
+        """
+        Read back histograms from the given root file.
+        May need to append histograms
+
+        returns:
+          Should return True if histograms were written without problem.
+          If anything else is returned, processing of the trees will stop
+        """
+        results = []
+        with root_open(input_filename, "r") as input_file:
+            for hist in self.all_plots:
+                indir = input_file.GetDirectory(hist.directory_name)
+                results.append(hist.from_root(indir))
+        return all(results)
+
     def write_histograms(self):
         """
         Called after all events have been read, so that histograms can be
@@ -56,9 +79,18 @@ class BaseAnalyzer(object):
           Should return True if histograms were written without problem.
           If anything else is returned, processing of the trees will stop
         """
-        for hist in self.all_plots:
-            hist.to_root(self.get_histogram_filename())
-        return True
+        results = []
+        outname = self.get_histogram_filename()
+        try:
+            with root_open(outname, "new") as outfile:
+                logger.info("Saving histograms to: " + outname)
+                for hist in self.all_plots:
+                    outdir = outfile.mkdir(hist.directory_name)
+                    results.append(hist.to_root(outdir))
+        except ROOTError:
+            # Root file already exists, not handled by root_open
+            pass
+        return all(results)
 
     def make_plots(self):
         """
@@ -83,9 +115,21 @@ class BaseAnalyzer(object):
         """
         return True
 
+    def register_plotter(self, plotter):
+        """
+        Register a plotter with this analyzer, and set up it's outputs
+        """
+        file_format = self.config.try_get('output', 'plot_format', "png")
+        plotter.set_plot_output_cfg(self.plots_folder, file_format)
+        self.all_plots.append(plotter)
+
+    _hist_file_format = "{analyzer}_histograms.root"
+
     def get_histogram_filename(self):
-        output_file = "{}_histograms.root".format(self.name)
+        output_file = self._hist_file_format.format(analyzer=self.name)
         return os.path.join(self.output_folder, output_file)
 
-    def add_plotter(self, plotter):
-        self.all_plots.append(plotter)
+    def might_contain_histograms(self, filename):
+        this_file = self._hist_file_format.format(analyzer=self.name)
+        base = os.path.basename(filename)
+        return base == this_file
