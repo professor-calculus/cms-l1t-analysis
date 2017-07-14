@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 from __future__ import print_function
 import ROOT
-from rootpy.io import root_open
 import os
 from datetime import datetime
 from cmsl1t.utils.timers import timerfunc_log_to
@@ -133,12 +132,12 @@ def run(config, nevents, reload_histograms):
 
 def check(results, analyzers, method):
     msg = 'Problem during {method}() with analyzer "{analyzer}"'
-    problem = all(results)
-    if problem:
+    is_ok = all(results)
+    if not is_ok:
         for i, r in enumerate(results):
             if r is not True:
                 logger.error(msg.format(method=method, analyzer=analyzers[i]))
-    return problem
+    return is_ok
 
 
 @click.command()

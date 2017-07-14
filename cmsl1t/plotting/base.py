@@ -52,7 +52,8 @@ class BasePlotter(object):
 
     def to_root(self, outfile):
         """
-        Write histograms to a root file.
+        Write this plotter to a root file.
+        ROOT (and rootpy) take care of persisting the ROOT objects held by this class
         """
         to_root(self, outfile)
         return True

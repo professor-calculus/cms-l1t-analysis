@@ -14,7 +14,7 @@ class Analyzer(BaseAnalyzer):
         super(Analyzer, self).__init__("study_met", config)
 
         self.eff_caloMET_BE = EfficiencyPlot("CaloMETBE", "OfflineMETBE")
-        self.add_plotter(self.eff_caloMET_BE)
+        self.register_plotter(self.eff_caloMET_BE)
 
     def prepare_for_events(self, reader):
         # TODO: Get these from a common place, and / or the config file

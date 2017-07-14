@@ -13,11 +13,13 @@ from rootpy import asrootpy, ROOT
 
 
 # Hack to fix Efficiency.__iadd__ for now
+# TODO: Remove when we update rootpy to >0.9.2
 def my_iadd(self, other):
     super(Efficiency, self).Add(other)
     return self
 
 
+# TODO: Remove when we update rootpy to >0.9.2
 setattr(Efficiency, "__iadd__", my_iadd)
 
 
@@ -148,6 +150,7 @@ class EfficiencyPlot(BasePlotter):
 
     def __summarize_fits(self):
         """ Implement this to show fit evolution plots """
+        # TODO: Implement this __summarize_fits methods
         pass
 
     def _is_consistent(self, new):
@@ -159,8 +162,8 @@ class EfficiencyPlot(BasePlotter):
                (self.online_name == new.online_name) and \
                (self.offline_name == new.offline_name)
 
-    def _merge(self, right):
+    def _merge(self, other):
         """
-        Combine another plotter with this one
+        Merge another plotter into this one
         """
-        self.efficiencies += right.efficiencies
+        self.efficiencies += other.efficiencies

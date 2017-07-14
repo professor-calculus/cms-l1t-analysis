@@ -54,8 +54,6 @@ class BaseAnalyzer(object):
 
     def reload_histograms(self, input_filename):
         """
-        Has to be overloaded by users code.
-
         Read back histograms from the given root file.
         May need to append histograms
 
@@ -117,11 +115,7 @@ class BaseAnalyzer(object):
         """
         return True
 
-    def get_histogram_filename(self):
-        output_file = "{}_histograms.root".format(self.name)
-        return os.path.join(self.output_folder, output_file)
-
-    def add_plotter(self, plotter):
+    def register_plotter(self, plotter):
         """
         Register a plotter with this analyzer, and set up it's outputs
         """
@@ -129,7 +123,13 @@ class BaseAnalyzer(object):
         plotter.set_plot_output_cfg(self.plots_folder, file_format)
         self.all_plots.append(plotter)
 
+    _hist_file_format = "{analyzer}_histograms.root"
+
+    def get_histogram_filename(self):
+        output_file = self._hist_file_format.format(analyzer=self.name)
+        return os.path.join(self.output_folder, output_file)
+
     def might_contain_histograms(self, filename):
-        this_file = "{}_histograms.root".format(self.name)
+        this_file = self._hist_file_format.format(analyzer=self.name)
         base = os.path.basename(filename)
         return base == this_file
