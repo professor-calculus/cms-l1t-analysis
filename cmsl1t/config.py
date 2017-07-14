@@ -80,7 +80,7 @@ class ConfigParser(object):
         try:
             self.__fill_outdir_and_reload_files(reload_histograms, hist_files)
         except Exception, e:
-            msg = 'Could fill out output template:' + str(e)
+            msg = 'Could not fill out output template: ' + str(e)
             logger.exception(msg)
             raise IOError(msg)
 
@@ -212,8 +212,13 @@ class ConfigParser(object):
 
             # Find the version of this output dir to use
             if cfg['input']['reload_histograms'] == "plot last":
-                output_folder = get_last_version_of(output_folder)
-                search_path = os.path.join(output_folder, "*.root")
+                latest_version = get_last_version_of(output_folder)
+                if not latest_version:
+                    msg = "Cannot find valid input histogram-file directory."
+                    msg += " Looking for: " + output_folder
+                    logger.error(msg)
+                    raise IOError(msg)
+                search_path = os.path.join(latest_version, "*.root")
                 self.config['input']['hist_files'] = resolve_file_paths([search_path])
             else:
                 # Either merging multiple hists, or we're reading trees
