@@ -145,7 +145,7 @@ def check(results, analyzers, method):
 @click.option('-n', '--nevents', default=-1, help='Number of events to process.')
 @click.option('-r', '--reload-histograms', is_flag=True,
               help="Reload histograms from a file and skip the input tuples")
-@click.option('-f', '--hist-files',  default=None,
+@click.option('--hist-files',  default=None,
               help="Provide a list of files to reload histograms from")
 @click_log.simple_verbosity_option()
 @click_log.init(__name__)
