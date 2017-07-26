@@ -7,3 +7,4 @@ click
 click-log
 sphinx
 pyfakefs
+htcondor
