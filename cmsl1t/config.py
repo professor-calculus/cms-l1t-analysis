@@ -235,7 +235,6 @@ class ConfigParser(object):
     def describe(self):
         return __doc__
 
-
     def dump(self, out_filename):
         # Remove contents that weren't in the actual input config file
         config = deepcopy(self.config)

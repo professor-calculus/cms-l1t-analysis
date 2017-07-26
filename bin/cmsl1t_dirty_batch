@@ -10,6 +10,9 @@ import htcondor
 import sys
 import math
 from textwrap import dedent
+import logging
+logger = logging.getLogger(__name__)
+
 
 class cmsl1t_batch_job(object):
     def __init__(self, batch_directory):
@@ -26,22 +29,19 @@ class cmsl1t_batch_job(object):
             run_script.write(run_script_contents)
 
     def submit(self, config_files):
-        print("Will submit", len(config_files), "jobs")
+        logger.info("Will submit", len(config_files), "jobs")
         schedd = htcondor.Schedd()
         results = []
         for cfg in config_files:
             with schedd.transaction() as txn:
                 cfg = os.path.realpath(cfg)
-                job_cfg = dict(
-                        executable=self.run_script, 
-                        arguments="-c {}".format(cfg),
-                        )
+                job_cfg = dict(executable=self.run_script,
+                               arguments="-c {}".format(cfg))
                 sub = htcondor.Submit(job_cfg)
                 out = sub.queue(txn)
-                print(out)
                 results.append(out)
         return results
-                
+
 
 @click.command()
 @click.option('-c', '--config_file', help='YAML style config file', type=click.File(), required=True)
@@ -60,7 +60,7 @@ def run(config_file):
     batch_dir = os.path.join(output_directory, "batch")
     batch_dir = get_unique_out_dir(batch_dir)
     batch_config_dir = os.path.join(batch_dir, "_configs")
-    print("Batch config files will be placed under:", batch_config_dir)
+    logger.info("Batch config files will be placed under:", batch_config_dir)
     os.makedirs(batch_config_dir)
 
     # Sort out a name for the batch config files
@@ -99,13 +99,13 @@ def run(config_file):
     result = submitter.submit(job_configs)
 
     if not all(result):
-        print("Error: submitting jobs failed...")
+        logger.error("Error: submitting jobs failed...")
         return False
 
     # Finally dump the commands needed to run the next steps to screen:
     next_steps = """
     Jobs should be running on htcondor now.  To monitor their progress use:
-        
+
         condor_q $USER
 
     when all jobs are done, you can combine all results together with:
@@ -115,10 +115,11 @@ def run(config_file):
     ie. use the same config file given here, but reload hists from the intermediate root files.
     """
 
-    print(next_steps.format(cfg=config_file.name,
-                            out_dir=out_dir.format(index="*")))
+    logger.info(next_steps.format(cfg=config_file.name,
+                                  out_dir=out_dir.format(index="*")))
 
     return True
+
 
 if __name__ == '__main__':
     run()

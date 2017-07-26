@@ -61,6 +61,7 @@ def process_tuples(config, nevents, analyzers):
         if all(results) is not True:
             break
 
+
 @timerfunc_log_to(logger.info)
 def process_histogram_files(config, analyzers):
     # Open the histogram files
@@ -145,7 +146,7 @@ def check(results, analyzers, method):
 @click.option('-n', '--nevents', default=-1, help='Number of events to process.')
 @click.option('-r', '--reload-histograms', is_flag=True,
               help="Reload histograms from a file and skip the input tuples")
-@click.option('--hist-files',  default=None,
+@click.option('--hist-files', default=None,
               help="Provide a list of files to reload histograms from")
 @click_log.simple_verbosity_option()
 @click_log.init(__name__)
@@ -173,6 +174,7 @@ def load_analyzer(analyzer, config):
     module = import_module(name)
     logger.info("Successfully loaded analyzer:" + name)
     return module.Analyzer(config, **params)
+
 
 if __name__ == '__main__':
     analyze()
