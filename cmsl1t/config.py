@@ -195,42 +195,58 @@ class ConfigParser(object):
                 reload_histograms = "plot last"
         cfg["input"]["reload_histograms"] = reload_histograms
 
-        if reload_histograms == "plot specific":
-            output_folder = os.path.dirname(hist_files[0])
-        else:
-            template = os.path.join(*cfg['output']['template'])
-
-            date = '{y}{m:02d}{d:02d}'.format(
-                y=TODAY.tm_year, m=TODAY.tm_mon, d=TODAY.tm_mday)
-            sample_name = cfg['input']['sample']['name']
-            trigger_name = cfg['input']['trigger']['name']
-            run_number = cfg['input']['run_number']
-
-            output_folder = template.format(
-                date=date, sample_name=sample_name, trigger_name=trigger_name,
-                run_number=run_number)
-
-            # Find the version of this output dir to use
-            if cfg['input']['reload_histograms'] == "plot last":
-                latest_version = get_last_version_of(output_folder)
-                if not latest_version:
-                    msg = "Cannot find valid input histogram-file directory."
-                    msg += " Looking for: " + output_folder
-                    logger.error(msg)
-                    raise IOError(msg)
-                search_path = os.path.join(latest_version, "*.root")
-                self.config['input']['hist_files'] = resolve_file_paths([search_path])
+        output_folder = self.try_get('output', 'folder')
+        if not output_folder:
+            if reload_histograms == "plot specific":
+                output_folder = os.path.dirname(hist_files[0])
             else:
-                # Either merging multiple hists, or we're reading trees
-                # Essentially, this is a new analysis output
-                output_folder = get_unique_out_dir(output_folder)
+                template = os.path.join(*cfg['output']['template'])
 
+                date = '{y}{m:02d}{d:02d}'.format(
+                    y=TODAY.tm_year, m=TODAY.tm_mon, d=TODAY.tm_mday)
+                sample_name = cfg['input']['sample']['name']
+                trigger_name = cfg['input']['trigger']['name']
+                run_number = cfg['input']['run_number']
+
+                output_folder = template.format(
+                    date=date, sample_name=sample_name, trigger_name=trigger_name,
+                    run_number=run_number)
+
+                # Find the version of this output dir to use
+                if cfg['input']['reload_histograms'] == "plot last":
+                    latest_version = get_last_version_of(output_folder)
+                    if not latest_version:
+                        msg = "Cannot find valid input histogram-file directory."
+                        msg += " Looking for: " + output_folder
+                        logger.error(msg)
+                        raise IOError(msg)
+                    search_path = os.path.join(latest_version, "*.root")
+                    self.config['input']['hist_files'] = resolve_file_paths([search_path])
+                else:
+                    # Either merging multiple hists, or we're reading trees
+                    # Essentially, this is a new analysis output
+                    output_folder = get_unique_out_dir(output_folder)
+
+        output_folder = os.path.realpath(output_folder)
         plots_folder = os.path.join(output_folder, "plots")
         cfg['output']['folder'] = output_folder
         cfg['output']['plots_folder'] = get_unique_out_dir(plots_folder)
 
     def describe(self):
         return __doc__
+
+
+    def dump(self, out_filename):
+        # Remove contents that weren't in the actual input config file
+        config = deepcopy(self.config)
+
+        del config['output']['plots_folder']
+        del config['input']['reload_histograms']
+        if 'hist_files' in config['input']:
+            del config['input']['hist_files']
+
+        with open(out_filename, "w") as out_file:
+            out_file.write(yaml.dump(config))
 
 
 if __name__ == '__main__':
