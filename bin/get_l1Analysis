@@ -106,8 +106,8 @@ namespace l1t {
 
 
 # additional header needed by legacy for the enum EtSumType
-additional_header_url = 'https://raw.githubusercontent.com/cms-sw/cmssw/{0}/DataFormats/L1Trigger/interface/EtSum.h'.format(
-    CMSSW_BRANCH)
+additional_header_url = 'https://raw.githubusercontent.com/cms-sw/cmssw/{0}/DataFormats/L1Trigger/interface/EtSum.h'
+additional_header_url = additional_header_url.format(CMSSW_BRANCH)
 additional_header = 'EtSum.h'
 destination = 'external/DataFormats/L1Trigger/interface/'
 if not os.path.exists(destination):
