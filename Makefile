@@ -52,7 +52,7 @@ pep8:
 	@pep8 --exclude=.git,external examples cmsl1t
 
 flake8:
-	@flake8 cmsl1t test --ignore=F401 --max-line-length=120
+	@flake8 cmsl1t test bin/cmsl1t{,_dirty_batch} --ignore=F401 --max-line-length=120
 
 # benchmarks
 NTUPLE_CFG := "legacy/Config/ntuple_cfg.h"
