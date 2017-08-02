@@ -1,0 +1,16 @@
+version: '3'
+services:
+  cmsl1t:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    image: kreczko/cms-l1t-analysis
+    volumes:
+      - .:/code
+    environment:
+      DISPLAY: ${DISPLAY}
+      TERM: ${TERM}
+    working_dir: /code
+    tty: true
+    domainname: foo.bar
+    hostname: cmsl1t

@@ -1,5 +1,4 @@
 memory_profiler
-#tqdm?
 flake8
 pep8
 nose
@@ -10,3 +9,4 @@ pyfakefs
 htcondor
 pyaml
 rootpy
+dill

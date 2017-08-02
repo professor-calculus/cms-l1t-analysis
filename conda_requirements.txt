@@ -1,0 +1,7 @@
+root>=6.04
+root-numpy
+numpy
+matplotlib
+pytables
+rootpy
+pandas
