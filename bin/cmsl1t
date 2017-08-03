@@ -76,14 +76,16 @@ def process_histogram_files(config, analyzers):
         logger.info(inputs)
 
     # Open the histogram file
-    results = []
+    results = {}
     for filename in inputs:
         for analyzer in analyzers:
+            if analyzer not in results:
+                results[analyzer] = True
             if analyzer.might_contain_histograms(filename):
-                results.append(analyzer.reload_histograms(filename))
+                results[analyzer] &= bool(analyzer.reload_histograms(filename))
 
     # Check for errors
-    return check(results, analyzers, 'process_histogram_files')
+    return check(results.values(), results.keys(), 'process_histogram_files')
 
 
 @timerfunc_log_to(logger.info)
