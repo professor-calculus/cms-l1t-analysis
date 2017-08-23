@@ -8,3 +8,5 @@ click-log
 sphinx
 pyfakefs
 htcondor
+pyaml
+rootpy

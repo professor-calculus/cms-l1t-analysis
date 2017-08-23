@@ -244,6 +244,9 @@ class ConfigParser(object):
         if 'hist_files' in config['input']:
             del config['input']['hist_files']
 
+        # copy the "general" section back to the top-level
+        config.update(config.get('general', {}))
+
         with open(out_filename, "w") as out_file:
             out_file.write(yaml.dump(config))
 
