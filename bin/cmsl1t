@@ -153,7 +153,7 @@ def check(results, analyzers, method):
               help="Provide a list of files to reload histograms from")
 @click_log.simple_verbosity_option(logger)
 def analyze(config_file, nevents, reload_histograms, hist_files):
-    logger.info(section.format("Starting CMS L1T Analsysis"))
+    logger.info(section.format("Starting CMS L1T Analysis"))
     config = ConfigParser()
     config.read(config_file, reload_histograms, hist_files)
 
