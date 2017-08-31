@@ -11,6 +11,7 @@ from importlib import import_module
 import logging
 logger = logging.getLogger(__name__)
 logging.getLogger("rootpy.tree.chain").setLevel(logging.WARNING)
+click_log.basic_config(logger)
 
 TODAY = datetime.now().timetuple()
 ROOT.PyConfig.IgnoreCommandLineOptions = True
@@ -150,8 +151,7 @@ def check(results, analyzers, method):
               help="Reload histograms from a file and skip the input tuples")
 @click.option('--hist-files', default=None,
               help="Provide a list of files to reload histograms from")
-@click_log.simple_verbosity_option()
-@click_log.init(__name__)
+@click_log.simple_verbosity_option(logger)
 def analyze(config_file, nevents, reload_histograms, hist_files):
     logger.info(section.format("Starting CMS L1T Analsysis"))
     config = ConfigParser()
