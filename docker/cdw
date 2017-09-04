@@ -1,0 +1,6 @@
+#!/bin/bash
+cd /code
+export NO_CVMFS=1
+source bin/env.sh
+stty rows 256 cols 256
+bash
