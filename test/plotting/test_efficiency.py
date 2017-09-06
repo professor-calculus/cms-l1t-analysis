@@ -26,19 +26,18 @@ def test_EffiencyPlot_noPU_oneThreshold():
     for plotter in plotters:
         plotter.set_plot_output_cfg("tests/outputs", "png")
 
-    pileup = 3 # dummy pile-up, we don't really care here
+    pileup = 3  # dummy pile-up, we don't really care here
     for on, off in zip(online_data, offline_data):
         on_vs_off_efficiency.fill(pileup, on, off)
         on_vs_on_efficiency.fill(pileup, on, on)
         off_vs_off_efficiency.fill(pileup, off, off)
 
-    #with root_open("test/outputs/plotting-test_efficiency.root", "w") as out_file:
-    #    for plotter in plotters:
-    #        plotter.to_root(out_file.mkdir(plotter.directory_name))
+    # with root_open("test/outputs/plotting-test_efficiency.root", "w") as out_file:
+    #     for plotter in plotters:
+    #         plotter.to_root(out_file.mkdir(plotter.directory_name))
 
     for plotter in plotters:
         above_50 = plotter.efficiencies.get_bin_contents([bn.Base.everything, 0])
-        effs = list(above_50)
         non_integral = [eff for eff in above_50 if eff != int(eff)]
         plotter.n_non_integral = len(non_integral)
 
