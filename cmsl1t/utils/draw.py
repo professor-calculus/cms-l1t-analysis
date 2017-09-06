@@ -59,6 +59,15 @@ def root_palette(value, max, min=0):
     return gStyle.GetColorPalette(int(colour_index))
 
 
+def set_palette(palette):
+    if palette in __known_root_pallettes:
+        gStyle.SetPalette(getattr(ROOT, "k" + palette))
+        palette = root_palette
+    else:
+        raise RuntimeError("Unknown palette requested: " + palette)
+    return palette
+
+
 def __prepare_canvas(canvas_args):
     style = gStyle
     style.SetOptStat(0)
@@ -93,11 +102,7 @@ def __apply_colour_map(hists, colourmap, colour_values, change_colour):
     with preserve_current_style():
         # Resolve the requested palette if it's not a function
         if isinstance(colourmap, str):
-            if colourmap in __known_root_pallettes:
-                gStyle.SetPalette(getattr(ROOT, "k" + colourmap))
-                colourmap = root_palette
-            else:
-                raise RuntimeError("Unknown palette requested: " + colourmap)
+            colourmap = set_palette(colourmap)
 
         # Set the colour of each hist
         max = len(hists)
@@ -137,6 +142,19 @@ def draw(hists, colourmap="RainBow", colour_values=None,
     axis_hist.title = ""
 
     r_draw(hists, canvas, xaxis=xaxis, yaxis=yaxis, **draw_args)
+    return canvas
+
+
+def draw2D(hist2d, colourmap="RainBow", canvas_args={}, draw_args={}):
+    canvas, style = __prepare_canvas(canvas_args)
+    if isinstance(colourmap, str):
+        colourmap = set_palette(colourmap)
+    hist2d.title = ""
+    hist2d.Draw(draw_args.get("opts", "colz"))
+    if "xtitle" in draw_args:
+        hist2d.GetXaxis().SetTitle(draw_args["xtitle"])
+    if "ytitle" in draw_args:
+        hist2d.GetYaxis().SetTitle(draw_args["ytitle"])
     return canvas
 
 
