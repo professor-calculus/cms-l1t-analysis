@@ -68,7 +68,7 @@ class EfficiencyPlot(BasePlotter):
                 passed = True
             elif online > threshold:
                 passed = True
-            self.efficiencies[pileup, online].fill(passed, offline)
+            hist.fill(passed, offline)
 
     def draw(self, with_fits=True):
         # Fit the efficiencies if requested
