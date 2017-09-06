@@ -73,6 +73,11 @@ else
   source activate cms
 fi
 
+# Capture the user's site-packages directory:
+USER_SITE_PACKAGES="$(python -c "import site; print site.USER_SITE")"
+# add project to PYTHONPATH
+PYTHONPATH="${USER_SITE_PACKAGES}:$PYTHONPATH"
+
 git submodule init
 git submodule update
 
