@@ -71,8 +71,8 @@ def process_histogram_files(config, analyzers):
     inputs = config.get('input', 'hist_files')
     logger.info("Inputs:")
     if len(inputs) > 10:
-        logger.info(inputs[:10], "... and",
-                    len(inputs) - 10, "more")
+        msg = inputs[:10], "... and " + str(len(inputs) - 10) + " more"
+        logger.info(msg)
     else:
         logger.info(inputs)
 
