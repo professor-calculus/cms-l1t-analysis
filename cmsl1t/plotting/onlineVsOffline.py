@@ -18,7 +18,7 @@ class OnlineVsOffline(BasePlotter):
         self.offline_name = offline_name
 
     def create_histograms(self,
-                          online_title, offline_title, 
+                          online_title, offline_title,
                           pileup_bins, n_bins, low, high):
         """ This is not in an init function so that we can by-pass this in the
         case where we reload things from disk """
@@ -30,6 +30,7 @@ class OnlineVsOffline(BasePlotter):
         name = [self.online_name, self.offline_name, "pu_{pileup}"]
         name = "__".join(name)
         title = " ".join([self.online_name, "vs.", self.offline_name, "in PU bin: {pileup}"])
+        title = ";".join([title, self.offline_title, self.online_name])
         self.plots = HistogramCollection([self.pileup_bins],
                                          "Hist2D", n_bins, low, high, n_bins, low, high,
                                          name=name, title=title)
