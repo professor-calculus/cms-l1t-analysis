@@ -92,6 +92,13 @@ class Base():
         for i in self.values:
             yield i
 
+    def items(self):
+        """
+        Like a dict's items() generator, iterating over all bins, including everthing, underflow, and overflow
+        """
+        for k, v in self.values.items():
+            yield (k, v)
+
 
 class Sorted(Base):
     """

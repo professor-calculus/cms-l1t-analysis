@@ -61,14 +61,15 @@ class EfficiencyPlot(BasePlotter):
                                                 make_efficiency)
 
     def fill(self, pileup, online, offline):
-        for bins, hist in self.efficiencies[pileup, online].items():
-            threshold = self.thresholds.get_bin_center(bins[1])
+        efficiencies = {thresh: eff for thresholds in self.efficiencies[pileup] for thresh, eff in thresholds.items()}
+        for threshold_bin, efficiency in efficiencies.items():
+            threshold = self.thresholds.get_bin_center(threshold_bin)
             passed = False
-            if isinstance(threshold, str) and threshold == bn.Base.overflow:
-                passed = True
+            if isinstance(threshold, str):
+                continue
             elif online > threshold:
                 passed = True
-            hist.fill(passed, offline)
+            efficiency.fill(passed, offline)
 
     def draw(self, with_fits=True):
         # Fit the efficiencies if requested
