@@ -37,6 +37,13 @@ def test_glob_local_wildcard():
         assert_equal(root_glob(filename), py_glob(filename))
 
 
+def test_glob_local_multiple_wildcards():
+    with patch('glob.glob', glob.glob):
+        filename = "/tmp/l*/*.root"
+        from glob import glob as py_glob
+        assert_equal(root_glob(filename), py_glob(filename))
+
+
 @attr('grid_access')
 def test_glob_xrootd_single():
     filename = "root://lcgse01.phy.bris.ac.uk///cms/store/PhEDEx_LoadTest07/"\
