@@ -40,20 +40,23 @@ def fake_efficiency_plots(prefix, n_points=10000, online_offset=10, online_resol
 def test_EffiencyPlot_noPU_oneThreshold():
     plotters = fake_efficiency_plots("", 10000, thresholds=[53])
 
-    # with root_open("test/outputs/plotting-test_efficiency.root", "w") as out_file:
-    #     for name, plotter in plotters.items():
-    #         plotter.to_root(out_file.mkdir(plotter.directory_name))
+    with root_open("test/outputs/plotting-test_efficiency.root", "w") as out_file:
+        for name, plotter in plotters.items():
+            plotter.to_root(out_file.mkdir(plotter.directory_name))
 
     for plotter in plotters.values():
         if not isinstance(plotter, EfficiencyPlot):
             continue
-        above_50 = plotter.efficiencies.get_bin_contents([bn.Base.everything, 0])
-        non_integral = [eff for eff in above_50 if eff != int(eff)]
-        plotter.n_non_integral = len(non_integral)
+        for pu_bin in [0, bn.Base.everything]:
+            above_50 = plotter.efficiencies.get_bin_contents([pu_bin, 0])
+            non_integral = [eff for eff in above_50 if eff != int(eff)]
+            setattr(plotter, "n_non_integral_" + str(pu_bin), len(non_integral))
 
     # There should only be 1 non-integer bin: that which contains the actual threshold
-    assert_equal(1, plotters["on_v_on"].n_non_integral)
-    assert_equal(1, plotters["off_v_off"].n_non_integral)
+    assert_equal(1, plotters["on_v_on"].n_non_integral_0)
+    assert_equal(1, plotters["off_v_off"].n_non_integral_0)
+    assert_equal(1, plotters["on_v_on"].n_non_integral_everything)
+    assert_equal(1, plotters["off_v_off"].n_non_integral_everything)
 
 
 def test_EffiencyPlot_merge():
@@ -66,13 +69,13 @@ def test_EffiencyPlot_merge():
         merged.merge_in(plotters_1[plot_name])
         merged.merge_in(plotters_2[plot_name])
 
-    # with root_open("test/outputs/plotting-test_efficiency-merge.root", "w") as out_file:
-    #     for name, plotter in plotters_1.items():
-    #         plotter.to_root(out_file.mkdir(plotter.directory_name + "_pre_merge_1"))
-    #     for name, plotter in plotters_2.items():
-    #         plotter.to_root(out_file.mkdir(plotter.directory_name + "_pre_merge_2"))
-    #     for name, plotter in plotters_merged.items():
-    #         plotter.to_root(out_file.mkdir(plotter.directory_name + "_merged"))
+    with root_open("test/outputs/plotting-test_efficiency-merge.root", "w") as out_file:
+        for name, plotter in plotters_1.items():
+            plotter.to_root(out_file.mkdir(plotter.directory_name + "_pre_merge_1"))
+        for name, plotter in plotters_2.items():
+            plotter.to_root(out_file.mkdir(plotter.directory_name + "_pre_merge_2"))
+        for name, plotter in plotters_merged.items():
+            plotter.to_root(out_file.mkdir(plotter.directory_name + "_merged"))
 
     for name, plotter in plotters_merged.items():
         if not isinstance(plotter, EfficiencyPlot):
