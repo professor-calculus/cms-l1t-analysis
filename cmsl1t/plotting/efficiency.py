@@ -40,8 +40,7 @@ class EfficiencyPlot(BasePlotter):
         self.offline_title = offline_title
         self.pileup_bins = bn.Sorted(pileup_bins, "pileup",
                                      use_everything_bin=True)
-        self.thresholds = bn.GreaterThan(thresholds, "threshold",
-                                         use_everything_bin=True)
+        self.thresholds = bn.GreaterThan(thresholds, "threshold")
 
         name = ["efficiency", self.online_name, self.offline_name]
         name += ["thresh_{threshold}", "pu_{pileup}"]
@@ -61,8 +60,10 @@ class EfficiencyPlot(BasePlotter):
                                                 make_efficiency)
 
     def fill(self, pileup, online, offline):
-        efficiencies = {thresh: eff for thresholds in self.efficiencies[pileup] for thresh, eff in thresholds.items()}
-        for threshold_bin, efficiency in efficiencies.items():
+        efficiencies = {(pu, thresh): eff
+                        for (pu,), thresholds in self.efficiencies[pileup].items()
+                        for thresh, eff in thresholds.items()}
+        for (pu_bin, threshold_bin), efficiency in efficiencies.items():
             threshold = self.thresholds.get_bin_center(threshold_bin)
             passed = False
             if isinstance(threshold, str):

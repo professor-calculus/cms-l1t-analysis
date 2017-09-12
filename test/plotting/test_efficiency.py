@@ -47,13 +47,16 @@ def test_EffiencyPlot_noPU_oneThreshold():
     for plotter in plotters.values():
         if not isinstance(plotter, EfficiencyPlot):
             continue
-        above_50 = plotter.efficiencies.get_bin_contents([bn.Base.everything, 0])
-        non_integral = [eff for eff in above_50 if eff != int(eff)]
-        plotter.n_non_integral = len(non_integral)
+        for pu_bin in [0, bn.Base.everything]:
+            above_50 = plotter.efficiencies.get_bin_contents([pu_bin, 0])
+            non_integral = [eff for eff in above_50 if eff != int(eff)]
+            setattr(plotter, "n_non_integral_" + str(pu_bin), len(non_integral))
 
     # There should only be 1 non-integer bin: that which contains the actual threshold
-    assert_equal(1, plotters["on_v_on"].n_non_integral)
-    assert_equal(1, plotters["off_v_off"].n_non_integral)
+    assert_equal(1, plotters["on_v_on"].n_non_integral_0)
+    assert_equal(1, plotters["off_v_off"].n_non_integral_0)
+    assert_equal(1, plotters["on_v_on"].n_non_integral_everything)
+    assert_equal(1, plotters["off_v_off"].n_non_integral_everything)
 
 
 def test_EffiencyPlot_merge():
