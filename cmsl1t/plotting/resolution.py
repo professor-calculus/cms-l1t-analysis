@@ -32,7 +32,7 @@ class ResolutionPlot(BasePlotter):
         name = ["resolution", self.online_name, self.offline_name, "pu_{pileup}"]
         name = "__".join(name)
         title = " ".join([self.online_name, "vs.", self.offline_name, "in PU bin: {pileup}"])
-        title = ";".join([title, self.offline_title, self.online_name])
+        title = ";".join([title, self.offline_title, self.online_title])
         self.plots = HistogramCollection([self.pileup_bins],
                                          "Hist1D", n_bins, low, high,
                                          name=name, title=title)
