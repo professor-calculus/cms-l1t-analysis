@@ -27,7 +27,7 @@ class OnlineVsOffline(BasePlotter):
         self.pileup_bins = bn.Sorted(pileup_bins, "pileup",
                                      use_everything_bin=True)
 
-        name = [self.online_name, self.offline_name, "pu_{pileup}"]
+        name = ["onlineVsOffline", self.online_name, self.offline_name, "pu_{pileup}"]
         name = "__".join(name)
         title = " ".join([self.online_name, "vs.", self.offline_name, "in PU bin: {pileup}"])
         title = ";".join([title, self.offline_title, self.online_name])
