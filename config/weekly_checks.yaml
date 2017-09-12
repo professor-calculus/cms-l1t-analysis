@@ -3,34 +3,28 @@ name: 'Weekly Checks'
 
 input:
   files:
-    - data/L1Ntuple_*.root
+      -   root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/SingleMuon/Collision2017-wRECO-l1t-integration-v96p27/SingleMuon/crab_Collision2017-wRECO-l1t-integration-v96p27__SingleMuon/170818_102121/000*/L1Ntuple_*.root
+      # -   root://eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/SingleMuon/Fill6061/Collision2017-wRECO-l1t-integration-v96p27_PUSv7/SingleMuon/crab_Collision2017-wRECO-l1t-integration-v96p27_PUSv7__SingleMuon/170912_134856/0000/L1Ntuple_*root
   sample:
     name: Data
-    title: 2016 Data
+    title: 2017 Data
   trigger:
     name: SingleMu
     title: Single Muon
   pileup_file: ""
-  run_number: 276243
+  run_number: 6061
 
 analysis:
-  do_fit: False
+  do_fit: True
   pu_type: 0PU12,13PU19,20PU
   pu_bins: 0,13,20,999
   analyzers:
-    - cmsl1t.analyzers.energy_sums_efficiencies
-    - cmsl1t.analyzers.jet_efficiencies
-  modifiers:
-    - cmsl1t.recalc.met.l1MetNot28:
-        in: event.caloTowers
-        out: event.l1MetNot28
-    - cmsl1t.recalc.met.l1MetNot28HF:
-        in: event.caloTowers
-        out: event.l1MetNot28HF
+      - cmsl1t.analyzers.weekly_analyzer
+  modifiers: []
   progress_bar:
     report_every: 1000
 
 output:
   template:
      - output/weekly_checks
-     - "{date}_{sample_name}_run-{run_number}_{trigger_name}"
+     - "{date}_Fill-{run_number}_{sample_name}_{trigger_name}"
