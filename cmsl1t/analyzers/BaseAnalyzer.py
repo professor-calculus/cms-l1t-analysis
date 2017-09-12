@@ -69,7 +69,6 @@ class BaseAnalyzer(object):
         ok = all(results)
         return ok
 
-
     def write_histograms(self):
         """
         Called after all events have been read, so that histograms can be
