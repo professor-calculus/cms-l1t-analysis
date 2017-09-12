@@ -168,3 +168,4 @@ class EfficiencyPlot(BasePlotter):
         Merge another plotter into this one
         """
         self.efficiencies += other.efficiencies
+        return self.efficiencies
