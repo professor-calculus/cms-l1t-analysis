@@ -66,7 +66,7 @@ class BasePlotter(object):
         merged together with existing ones
         """
         reloaded = from_root(filename)
-        self.merge_in(reloaded)
+        return self.merge_in(reloaded)
 
     def merge_in(self, reloaded):
         # Have already been initialised, so merge this in

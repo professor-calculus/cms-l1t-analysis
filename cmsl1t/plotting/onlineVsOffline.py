@@ -69,3 +69,4 @@ class OnlineVsOffline(BasePlotter):
         Merge another plotter into this one
         """
         self.plots += other.plots
+        return self.plots

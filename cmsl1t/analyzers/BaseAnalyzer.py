@@ -66,7 +66,8 @@ class BaseAnalyzer(object):
             for hist in self.all_plots:
                 indir = input_file.GetDirectory(hist.directory_name)
                 results.append(hist.from_root(indir))
-        return all(results)
+        ok = all(results)
+        return ok
 
     def write_histograms(self):
         """
