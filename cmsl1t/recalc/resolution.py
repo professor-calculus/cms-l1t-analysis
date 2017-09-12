@@ -6,17 +6,23 @@ twopi = 2 * pi
 
 def get_resolution_function(resolution_type):
     if resolution_type.lower() == "energy":
-        return resolution_energy
+        function = resolution_energy
+        function.label = "({on} - {off})/ {off}"
     elif resolution_type.lower() == "phi":
-        return resolution_phi
+        function = resolution_phi
     elif resolution_type.lower() == "eta":
-        return resolution_eta
+        function = resolution_eta
     elif resolution_type.lower() == "position_1d":
-        return resolution_position_1D
+        function = resolution_position_1D
     elif resolution_type.lower() == "position_2d":
-        return resolution_position_2D
-    msg = "Cannot find method for requested resolution_type, " + resolution_type
-    raise RuntimeError(msg)
+        function = resolution_position_2D
+        function.label = "|{on} - {off}|"
+    else:
+        msg = "Cannot find method for requested resolution_type, " + resolution_type
+        raise RuntimeError(msg)
+    if not hasattr(function, "label"):
+        function.label = "{on} - {off}"
+    return function
 
 
 def resolution_energy(online, offline):
