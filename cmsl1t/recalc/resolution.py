@@ -31,14 +31,14 @@ def resolution_energy(online, offline):
 
 def resolution_phi(online, offline):
     """
-    delta_phi = phi_on - phi_off 
-    but then wrap delta_phi, so abs(delta_phi) < pi 
+    delta_phi = phi_on - phi_off
+    but then wrap delta_phi, so abs(delta_phi) < pi
     and make sure the sign implies the same direction (anti-clockwise from on to off is positive)
     """
     delta_phi = _resolution_no_div(online, offline)
-    if delta_phi > pi: 
+    if delta_phi > pi:
         delta_phi -= twopi
-    delta_phi_other = delta_phi % twopi 
+    delta_phi_other = delta_phi % twopi
     delta_phi_ret = delta_phi if delta_phi_other > pi else delta_phi_other
     return delta_phi_ret
 

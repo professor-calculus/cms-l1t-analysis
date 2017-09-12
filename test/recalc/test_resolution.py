@@ -12,7 +12,7 @@ def test_get_resolution_function():
     assert_equal(funcs.get_resolution_function("eta"), funcs.resolution_eta)
     assert_equal(funcs.get_resolution_function("position_1D"), funcs.resolution_position_1D)
     assert_equal(funcs.get_resolution_function("position_2D"), funcs.resolution_position_2D)
-    assert_raises(RuntimeError, funcs.get_resolution_function,"gobbledygoop")
+    assert_raises(RuntimeError, funcs.get_resolution_function, "gobbledygoop")
 
 
 def test_resolution_energy():
@@ -53,4 +53,3 @@ def test_resolution_position_2D():
     assert_equal(funcs.resolution_position_2D([1, 1], [1, 1]), 0)
     assert_equal(funcs.resolution_position_2D([1, 1], [-1, -1]), 2 * sqrt(2))
     assert_equal(funcs.resolution_position_2D([1, 1], [1, -1]), 2)
-

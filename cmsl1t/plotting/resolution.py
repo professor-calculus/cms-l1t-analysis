@@ -18,7 +18,6 @@ class ResolutionPlot(BasePlotter):
         self.offline_name = offline_name
         self.resolution_method = get_resolution_function(resolution_type)
 
-
     def create_histograms(self,
                           online_title, offline_title,
                           pileup_bins, n_bins, low, high):
@@ -46,7 +45,7 @@ class ResolutionPlot(BasePlotter):
         hists = []
         labels = []
         fits = []
-        for (pile_up, ), hist  in self.plots.flat_items_all():
+        for (pile_up, ), hist in self.plots.flat_items_all():
             if pile_up == bn.Base.everything:
                 hist.linestyle = "dashed"
                 label = "Everything"
@@ -61,10 +60,10 @@ class ResolutionPlot(BasePlotter):
             #     fits.append(self.fits.get_bin_contents([pile_up]))
         self.__make_overlay(hists, fits, labels, "Number of events")
 
-        normed_hists = [ hist / hist.integral()  if hist.integral() != 0 else hist.Clone() for hist in hists]
+        normed_hists = [hist / hist.integral() if hist.integral() != 0 else hist.Clone() for hist in hists]
         self.__make_overlay(normed_hists, fits, labels, "Fraction of events", "__shapes")
 
-    def __make_overlay(self, hists, fits, labels, ytitle, suffix = ""):
+    def __make_overlay(self, hists, fits, labels, ytitle, suffix=""):
         with preserve_current_style():
             # Draw each resolution (with fit)
             xtitle = self.resolution_method.label.format(on=self.online_title, off=self.offline_title)
