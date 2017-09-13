@@ -27,10 +27,10 @@ class OnlineVsOffline(BasePlotter):
         self.pileup_bins = bn.Sorted(pileup_bins, "pileup",
                                      use_everything_bin=True)
 
-        name = [self.online_name, self.offline_name, "pu_{pileup}"]
+        name = ["onlineVsOffline", self.online_name, self.offline_name, "pu_{pileup}"]
         name = "__".join(name)
         title = " ".join([self.online_name, "vs.", self.offline_name, "in PU bin: {pileup}"])
-        title = ";".join([title, self.offline_title, self.online_name])
+        title = ";".join([title, self.offline_title, self.online_title])
         self.plots = HistogramCollection([self.pileup_bins],
                                          "Hist2D", n_bins, low, high, n_bins, low, high,
                                          name=name, title=title)
@@ -60,9 +60,10 @@ class OnlineVsOffline(BasePlotter):
         """
         Check the two plotters are the consistent, so same binning and same axis names
         """
-        return (self.pileup_bins.bins == new.pileup_bins.bins) and \
-               (self.online_name == new.online_name) and \
-               (self.offline_name == new.offline_name)
+        return all([self.pileup_bins.bins == new.pileup_bins.bins,
+                    self.online_name == new.online_name,
+                    self.offline_name == new.offline_name,
+                    ])
 
     def _merge(self, other):
         """
