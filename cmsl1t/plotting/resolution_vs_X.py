@@ -70,11 +70,12 @@ class ResolutionVsXPlot(BasePlotter):
         """
         Check the two plotters are the consistent, so same binning and same axis names
         """
-        return (self.pileup_bins.bins == new.pileup_bins.bins) and \
-               (self.resolution_method == new.resolution_method) and \
-               (self.versus_name == new.versus_name) and \
-               (self.online_name == new.online_name) and \
-               (self.offline_name == new.offline_name)
+        return all([self.pileup_bins.bins == new.pileup_bins.bins,
+                    self.resolution_method == new.resolution_method,
+                    self.versus_name == new.versus_name,
+                    self.online_name == new.online_name,
+                    self.offline_name == new.offline_name,
+                    ])
 
     def _merge(self, other):
         """
