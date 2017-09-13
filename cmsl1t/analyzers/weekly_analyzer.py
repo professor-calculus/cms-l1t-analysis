@@ -19,15 +19,15 @@ Sums = namedtuple("Sums", sum_types)
 
 
 def ExtractSums(event):
-    offline = dict("HTT"=Sum(event.sums.Ht),
-                   "MHT"=Met(event.sums.mHt, event.sums.mHtPhi),
-                   "MET_HF"=Met(event.sums.caloMet, event.sums.caloMetPhi),
-                   "MET_noHF"=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE)
+    offline = dict(HTT=Sum(event.sums.Ht),
+                   MHT=Met(event.sums.mHt, event.sums.mHtPhi),
+                   MET_HF=Met(event.sums.caloMet, event.sums.caloMetPhi),
+                   MET_noHF=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE)
                    )
-    online = dict("HTT"=event.l1Sums["L1Htt"],
-                  "MHT"=event.l1Sums["L1Mht"],
-                  "MET_HF"=event.l1Sums["L1MetHF"],
-                  "MET_noHF"=event.l1Sums["L1Met"]
+    online = dict(HTT=event.l1Sums["L1Htt"],
+                  MHT=event.l1Sums["L1Mht"],
+                  MET_HF=event.l1Sums["L1MetHF"],
+                  MET_noHF=event.l1Sums["L1Met"]
                   )
     return online, offline
 
@@ -74,23 +74,24 @@ class Analyzer(BaseAnalyzer):
             eff_plot = getattr(self, cfg.name + "_eff")
             res_plot = getattr(self, cfg.name + "_res")
             twoD_plot = getattr(self, cfg.name + "_2D")
-            eff_plot.build(cfg.on_title + " (GeV)", cfg.off_title + " (GeV)", 
+            eff_plot.build(cfg.on_title + " (GeV)", cfg.off_title + " (GeV)",
                            puBins, thresholds, 50, 0, cfg.off_max)
-            twoD_plot.build(cfg.on_title + " (GeV)", cfg.off_title + " (GeV)", 
+            twoD_plot.build(cfg.on_title + " (GeV)", cfg.off_title + " (GeV)",
                             puBins, 50, 0, cfg.off_max)
-            res_plot.build(cfg.on_title, cfg.off_title, 
+            res_plot.build(cfg.on_title, cfg.off_title,
                            puBins, 50, -10, 10)
-            
+
             if not hasattr(self, cfg.name + "_phi_res"):
                 continue
             res_plot = getattr(self, cfg.name + "_phi_res")
             twoD_plot = getattr(self, cfg.name + "_phi_2D")
-            twoD_plot.build(cfg.on_title + " Phi (rad)", cfg.off_title + " Phi (rad)", 
+            twoD_plot.build(cfg.on_title + " Phi (rad)", cfg.off_title + " Phi (rad)",
                             puBins, 50, -pi, 2 * pi)
-            res_plot.build(cfg.on_title + " Phi", cfg.off_title + " Phi", 
+            res_plot.build(cfg.on_title + " Phi", cfg.off_title + " Phi",
                            puBins, 50, -2, 2)
 
-        self.res_vs_eta_CentralJets.build("Online Jet energy (GeV)", "Offline Jet energy (GeV)", "Offline Jet Eta (rad)",
+        self.res_vs_eta_CentralJets.build("Online Jet energy (GeV)",
+                                          "Offline Jet energy (GeV)", "Offline Jet Eta (rad)",
                                           puBins, 50, -10, 10, 30, 0, 6)
         return True
 
@@ -116,7 +117,7 @@ class Analyzer(BaseAnalyzer):
         for recoJet in event.goodJets():
             l1Jet = event.getMatchedL1Jet(recoJet)
             if not l1Jet:
-                 continue
+                continue
             self.res_vs_eta_CentralJets.fill(pileup, recoJet.eta, recoJet.etCorr, l1Jet.et)
 
         return True
