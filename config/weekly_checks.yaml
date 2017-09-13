@@ -3,16 +3,22 @@ name: 'Weekly Checks'
 
 input:
   files:
-      -   root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/SingleMuon/Collision2017-wRECO-l1t-integration-v96p27/SingleMuon/crab_Collision2017-wRECO-l1t-integration-v96p27__SingleMuon/170818_102121/000*/L1Ntuple_*.root
-      # -   root://eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/SingleMuon/Fill6061/Collision2017-wRECO-l1t-integration-v96p27_PUSv7/SingleMuon/crab_Collision2017-wRECO-l1t-integration-v96p27_PUSv7__SingleMuon/170912_134856/0000/L1Ntuple_*root
+      # Single Muons
+      # -   root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/SingleMuon/Collision2017-wRECO-l1t-integration-v96p27/SingleMuon/crab_Collision2017-wRECO-l1t-integration-v96p27__SingleMuon/170818_102121/000*/L1Ntuple_*.root
+      -  root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/SingleMuon/Fill*/Collision2017-wRECO-l1t-integration-v96p27_CaloMode/SingleMuon/crab_Collision2017-wRECO-l1t-integration-v96p27_CaloMode__SingleMuon/*/0000/L1Ntuple_*root
+      # Zero Bias
+      # -  root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/ZeroBias/Fill6*/Collision2017-noRECO-l1t-integration-96p27_NoPUS/ZeroBias/crab_Collision2017-noRECO-l1t-integration-96p27_NoPUS__ZeroBias_Run2017C/*/0000/L1Ntuple_*root
+      # -  root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/ZeroBias/Collision2017-noRECO-l1t-integration-96p20/ZeroBias/crab_Collision2017-noRECO-l1t-integration-96p20__ZeroBias_Run2017C/170726_094745/0000/*root
   sample:
     name: Data
     title: 2017 Data
   trigger:
+    # name: ZeroBias
+    # title: Zero Bias
     name: SingleMu
     title: Single Muon
   pileup_file: ""
-  run_number: 6061
+  run_number: 6XXX
 
 analysis:
   do_fit: True

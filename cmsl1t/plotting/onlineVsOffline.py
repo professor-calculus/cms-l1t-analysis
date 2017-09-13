@@ -49,6 +49,8 @@ class OnlineVsOffline(BasePlotter):
             # Draw each efficiency (with fit)
             canvas = draw2D(hist, draw_args={"xtitle": self.offline_title,
                                              "ytitle": self.online_title})
+            canvas.SetLogz(True)
+
             # Add labels
             label_canvas()
 

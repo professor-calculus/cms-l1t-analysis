@@ -19,16 +19,16 @@ Sums = namedtuple("Sums", sum_types)
 
 
 def ExtractSums(event):
-    offline = Sums(Sum(event.sums.Ht),
-                   Met(event.sums.mHt, event.sums.mHtPhi),
-                   Met(event.sums.caloMet, event.sums.caloMetPhi),
-                   Met(event.sums.caloMetBE, event.sums.caloMetPhiBE)
+    offline = dict("HTT"=Sum(event.sums.Ht),
+                   "MHT"=Met(event.sums.mHt, event.sums.mHtPhi),
+                   "MET_HF"=Met(event.sums.caloMet, event.sums.caloMetPhi),
+                   "MET_noHF"=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE)
                    )
-    online = Sums(event.l1Sums["L1Htt"],
-                   event.l1Sums["L1Mht"],
-                   event.l1Sums["L1MetHF"],
-                   event.l1Sums["L1Met"]
-                   )
+    online = dict("HTT"=event.l1Sums["L1Htt"],
+                  "MHT"=event.l1Sums["L1Mht"],
+                  "MET_HF"=event.l1Sums["L1MetHF"],
+                  "MET_noHF"=event.l1Sums["L1Met"]
+                  )
     return online, offline
 
 
@@ -86,27 +86,26 @@ class Analyzer(BaseAnalyzer):
             res_plot = getattr(self, cfg.name + "_phi_res")
             twoD_plot = getattr(self, cfg.name + "_phi_2D")
             twoD_plot.build(cfg.on_title + " Phi (rad)", cfg.off_title + " Phi (rad)", 
-                            puBins, 50, 0, 2 * pi)
+                            puBins, 50, -pi, 2 * pi)
             res_plot.build(cfg.on_title + " Phi", cfg.off_title + " Phi", 
                            puBins, 50, -2, 2)
 
         self.res_vs_eta_CentralJets.build("Online Jet energy (GeV)", "Offline Jet energy (GeV)", "Offline Jet Eta (rad)",
-                                          puBins, 50, -10, 10, 10, 0, pi / 2)
+                                          puBins, 50, -10, 10, 30, 0, 6)
         return True
 
     def fill_histograms(self, entry, event):
         if not event.passesMETFilter():
             return True
 
-        if len(event.caloTowers) <= 0:
-            return True
-
         offline, online = ExtractSums(event)
         pileup = event.nVertex
 
         for name in sum_types:
-            off = getattr(offline, name)
-            on = getattr(online, name)
+            on = online[name]
+            if on.et == 0:
+                continue
+            off = offline[name]
             getattr(self, name + "_eff").fill(pileup, off.et, on.et)
             getattr(self, name + "_res").fill(pileup, off.et, on.et)
             getattr(self, name + "_2D").fill(pileup, off.et, on.et)
