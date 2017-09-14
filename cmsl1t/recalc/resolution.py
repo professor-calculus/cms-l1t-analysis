@@ -5,16 +5,17 @@ twopi = 2 * pi
 
 
 def get_resolution_function(resolution_type):
-    if resolution_type.lower() == "energy":
+    resolution_type = resolution_type.lower()
+    if resolution_type == "energy":
         function = resolution_energy
         function.label = "({on} - {off})/ {off}"
-    elif resolution_type.lower() == "phi":
+    elif resolution_type == "phi":
         function = resolution_phi
-    elif resolution_type.lower() == "eta":
+    elif resolution_type == "eta":
         function = resolution_eta
-    elif resolution_type.lower() == "position_1d":
+    elif resolution_type == "position_1d":
         function = resolution_position_1D
-    elif resolution_type.lower() == "position_2d":
+    elif resolution_type == "position_2d":
         function = resolution_position_2D
         function.label = "|{on} - {off}|"
     else:
