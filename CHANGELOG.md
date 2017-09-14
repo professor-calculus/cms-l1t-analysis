@@ -2,19 +2,79 @@
 
 ## [Unreleased](https://github.com/cms-l1t-offline/cms-l1t-analysis/tree/HEAD)
 
-[Full Changelog](https://github.com/cms-l1t-offline/cms-l1t-analysis/compare/v0.1.0...HEAD)
+[Full Changelog](https://github.com/cms-l1t-offline/cms-l1t-analysis/compare/v0.1.1...HEAD)
 
 **Implemented enhancements:**
 
+- Batch submission [\#58](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/58)
+- Allow multiple wildcards with root\_glob [\#68](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/68) ([benkrikler](https://github.com/benkrikler))
+
+**Closed issues:**
+
+- cmsl1t\_dirty\_batch command broken for click-log 0.2.0 [\#71](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/71)
+
+**Merged pull requests:**
+
+- Add two more plotters for resolution [\#76](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/76) ([benkrikler](https://github.com/benkrikler))
+- Efficiency plots: Fill all pile-up bins [\#75](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/75) ([benkrikler](https://github.com/benkrikler))
+- Fix reporting of errors when merging histograms together  [\#74](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/74) ([benkrikler](https://github.com/benkrikler))
+- Fix another issue with the efficiency curves [\#73](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/73) ([benkrikler](https://github.com/benkrikler))
+- Fix issue 71 and other aspects of the bin/cmsl1t\* commands [\#72](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/72) ([benkrikler](https://github.com/benkrikler))
+- Add a generic 2D online vs offline quantity plotter [\#70](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/70) ([benkrikler](https://github.com/benkrikler))
+- Add users' site packages directory to PYTHONPATH [\#69](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/69) ([benkrikler](https://github.com/benkrikler))
+- Fix the Efficiency plotter which was giving non-physical looking turnons [\#67](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/67) ([benkrikler](https://github.com/benkrikler))
+- First version of weekly checks config [\#65](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/65) ([kreczko](https://github.com/kreczko))
+
+## [v0.1.1](https://github.com/cms-l1t-offline/cms-l1t-analysis/tree/v0.1.1) (2017-09-04)
+[Full Changelog](https://github.com/cms-l1t-offline/cms-l1t-analysis/compare/v0.1.0...v0.1.1)
+
+**Implemented enhancements:**
+
+- Support to run legacy analysers in the new framework [\#48](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/48) ([kreczko](https://github.com/kreczko))
+- skeleton for documentation [\#33](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/33) ([kreczko](https://github.com/kreczko))
+- Fixing issue 23 [\#27](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/27) ([kreczko](https://github.com/kreczko))
 - Fixing issue \#22 [\#26](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/26) ([kreczko](https://github.com/kreczko))
 
 **Closed issues:**
 
+- Configuration tutorial [\#50](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/50)
+- cmsl1t can only be executed in cms-l1t-analysis project directory [\#41](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/41)
+- Config validation [\#29](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/29)
 - demo\_analyzer can not be run [\#24](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/24)
+- Setting up the environment twice fails [\#23](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/23)
+- Can not run benchmark [\#22](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/22)
 - rootpy's TreeChain doesn't work with globbing and xrootd access [\#16](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/16)
+- Suggestion for plotting and histogram collections [\#14](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/14)
+- Introduce 'modifiers' [\#9](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/9)
+- Migrate remaining macros [\#8](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/8)
+- Replacement of ntuple\_config [\#5](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/5)
+- Improvements to base histogram collection [\#4](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/4)
+- Plotting in cmsl1t [\#3](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/3)
 
 **Merged pull requests:**
 
+- Get bsub batch submission working [\#63](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/63) ([benkrikler](https://github.com/benkrikler))
+- Docker for HTCondor testing [\#62](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/62) ([kreczko](https://github.com/kreczko))
+- WIP: Add a dirty batch submission script, for issue \#58 [\#60](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/60) ([benkrikler](https://github.com/benkrikler))
+- Add the ability to reload histograms from files [\#59](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/59) ([benkrikler](https://github.com/benkrikler))
+- Make proper use of TEfficiency [\#57](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/57) ([benkrikler](https://github.com/benkrikler))
+- Resolve the warnings seen when more than 10 files are loaded [\#56](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/56) ([benkrikler](https://github.com/benkrikler))
+- Make {emuC,c}aloTowers pluralised consistently [\#55](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/55) ([benkrikler](https://github.com/benkrikler))
+- Improve Base classes for Analyzers and Plotters [\#52](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/52) ([benkrikler](https://github.com/benkrikler))
+- Moving configuration description into config tutorial [\#51](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/51) ([kreczko](https://github.com/kreczko))
+- Implement fitting of turnon curves [\#49](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/49) ([benkrikler](https://github.com/benkrikler))
+- Fixing issue 41: execute cmsl1t from anywhere [\#46](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/46) ([kreczko](https://github.com/kreczko))
+- Add jet matching algorithm [\#45](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/45) ([kreczko](https://github.com/kreczko))
+- Handle L1NTuples without certain trees [\#43](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/43) ([benkrikler](https://github.com/benkrikler))
+- Say something when validation fails due to missing section [\#42](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/42) ([benkrikler](https://github.com/benkrikler))
+- Add final polish to efficiency plotter and related code [\#38](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/38) ([benkrikler](https://github.com/benkrikler))
+- WIP: implement first real plotter [\#37](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/37) ([benkrikler](https://github.com/benkrikler))
+- Config validation [\#36](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/36) ([kreczko](https://github.com/kreczko))
+- Fixes for documentation on readthedocs. [\#35](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/35) ([kreczko](https://github.com/kreczko))
+- Improve interface to allow working with multiple hists for one key [\#34](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/34) ([benkrikler](https://github.com/benkrikler))
+- General histogram collection [\#32](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/32) ([benkrikler](https://github.com/benkrikler))
+- Migrating legacy analyzers [\#30](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/30) ([kreczko](https://github.com/kreczko))
+- Config draft [\#28](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/28) ([kreczko](https://github.com/kreczko))
 - Split timerfunc decorator for different call-signatures [\#25](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/25) ([benkrikler](https://github.com/benkrikler))
 - Fixes for decorator and flake8 [\#21](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/21) ([kreczko](https://github.com/kreczko))
 - Update README.md [\#20](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/20) ([benkrikler](https://github.com/benkrikler))
