@@ -51,7 +51,7 @@ data/L1Ntuple_test_3.root:
 pep8:
 	@pep8 --exclude=.git,external examples cmsl1t
 
-flake8: 
+flake8:
 	@flake8 $(shell file -p bin/* |awk -F: '/python.*text/{print $$1}') cmsl1t test --ignore=F401 --max-line-length=120
 
 # benchmarks
@@ -81,6 +81,8 @@ test-code-full:
 	@$(NOSETESTS) -v -s test
 
 changelog:
+	@echo "If you have not done it, please run"
+	@echo "export CHANGELOG_GITHUB_TOKEN=<from https://github.com/settings/tokens>"
 	@github_changelog_generator -u cms-l1t-offline -p cms-l1t-analysis --base docs/initial_changelog.md
 
 docs-html:
