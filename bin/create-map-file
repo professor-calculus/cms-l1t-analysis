@@ -9,6 +9,7 @@ import ROOT
 from rootpy.io import root_open
 from rootpy.tree import Tree
 from cmsl1t.utils.module import load_L1TNTupleLibrary
+import cmsl1t
 
 import yaml
 import collections
@@ -26,8 +27,6 @@ def extract_branches(tree):
         branchName = branch.GetName()
 
         if isinstance(branch, ROOT.TBranchElement):
-            branchClass = branch.GetClass()
-            branchClassName = branch.GetClass().GetName()
             leaves = ['.'.join([branchName, l.GetName()])
                       for l in branch.GetListOfBranches()]
             if leaves:
@@ -89,12 +88,54 @@ def add_aliases(trees):
     return trees
 
 
+def add_meta_data(trees):
+    for path, tree in trees.items():
+        optional = False
+        if 'reco' in path.lower():
+            optional = True
+        tree['optional'] = optional
+    return trees
+
+
+def create_order(trees):
+    new_trees = {}
+    for path, tree in trees.items():
+        new_trees[path] = collections.OrderedDict([
+            ('name', tree['name']),
+            ('optional', tree['optional']),
+            ('branches', tree['branches']),
+        ])
+    return new_trees
+
+
+def encapsulate_trees(trees):
+    return collections.OrderedDict([
+        ('version', cmsl1t.__version__),
+        ('content', trees),
+    ]
+    )
+
+
+def _represent_dict_order(self, data):
+    return self.represent_mapping('tag:yaml.org,2002:map', data.items())
+
+
+def setup_yaml():
+    """ https://stackoverflow.com/a/8661021 """
+    yaml.add_representer(collections.OrderedDict, _represent_dict_order)
+
+
 def print_yaml(trees, toFile=None):
+    setup_yaml()
     if toFile:
         with open(toFile, 'w') as f:
-            yaml.dump(trees, f)
+            yaml.dump(
+                trees,
+                f,
+                default_flow_style=False,
+            )
     else:
-        print(yaml.dump(trees))
+        print(yaml.dump(trees, default_flow_style=False))
 
 
 def check_for_duplicates():
@@ -103,6 +144,7 @@ def check_for_duplicates():
     noClashes = len(ALIAS_REGISTRY) == len(unique_aliases)
     if noClashes:
         print('All aliases are unique')
+        return True
     else:
         print('Found duplicate aliases')
         counter = collections.Counter(ALIAS_REGISTRY)
@@ -110,21 +152,29 @@ def check_for_duplicates():
         print('Found', len(duplicates), 'duplicates:')
         for d in duplicates:
             print('-->', d)
+        return False
 
 
 @click.command()
 @click.argument('input_file', type=click.Path(exists=True))
+@click.option('-o', '--output_file', default='config/ntuple_content.yaml')
 @click_log.simple_verbosity_option(logger)
-def main(input_file):
+def main(input_file, output_file):
+    '''
+    '''
     load_L1TNTupleLibrary()
+    # ntuple content to dictionary
     trees = extract_trees(input_file)
     trees = convert_to_dict(trees)
-    # print(trees)
+    # add custom information
     trees = add_aliases(trees)
+    trees = add_meta_data(trees)
+    # make pretty and convert to YAML
+    trees = create_order(trees)
+    trees = encapsulate_trees(trees)
 
-    print_yaml(trees, 'test.yaml')
-
-    check_for_duplicates()
+    if check_for_duplicates():
+        print_yaml(trees, output_file)
 
 
 if __name__ == '__main__':
