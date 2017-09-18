@@ -1,4 +1,5 @@
 from importlib import import_module
+import os
 
 
 def exists(module_name):
@@ -17,3 +18,12 @@ def exists(module_name):
         return hasattr(m, tokens[-1])
     else:
         return True
+
+
+def load_L1TNTupleLibrary(lib_name='L1TAnalysisDataformats.so'):
+    import ROOT
+    PROJECT_ROOT = os.environ.get('PROJECT_ROOT', os.getcwd())
+    if lib_name not in ROOT.gSystem.GetLibraries():
+        path_to_lib = os.path.join(PROJECT_ROOT, 'build', lib_name)
+        ROOT.gSystem.Load(path_to_lib)
+        assert (lib_name in ROOT.gSystem.GetLibraries())
