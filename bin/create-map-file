@@ -63,18 +63,39 @@ def convert_to_dict(trees):
     return trees_dict
 
 
-def getDefaultAliases(path, treeName, objName):
+def _full_path_alias(path, objName):
+    # path includes treeName
+    tokens = path.split('/')
+    tokens += objName.split('.')
+    return 'event.' + '_'.join(tokens)
+
+
+def _default_alias(path, treeName, objName):
     tokens = []
     if 'emu' in path.lower():
         tokens.append('emu')
     tokens.append(treeName)
     tokens += objName.split('.')
-    alias1 = 'event.' + '_'.join(tokens)
+    return 'event.' + '_'.join(tokens)
 
-    tokens = path.split('/')
-    tokens += objName.split('.')
-    alias2 = 'event.' + '_'.join(tokens)
-    return [alias1, alias2]
+
+def _shorthand_alias(path, treeName, objName):
+    tokens = []
+    path_lower = path.lower()
+    obj_lower = objName.lower()
+    search_for = ['emu', 'bmt', 'emt', 'omt']
+    for s in search_for:
+        if s in path_lower or s in obj_lower:
+            tokens.append(s)
+    tokens += objName.split('.')[-2:]
+    return 'event.' + '_'.join(tokens)
+
+
+def getDefaultAliases(path, treeName, objName):
+    alias1 = _full_path_alias(path, objName)
+    alias2 = _default_alias(path, treeName, objName)
+    alias3 = _shorthand_alias(path, treeName, objName)
+    return [alias1, alias2, alias3]
 
 
 def add_aliases(trees):
