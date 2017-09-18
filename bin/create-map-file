@@ -19,6 +19,7 @@ click_log.basic_config(logger)
 
 ALIAS_REGISTRY = []
 
+
 def extract_branches(tree):
     paths = []
     for branch in tree.branches:
@@ -52,28 +53,41 @@ def extract_trees(input_file):
                     )
         return trees
 
+
 def convert_to_dict(trees):
     trees_dict = {}
     for path, tree in trees.items():
         trees_dict[path] = dict(
             name=tree['name'],
-            branches={b:{} for b in tree['branches']},
+            branches={b: {} for b in tree['branches']},
         )
     return trees_dict
 
-def getDefaultAlias(treeName, objName):
-    tokens = [treeName]
+
+def getDefaultAliases(path, treeName, objName):
+    tokens = []
+    if 'emu' in path.lower():
+        tokens.append('emu')
+    tokens.append(treeName)
     tokens += objName.split('.')
-    return 'event.' + '_'.join(tokens)
+    alias1 = 'event.' + '_'.join(tokens)
+
+    tokens = path.split('/')
+    tokens += objName.split('.')
+    alias2 = 'event.' + '_'.join(tokens)
+    return [alias1, alias2]
+
 
 def add_aliases(trees):
+    global ALIAS_REGISTRY
     for path, tree in trees.items():
         branches = tree['branches']
         for name, value in branches.items():
-            defaultAlias = getDefaultAlias(tree['name'], name)
-            ALIAS_REGISTRY.append(defaultAlias)
-            value['aliases'] = [defaultAlias]
+            defaultAliases = getDefaultAliases(path, tree['name'], name)
+            ALIAS_REGISTRY += defaultAliases
+            value['aliases'] = defaultAliases
     return trees
+
 
 def print_yaml(trees, toFile=None):
     if toFile:
@@ -82,7 +96,9 @@ def print_yaml(trees, toFile=None):
     else:
         print(yaml.dump(trees))
 
+
 def check_for_duplicates():
+    global ALIAS_REGISTRY
     unique_aliases = set(ALIAS_REGISTRY)
     noClashes = len(ALIAS_REGISTRY) == len(unique_aliases)
     if noClashes:
@@ -109,8 +125,6 @@ def main(input_file):
     print_yaml(trees, 'test.yaml')
 
     check_for_duplicates()
-
-
 
 
 if __name__ == '__main__':
