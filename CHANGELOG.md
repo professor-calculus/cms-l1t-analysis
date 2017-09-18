@@ -1,20 +1,23 @@
 # Change Log
 
-## [Unreleased](https://github.com/cms-l1t-offline/cms-l1t-analysis/tree/HEAD)
-
-[Full Changelog](https://github.com/cms-l1t-offline/cms-l1t-analysis/compare/v0.1.1...HEAD)
+## [v0.1.2](https://github.com/cms-l1t-offline/cms-l1t-analysis/tree/v0.1.2) (2017-09-18)
+[Full Changelog](https://github.com/cms-l1t-offline/cms-l1t-analysis/compare/v0.1.1...v0.1.2)
 
 **Implemented enhancements:**
 
 - Batch submission [\#58](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/58)
+- Merging weekly checks into master [\#81](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/81) ([kreczko](https://github.com/kreczko))
 - Allow multiple wildcards with root\_glob [\#68](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/68) ([benkrikler](https://github.com/benkrikler))
 
 **Closed issues:**
 
 - cmsl1t\_dirty\_batch command broken for click-log 0.2.0 [\#71](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/71)
+- Weekly monitoring confiuration [\#66](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/66)
 
 **Merged pull requests:**
 
+- Clarifications on how to use changelog generator [\#78](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/78) ([kreczko](https://github.com/kreczko))
+- "Final" PR to add all changes for weekly checks [\#77](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/77) ([benkrikler](https://github.com/benkrikler))
 - Add two more plotters for resolution [\#76](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/76) ([benkrikler](https://github.com/benkrikler))
 - Efficiency plots: Fill all pile-up bins [\#75](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/75) ([benkrikler](https://github.com/benkrikler))
 - Fix reporting of errors when merging histograms together  [\#74](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/74) ([benkrikler](https://github.com/benkrikler))
