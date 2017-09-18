@@ -57,7 +57,11 @@ make benchmark
 ```
 
 ### Generating changelog
+Since the changelog generator queries the repository you will need to give it
+a github authentication token to bypass the limits for unauthenticated access.
+You can create such tokens under https://github.com/settings/tokens .
 ```bash
+export CHANGELOG_GITHUB_TOKEN=<from https://github.com/settings/tokens>
 make changelog
 ```
 
