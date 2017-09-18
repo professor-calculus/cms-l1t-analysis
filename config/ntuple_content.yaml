@@ -1,0 +1,2457 @@
+version: 0.1.1
+content:
+  l1CaloTowerEmuTree/L1CaloTowerTree:
+    name: L1CaloTowerTree
+    optional: false
+    branches:
+      CaloTP.ecalTPCaliphi:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_ecalTPCaliphi
+        - event.emu_L1CaloTowerTree_CaloTP_ecalTPCaliphi
+        - event.emu_CaloTP_ecalTPCaliphi
+      CaloTP.ecalTPcompEt:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_ecalTPcompEt
+        - event.emu_L1CaloTowerTree_CaloTP_ecalTPcompEt
+        - event.emu_CaloTP_ecalTPcompEt
+      CaloTP.ecalTPet:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_ecalTPet
+        - event.emu_L1CaloTowerTree_CaloTP_ecalTPet
+        - event.emu_CaloTP_ecalTPet
+      CaloTP.ecalTPfineGrain:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_ecalTPfineGrain
+        - event.emu_L1CaloTowerTree_CaloTP_ecalTPfineGrain
+        - event.emu_CaloTP_ecalTPfineGrain
+      CaloTP.ecalTPieta:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_ecalTPieta
+        - event.emu_L1CaloTowerTree_CaloTP_ecalTPieta
+        - event.emu_CaloTP_ecalTPieta
+      CaloTP.ecalTPiphi:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_ecalTPiphi
+        - event.emu_L1CaloTowerTree_CaloTP_ecalTPiphi
+        - event.emu_CaloTP_ecalTPiphi
+      CaloTP.hcalTPCaliphi:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_hcalTPCaliphi
+        - event.emu_L1CaloTowerTree_CaloTP_hcalTPCaliphi
+        - event.emu_CaloTP_hcalTPCaliphi
+      CaloTP.hcalTPcompEt:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_hcalTPcompEt
+        - event.emu_L1CaloTowerTree_CaloTP_hcalTPcompEt
+        - event.emu_CaloTP_hcalTPcompEt
+      CaloTP.hcalTPet:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_hcalTPet
+        - event.emu_L1CaloTowerTree_CaloTP_hcalTPet
+        - event.emu_CaloTP_hcalTPet
+      CaloTP.hcalTPfineGrain:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_hcalTPfineGrain
+        - event.emu_L1CaloTowerTree_CaloTP_hcalTPfineGrain
+        - event.emu_CaloTP_hcalTPfineGrain
+      CaloTP.hcalTPieta:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_hcalTPieta
+        - event.emu_L1CaloTowerTree_CaloTP_hcalTPieta
+        - event.emu_CaloTP_hcalTPieta
+      CaloTP.hcalTPiphi:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_hcalTPiphi
+        - event.emu_L1CaloTowerTree_CaloTP_hcalTPiphi
+        - event.emu_CaloTP_hcalTPiphi
+      CaloTP.nECALTP:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_nECALTP
+        - event.emu_L1CaloTowerTree_CaloTP_nECALTP
+        - event.emu_CaloTP_nECALTP
+      CaloTP.nHCALTP:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_CaloTP_nHCALTP
+        - event.emu_L1CaloTowerTree_CaloTP_nHCALTP
+        - event.emu_CaloTP_nHCALTP
+      L1CaloCluster.et:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloCluster_et
+        - event.emu_L1CaloTowerTree_L1CaloCluster_et
+        - event.emu_L1CaloCluster_et
+      L1CaloCluster.eta:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloCluster_eta
+        - event.emu_L1CaloTowerTree_L1CaloCluster_eta
+        - event.emu_L1CaloCluster_eta
+      L1CaloCluster.iet:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloCluster_iet
+        - event.emu_L1CaloTowerTree_L1CaloCluster_iet
+        - event.emu_L1CaloCluster_iet
+      L1CaloCluster.ieta:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloCluster_ieta
+        - event.emu_L1CaloTowerTree_L1CaloCluster_ieta
+        - event.emu_L1CaloCluster_ieta
+      L1CaloCluster.iphi:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloCluster_iphi
+        - event.emu_L1CaloTowerTree_L1CaloCluster_iphi
+        - event.emu_L1CaloCluster_iphi
+      L1CaloCluster.iqual:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloCluster_iqual
+        - event.emu_L1CaloTowerTree_L1CaloCluster_iqual
+        - event.emu_L1CaloCluster_iqual
+      L1CaloCluster.nCluster:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloCluster_nCluster
+        - event.emu_L1CaloTowerTree_L1CaloCluster_nCluster
+        - event.emu_L1CaloCluster_nCluster
+      L1CaloCluster.phi:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloCluster_phi
+        - event.emu_L1CaloTowerTree_L1CaloCluster_phi
+        - event.emu_L1CaloCluster_phi
+      L1CaloTower.et:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloTower_et
+        - event.emu_L1CaloTowerTree_L1CaloTower_et
+        - event.emu_L1CaloTower_et
+      L1CaloTower.eta:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloTower_eta
+        - event.emu_L1CaloTowerTree_L1CaloTower_eta
+        - event.emu_L1CaloTower_eta
+      L1CaloTower.iem:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloTower_iem
+        - event.emu_L1CaloTowerTree_L1CaloTower_iem
+        - event.emu_L1CaloTower_iem
+      L1CaloTower.iet:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloTower_iet
+        - event.emu_L1CaloTowerTree_L1CaloTower_iet
+        - event.emu_L1CaloTower_iet
+      L1CaloTower.ieta:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloTower_ieta
+        - event.emu_L1CaloTowerTree_L1CaloTower_ieta
+        - event.emu_L1CaloTower_ieta
+      L1CaloTower.ihad:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloTower_ihad
+        - event.emu_L1CaloTowerTree_L1CaloTower_ihad
+        - event.emu_L1CaloTower_ihad
+      L1CaloTower.iphi:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloTower_iphi
+        - event.emu_L1CaloTowerTree_L1CaloTower_iphi
+        - event.emu_L1CaloTower_iphi
+      L1CaloTower.iqual:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloTower_iqual
+        - event.emu_L1CaloTowerTree_L1CaloTower_iqual
+        - event.emu_L1CaloTower_iqual
+      L1CaloTower.iratio:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloTower_iratio
+        - event.emu_L1CaloTowerTree_L1CaloTower_iratio
+        - event.emu_L1CaloTower_iratio
+      L1CaloTower.nTower:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloTower_nTower
+        - event.emu_L1CaloTowerTree_L1CaloTower_nTower
+        - event.emu_L1CaloTower_nTower
+      L1CaloTower.phi:
+        aliases:
+        - event.l1CaloTowerEmuTree_L1CaloTowerTree_L1CaloTower_phi
+        - event.emu_L1CaloTowerTree_L1CaloTower_phi
+        - event.emu_L1CaloTower_phi
+  l1CaloTowerTree/L1CaloTowerTree:
+    name: L1CaloTowerTree
+    optional: false
+    branches:
+      CaloTP.ecalTPCaliphi:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_ecalTPCaliphi
+        - event.L1CaloTowerTree_CaloTP_ecalTPCaliphi
+        - event.CaloTP_ecalTPCaliphi
+      CaloTP.ecalTPcompEt:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_ecalTPcompEt
+        - event.L1CaloTowerTree_CaloTP_ecalTPcompEt
+        - event.CaloTP_ecalTPcompEt
+      CaloTP.ecalTPet:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_ecalTPet
+        - event.L1CaloTowerTree_CaloTP_ecalTPet
+        - event.CaloTP_ecalTPet
+      CaloTP.ecalTPfineGrain:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_ecalTPfineGrain
+        - event.L1CaloTowerTree_CaloTP_ecalTPfineGrain
+        - event.CaloTP_ecalTPfineGrain
+      CaloTP.ecalTPieta:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_ecalTPieta
+        - event.L1CaloTowerTree_CaloTP_ecalTPieta
+        - event.CaloTP_ecalTPieta
+      CaloTP.ecalTPiphi:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_ecalTPiphi
+        - event.L1CaloTowerTree_CaloTP_ecalTPiphi
+        - event.CaloTP_ecalTPiphi
+      CaloTP.hcalTPCaliphi:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_hcalTPCaliphi
+        - event.L1CaloTowerTree_CaloTP_hcalTPCaliphi
+        - event.CaloTP_hcalTPCaliphi
+      CaloTP.hcalTPcompEt:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_hcalTPcompEt
+        - event.L1CaloTowerTree_CaloTP_hcalTPcompEt
+        - event.CaloTP_hcalTPcompEt
+      CaloTP.hcalTPet:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_hcalTPet
+        - event.L1CaloTowerTree_CaloTP_hcalTPet
+        - event.CaloTP_hcalTPet
+      CaloTP.hcalTPfineGrain:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_hcalTPfineGrain
+        - event.L1CaloTowerTree_CaloTP_hcalTPfineGrain
+        - event.CaloTP_hcalTPfineGrain
+      CaloTP.hcalTPieta:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_hcalTPieta
+        - event.L1CaloTowerTree_CaloTP_hcalTPieta
+        - event.CaloTP_hcalTPieta
+      CaloTP.hcalTPiphi:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_hcalTPiphi
+        - event.L1CaloTowerTree_CaloTP_hcalTPiphi
+        - event.CaloTP_hcalTPiphi
+      CaloTP.nECALTP:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_nECALTP
+        - event.L1CaloTowerTree_CaloTP_nECALTP
+        - event.CaloTP_nECALTP
+      CaloTP.nHCALTP:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_CaloTP_nHCALTP
+        - event.L1CaloTowerTree_CaloTP_nHCALTP
+        - event.CaloTP_nHCALTP
+      L1CaloCluster.et:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloCluster_et
+        - event.L1CaloTowerTree_L1CaloCluster_et
+        - event.L1CaloCluster_et
+      L1CaloCluster.eta:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloCluster_eta
+        - event.L1CaloTowerTree_L1CaloCluster_eta
+        - event.L1CaloCluster_eta
+      L1CaloCluster.iet:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloCluster_iet
+        - event.L1CaloTowerTree_L1CaloCluster_iet
+        - event.L1CaloCluster_iet
+      L1CaloCluster.ieta:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloCluster_ieta
+        - event.L1CaloTowerTree_L1CaloCluster_ieta
+        - event.L1CaloCluster_ieta
+      L1CaloCluster.iphi:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloCluster_iphi
+        - event.L1CaloTowerTree_L1CaloCluster_iphi
+        - event.L1CaloCluster_iphi
+      L1CaloCluster.iqual:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloCluster_iqual
+        - event.L1CaloTowerTree_L1CaloCluster_iqual
+        - event.L1CaloCluster_iqual
+      L1CaloCluster.nCluster:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloCluster_nCluster
+        - event.L1CaloTowerTree_L1CaloCluster_nCluster
+        - event.L1CaloCluster_nCluster
+      L1CaloCluster.phi:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloCluster_phi
+        - event.L1CaloTowerTree_L1CaloCluster_phi
+        - event.L1CaloCluster_phi
+      L1CaloTower.et:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloTower_et
+        - event.L1CaloTowerTree_L1CaloTower_et
+        - event.L1CaloTower_et
+      L1CaloTower.eta:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloTower_eta
+        - event.L1CaloTowerTree_L1CaloTower_eta
+        - event.L1CaloTower_eta
+      L1CaloTower.iem:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloTower_iem
+        - event.L1CaloTowerTree_L1CaloTower_iem
+        - event.L1CaloTower_iem
+      L1CaloTower.iet:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloTower_iet
+        - event.L1CaloTowerTree_L1CaloTower_iet
+        - event.L1CaloTower_iet
+      L1CaloTower.ieta:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloTower_ieta
+        - event.L1CaloTowerTree_L1CaloTower_ieta
+        - event.L1CaloTower_ieta
+      L1CaloTower.ihad:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloTower_ihad
+        - event.L1CaloTowerTree_L1CaloTower_ihad
+        - event.L1CaloTower_ihad
+      L1CaloTower.iphi:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloTower_iphi
+        - event.L1CaloTowerTree_L1CaloTower_iphi
+        - event.L1CaloTower_iphi
+      L1CaloTower.iqual:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloTower_iqual
+        - event.L1CaloTowerTree_L1CaloTower_iqual
+        - event.L1CaloTower_iqual
+      L1CaloTower.iratio:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloTower_iratio
+        - event.L1CaloTowerTree_L1CaloTower_iratio
+        - event.L1CaloTower_iratio
+      L1CaloTower.nTower:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloTower_nTower
+        - event.L1CaloTowerTree_L1CaloTower_nTower
+        - event.L1CaloTower_nTower
+      L1CaloTower.phi:
+        aliases:
+        - event.l1CaloTowerTree_L1CaloTowerTree_L1CaloTower_phi
+        - event.L1CaloTowerTree_L1CaloTower_phi
+        - event.L1CaloTower_phi
+  l1ElectronRecoTree/ElectronRecoTree:
+    name: ElectronRecoTree
+    optional: true
+    branches:
+      Electron.charge:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_charge
+        - event.ElectronRecoTree_Electron_charge
+        - event.Electron_charge
+      Electron.e:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_e
+        - event.ElectronRecoTree_Electron_e
+        - event.Electron_e
+      Electron.e_ECAL:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_e_ECAL
+        - event.ElectronRecoTree_Electron_e_ECAL
+        - event.Electron_e_ECAL
+      Electron.e_SC:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_e_SC
+        - event.ElectronRecoTree_Electron_e_SC
+        - event.Electron_e_SC
+      Electron.et:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_et
+        - event.ElectronRecoTree_Electron_et
+        - event.Electron_et
+      Electron.eta:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_eta
+        - event.ElectronRecoTree_Electron_eta
+        - event.Electron_eta
+      Electron.eta_SC:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_eta_SC
+        - event.ElectronRecoTree_Electron_eta_SC
+        - event.Electron_eta_SC
+      Electron.isLooseElectron:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_isLooseElectron
+        - event.ElectronRecoTree_Electron_isLooseElectron
+        - event.Electron_isLooseElectron
+      Electron.isMediumElectron:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_isMediumElectron
+        - event.ElectronRecoTree_Electron_isMediumElectron
+        - event.Electron_isMediumElectron
+      Electron.isTightElectron:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_isTightElectron
+        - event.ElectronRecoTree_Electron_isTightElectron
+        - event.Electron_isTightElectron
+      Electron.isVetoElectron:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_isVetoElectron
+        - event.ElectronRecoTree_Electron_isVetoElectron
+        - event.Electron_isVetoElectron
+      Electron.iso:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_iso
+        - event.ElectronRecoTree_Electron_iso
+        - event.Electron_iso
+      Electron.nElectrons:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_nElectrons
+        - event.ElectronRecoTree_Electron_nElectrons
+        - event.Electron_nElectrons
+      Electron.phi:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_phi
+        - event.ElectronRecoTree_Electron_phi
+        - event.Electron_phi
+      Electron.phi_SC:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_phi_SC
+        - event.ElectronRecoTree_Electron_phi_SC
+        - event.Electron_phi_SC
+      Electron.pt:
+        aliases:
+        - event.l1ElectronRecoTree_ElectronRecoTree_Electron_pt
+        - event.ElectronRecoTree_Electron_pt
+        - event.Electron_pt
+  l1EventTree/L1EventTree:
+    name: L1EventTree
+    optional: false
+    branches:
+      Event.bx:
+        aliases:
+        - event.l1EventTree_L1EventTree_Event_bx
+        - event.L1EventTree_Event_bx
+        - event.Event_bx
+      Event.event:
+        aliases:
+        - event.l1EventTree_L1EventTree_Event_event
+        - event.L1EventTree_Event_event
+        - event.Event_event
+      Event.hlt:
+        aliases:
+        - event.l1EventTree_L1EventTree_Event_hlt
+        - event.L1EventTree_Event_hlt
+        - event.Event_hlt
+      Event.lumi:
+        aliases:
+        - event.l1EventTree_L1EventTree_Event_lumi
+        - event.L1EventTree_Event_lumi
+        - event.Event_lumi
+      Event.nPV:
+        aliases:
+        - event.l1EventTree_L1EventTree_Event_nPV
+        - event.L1EventTree_Event_nPV
+        - event.Event_nPV
+      Event.nPV_True:
+        aliases:
+        - event.l1EventTree_L1EventTree_Event_nPV_True
+        - event.L1EventTree_Event_nPV_True
+        - event.Event_nPV_True
+      Event.orbit:
+        aliases:
+        - event.l1EventTree_L1EventTree_Event_orbit
+        - event.L1EventTree_Event_orbit
+        - event.Event_orbit
+      Event.puWeight:
+        aliases:
+        - event.l1EventTree_L1EventTree_Event_puWeight
+        - event.L1EventTree_Event_puWeight
+        - event.Event_puWeight
+      Event.run:
+        aliases:
+        - event.l1EventTree_L1EventTree_Event_run
+        - event.L1EventTree_Event_run
+        - event.Event_run
+      Event.time:
+        aliases:
+        - event.l1EventTree_L1EventTree_Event_time
+        - event.L1EventTree_Event_time
+        - event.Event_time
+  l1JetRecoTree/JetRecoTree:
+    name: JetRecoTree
+    optional: true
+    branches:
+      Jet.cMult:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_cMult
+        - event.JetRecoTree_Jet_cMult
+        - event.Jet_cMult
+      Jet.cemef:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_cemef
+        - event.JetRecoTree_Jet_cemef
+        - event.Jet_cemef
+      Jet.chMult:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_chMult
+        - event.JetRecoTree_Jet_chMult
+        - event.Jet_chMult
+      Jet.chef:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_chef
+        - event.JetRecoTree_Jet_chef
+        - event.Jet_chef
+      Jet.cmef:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_cmef
+        - event.JetRecoTree_Jet_cmef
+        - event.Jet_cmef
+      Jet.corrFactor:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_corrFactor
+        - event.JetRecoTree_Jet_corrFactor
+        - event.Jet_corrFactor
+      Jet.e:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_e
+        - event.JetRecoTree_Jet_e
+        - event.Jet_e
+      Jet.eEMF:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_eEMF
+        - event.JetRecoTree_Jet_eEMF
+        - event.Jet_eEMF
+      Jet.eEmEB:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_eEmEB
+        - event.JetRecoTree_Jet_eEmEB
+        - event.Jet_eEmEB
+      Jet.eEmEE:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_eEmEE
+        - event.JetRecoTree_Jet_eEmEE
+        - event.Jet_eEmEE
+      Jet.eEmHF:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_eEmHF
+        - event.JetRecoTree_Jet_eEmHF
+        - event.Jet_eEmHF
+      Jet.eHadHB:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_eHadHB
+        - event.JetRecoTree_Jet_eHadHB
+        - event.Jet_eHadHB
+      Jet.eHadHE:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_eHadHE
+        - event.JetRecoTree_Jet_eHadHE
+        - event.Jet_eHadHE
+      Jet.eHadHF:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_eHadHF
+        - event.JetRecoTree_Jet_eHadHF
+        - event.Jet_eHadHF
+      Jet.eHadHO:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_eHadHO
+        - event.JetRecoTree_Jet_eHadHO
+        - event.Jet_eHadHO
+      Jet.eMaxEcalTow:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_eMaxEcalTow
+        - event.JetRecoTree_Jet_eMaxEcalTow
+        - event.Jet_eMaxEcalTow
+      Jet.eMaxHcalTow:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_eMaxHcalTow
+        - event.JetRecoTree_Jet_eMaxHcalTow
+        - event.Jet_eMaxHcalTow
+      Jet.eef:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_eef
+        - event.JetRecoTree_Jet_eef
+        - event.Jet_eef
+      Jet.elMult:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_elMult
+        - event.JetRecoTree_Jet_elMult
+        - event.Jet_elMult
+      Jet.et:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_et
+        - event.JetRecoTree_Jet_et
+        - event.Jet_et
+      Jet.etCorr:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_etCorr
+        - event.JetRecoTree_Jet_etCorr
+        - event.Jet_etCorr
+      Jet.eta:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_eta
+        - event.JetRecoTree_Jet_eta
+        - event.Jet_eta
+      Jet.fHPD:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_fHPD
+        - event.JetRecoTree_Jet_fHPD
+        - event.Jet_fHPD
+      Jet.fRBX:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_fRBX
+        - event.JetRecoTree_Jet_fRBX
+        - event.Jet_fRBX
+      Jet.hfemMult:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_hfemMult
+        - event.JetRecoTree_Jet_hfemMult
+        - event.Jet_hfemMult
+      Jet.hfemef:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_hfemef
+        - event.JetRecoTree_Jet_hfemef
+        - event.Jet_hfemef
+      Jet.hfhMult:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_hfhMult
+        - event.JetRecoTree_Jet_hfhMult
+        - event.Jet_hfhMult
+      Jet.hfhef:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_hfhef
+        - event.JetRecoTree_Jet_hfhef
+        - event.Jet_hfhef
+      Jet.isPF:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_isPF
+        - event.JetRecoTree_Jet_isPF
+        - event.Jet_isPF
+      Jet.mef:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_mef
+        - event.JetRecoTree_Jet_mef
+        - event.Jet_mef
+      Jet.muMult:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_muMult
+        - event.JetRecoTree_Jet_muMult
+        - event.Jet_muMult
+      Jet.n60:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_n60
+        - event.JetRecoTree_Jet_n60
+        - event.Jet_n60
+      Jet.n90:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_n90
+        - event.JetRecoTree_Jet_n90
+        - event.Jet_n90
+      Jet.n90hits:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_n90hits
+        - event.JetRecoTree_Jet_n90hits
+        - event.Jet_n90hits
+      Jet.nJets:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_nJets
+        - event.JetRecoTree_Jet_nJets
+        - event.Jet_nJets
+      Jet.nMult:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_nMult
+        - event.JetRecoTree_Jet_nMult
+        - event.Jet_nMult
+      Jet.nemef:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_nemef
+        - event.JetRecoTree_Jet_nemef
+        - event.Jet_nemef
+      Jet.nhMult:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_nhMult
+        - event.JetRecoTree_Jet_nhMult
+        - event.Jet_nhMult
+      Jet.nhef:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_nhef
+        - event.JetRecoTree_Jet_nhef
+        - event.Jet_nhef
+      Jet.pef:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_pef
+        - event.JetRecoTree_Jet_pef
+        - event.Jet_pef
+      Jet.phMult:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_phMult
+        - event.JetRecoTree_Jet_phMult
+        - event.Jet_phMult
+      Jet.phi:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_phi
+        - event.JetRecoTree_Jet_phi
+        - event.Jet_phi
+      Jet.towerArea:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_towerArea
+        - event.JetRecoTree_Jet_towerArea
+        - event.Jet_towerArea
+      Jet.towerSize:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Jet_towerSize
+        - event.JetRecoTree_Jet_towerSize
+        - event.Jet_towerSize
+      Sums.Ht:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_Ht
+        - event.JetRecoTree_Sums_Ht
+        - event.Sums_Ht
+      Sums.caloMet:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_caloMet
+        - event.JetRecoTree_Sums_caloMet
+        - event.Sums_caloMet
+      Sums.caloMetBE:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_caloMetBE
+        - event.JetRecoTree_Sums_caloMetBE
+        - event.Sums_caloMetBE
+      Sums.caloMetPhi:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_caloMetPhi
+        - event.JetRecoTree_Sums_caloMetPhi
+        - event.Sums_caloMetPhi
+      Sums.caloMetPhiBE:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_caloMetPhiBE
+        - event.JetRecoTree_Sums_caloMetPhiBE
+        - event.Sums_caloMetPhiBE
+      Sums.caloSumEt:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_caloSumEt
+        - event.JetRecoTree_Sums_caloSumEt
+        - event.Sums_caloSumEt
+      Sums.caloSumEtBE:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_caloSumEtBE
+        - event.JetRecoTree_Sums_caloSumEtBE
+        - event.Sums_caloSumEtBE
+      Sums.ecalFlag:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_ecalFlag
+        - event.JetRecoTree_Sums_ecalFlag
+        - event.Sums_ecalFlag
+      Sums.hcalFlag:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_hcalFlag
+        - event.JetRecoTree_Sums_hcalFlag
+        - event.Sums_hcalFlag
+      Sums.mHt:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_mHt
+        - event.JetRecoTree_Sums_mHt
+        - event.Sums_mHt
+      Sums.mHtPhi:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_mHtPhi
+        - event.JetRecoTree_Sums_mHtPhi
+        - event.Sums_mHtPhi
+      Sums.met:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_met
+        - event.JetRecoTree_Sums_met
+        - event.Sums_met
+      Sums.metPhi:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_metPhi
+        - event.JetRecoTree_Sums_metPhi
+        - event.Sums_metPhi
+      Sums.metPx:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_metPx
+        - event.JetRecoTree_Sums_metPx
+        - event.Sums_metPx
+      Sums.metPy:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_metPy
+        - event.JetRecoTree_Sums_metPy
+        - event.Sums_metPy
+      Sums.sumEt:
+        aliases:
+        - event.l1JetRecoTree_JetRecoTree_Sums_sumEt
+        - event.JetRecoTree_Sums_sumEt
+        - event.Sums_sumEt
+  l1MetFilterRecoTree/MetFilterRecoTree:
+    name: MetFilterRecoTree
+    optional: true
+    branches:
+      MetFilters.chHadTrackResFilter:
+        aliases:
+        - event.l1MetFilterRecoTree_MetFilterRecoTree_MetFilters_chHadTrackResFilter
+        - event.MetFilterRecoTree_MetFilters_chHadTrackResFilter
+        - event.MetFilters_chHadTrackResFilter
+      MetFilters.cscTightHalo2015Filter:
+        aliases:
+        - event.l1MetFilterRecoTree_MetFilterRecoTree_MetFilters_cscTightHalo2015Filter
+        - event.MetFilterRecoTree_MetFilters_cscTightHalo2015Filter
+        - event.MetFilters_cscTightHalo2015Filter
+      MetFilters.ecalDeadCellTPFilter:
+        aliases:
+        - event.l1MetFilterRecoTree_MetFilterRecoTree_MetFilters_ecalDeadCellTPFilter
+        - event.MetFilterRecoTree_MetFilters_ecalDeadCellTPFilter
+        - event.MetFilters_ecalDeadCellTPFilter
+      MetFilters.eeBadScFilter:
+        aliases:
+        - event.l1MetFilterRecoTree_MetFilterRecoTree_MetFilters_eeBadScFilter
+        - event.MetFilterRecoTree_MetFilters_eeBadScFilter
+        - event.MetFilters_eeBadScFilter
+      MetFilters.goodVerticesFilter:
+        aliases:
+        - event.l1MetFilterRecoTree_MetFilterRecoTree_MetFilters_goodVerticesFilter
+        - event.MetFilterRecoTree_MetFilters_goodVerticesFilter
+        - event.MetFilters_goodVerticesFilter
+      MetFilters.hbheNoiseFilter:
+        aliases:
+        - event.l1MetFilterRecoTree_MetFilterRecoTree_MetFilters_hbheNoiseFilter
+        - event.MetFilterRecoTree_MetFilters_hbheNoiseFilter
+        - event.MetFilters_hbheNoiseFilter
+      MetFilters.hbheNoiseIsoFilter:
+        aliases:
+        - event.l1MetFilterRecoTree_MetFilterRecoTree_MetFilters_hbheNoiseIsoFilter
+        - event.MetFilterRecoTree_MetFilters_hbheNoiseIsoFilter
+        - event.MetFilters_hbheNoiseIsoFilter
+      MetFilters.muonBadTrackFilter:
+        aliases:
+        - event.l1MetFilterRecoTree_MetFilterRecoTree_MetFilters_muonBadTrackFilter
+        - event.MetFilterRecoTree_MetFilters_muonBadTrackFilter
+        - event.MetFilters_muonBadTrackFilter
+  l1MuonRecoTree/Muon2RecoTree:
+    name: Muon2RecoTree
+    optional: true
+    branches:
+      Muon.charge:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_charge
+        - event.Muon2RecoTree_Muon_charge
+        - event.Muon_charge
+      Muon.e:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_e
+        - event.Muon2RecoTree_Muon_e
+        - event.Muon_e
+      Muon.et:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_et
+        - event.Muon2RecoTree_Muon_et
+        - event.Muon_et
+      Muon.eta:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_eta
+        - event.Muon2RecoTree_Muon_eta
+        - event.Muon_eta
+      Muon.hlt_deltaR:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_hlt_deltaR
+        - event.Muon2RecoTree_Muon_hlt_deltaR
+        - event.Muon_hlt_deltaR
+      Muon.hlt_isoDeltaR:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_hlt_isoDeltaR
+        - event.Muon2RecoTree_Muon_hlt_isoDeltaR
+        - event.Muon_hlt_isoDeltaR
+      Muon.hlt_isomu:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_hlt_isomu
+        - event.Muon2RecoTree_Muon_hlt_isomu
+        - event.Muon_hlt_isomu
+      Muon.hlt_mu:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_hlt_mu
+        - event.Muon2RecoTree_Muon_hlt_mu
+        - event.Muon_hlt_mu
+      Muon.isLooseMuon:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_isLooseMuon
+        - event.Muon2RecoTree_Muon_isLooseMuon
+        - event.emu_Muon_isLooseMuon
+      Muon.isMediumMuon:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_isMediumMuon
+        - event.Muon2RecoTree_Muon_isMediumMuon
+        - event.Muon_isMediumMuon
+      Muon.isTightMuon:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_isTightMuon
+        - event.Muon2RecoTree_Muon_isTightMuon
+        - event.Muon_isTightMuon
+      Muon.iso:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_iso
+        - event.Muon2RecoTree_Muon_iso
+        - event.Muon_iso
+      Muon.met:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_met
+        - event.Muon2RecoTree_Muon_met
+        - event.Muon_met
+      Muon.mt:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_mt
+        - event.Muon2RecoTree_Muon_mt
+        - event.Muon_mt
+      Muon.nMuons:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_nMuons
+        - event.Muon2RecoTree_Muon_nMuons
+        - event.Muon_nMuons
+      Muon.passesSingleMuon:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_passesSingleMuon
+        - event.Muon2RecoTree_Muon_passesSingleMuon
+        - event.emu_Muon_passesSingleMuon
+      Muon.phi:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_phi
+        - event.Muon2RecoTree_Muon_phi
+        - event.Muon_phi
+      Muon.pt:
+        aliases:
+        - event.l1MuonRecoTree_Muon2RecoTree_Muon_pt
+        - event.Muon2RecoTree_Muon_pt
+        - event.Muon_pt
+  l1RecoTree/RecoTree:
+    name: RecoTree
+    optional: true
+    branches:
+      Vertex.NDoF:
+        aliases:
+        - event.l1RecoTree_RecoTree_Vertex_NDoF
+        - event.RecoTree_Vertex_NDoF
+        - event.Vertex_NDoF
+      Vertex.Rho:
+        aliases:
+        - event.l1RecoTree_RecoTree_Vertex_Rho
+        - event.RecoTree_Vertex_Rho
+        - event.Vertex_Rho
+      Vertex.Z:
+        aliases:
+        - event.l1RecoTree_RecoTree_Vertex_Z
+        - event.RecoTree_Vertex_Z
+        - event.Vertex_Z
+      Vertex.nVtx:
+        aliases:
+        - event.l1RecoTree_RecoTree_Vertex_nVtx
+        - event.RecoTree_Vertex_nVtx
+        - event.Vertex_nVtx
+  l1TauRecoTree/TauRecoTree:
+    name: TauRecoTree
+    optional: true
+    branches:
+      Tau.DMFindingNewDMs:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_DMFindingNewDMs
+        - event.TauRecoTree_Tau_DMFindingNewDMs
+        - event.Tau_DMFindingNewDMs
+      Tau.DMFindingOldDMs:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_DMFindingOldDMs
+        - event.TauRecoTree_Tau_DMFindingOldDMs
+        - event.Tau_DMFindingOldDMs
+      Tau.LooseAntiElectronFlag:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_LooseAntiElectronFlag
+        - event.TauRecoTree_Tau_LooseAntiElectronFlag
+        - event.Tau_LooseAntiElectronFlag
+      Tau.LooseAntiMuonFlag:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_LooseAntiMuonFlag
+        - event.TauRecoTree_Tau_LooseAntiMuonFlag
+        - event.Tau_LooseAntiMuonFlag
+      Tau.LooseIsoFlag:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_LooseIsoFlag
+        - event.TauRecoTree_Tau_LooseIsoFlag
+        - event.Tau_LooseIsoFlag
+      Tau.RawIso:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_RawIso
+        - event.TauRecoTree_Tau_RawIso
+        - event.Tau_RawIso
+      Tau.TightAntiElectronFlag:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_TightAntiElectronFlag
+        - event.TauRecoTree_Tau_TightAntiElectronFlag
+        - event.Tau_TightAntiElectronFlag
+      Tau.TightAntiMuonFlag:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_TightAntiMuonFlag
+        - event.TauRecoTree_Tau_TightAntiMuonFlag
+        - event.Tau_TightAntiMuonFlag
+      Tau.TightIsoFlag:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_TightIsoFlag
+        - event.TauRecoTree_Tau_TightIsoFlag
+        - event.Tau_TightIsoFlag
+      Tau.VLooseAntiElectronFlag:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_VLooseAntiElectronFlag
+        - event.TauRecoTree_Tau_VLooseAntiElectronFlag
+        - event.Tau_VLooseAntiElectronFlag
+      Tau.charge:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_charge
+        - event.TauRecoTree_Tau_charge
+        - event.Tau_charge
+      Tau.e:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_e
+        - event.TauRecoTree_Tau_e
+        - event.Tau_e
+      Tau.et:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_et
+        - event.TauRecoTree_Tau_et
+        - event.Tau_et
+      Tau.eta:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_eta
+        - event.TauRecoTree_Tau_eta
+        - event.Tau_eta
+      Tau.nTaus:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_nTaus
+        - event.TauRecoTree_Tau_nTaus
+        - event.Tau_nTaus
+      Tau.phi:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_phi
+        - event.TauRecoTree_Tau_phi
+        - event.Tau_phi
+      Tau.pt:
+        aliases:
+        - event.l1TauRecoTree_TauRecoTree_Tau_pt
+        - event.TauRecoTree_Tau_pt
+        - event.Tau_pt
+  l1UpgradeEmuTree/L1UpgradeTree:
+    name: L1UpgradeTree
+    optional: false
+    branches:
+      L1Upgrade.egBx:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egBx
+        - event.emu_L1UpgradeTree_L1Upgrade_egBx
+        - event.emu_L1Upgrade_egBx
+      L1Upgrade.egEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egEt
+        - event.emu_L1UpgradeTree_L1Upgrade_egEt
+        - event.emu_L1Upgrade_egEt
+      L1Upgrade.egEta:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egEta
+        - event.emu_L1UpgradeTree_L1Upgrade_egEta
+        - event.emu_L1Upgrade_egEta
+      L1Upgrade.egFootprintEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egFootprintEt
+        - event.emu_L1UpgradeTree_L1Upgrade_egFootprintEt
+        - event.emu_L1Upgrade_egFootprintEt
+      L1Upgrade.egIEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egIEt
+        - event.emu_L1UpgradeTree_L1Upgrade_egIEt
+        - event.emu_L1Upgrade_egIEt
+      L1Upgrade.egIEta:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egIEta
+        - event.emu_L1UpgradeTree_L1Upgrade_egIEta
+        - event.emu_L1Upgrade_egIEta
+      L1Upgrade.egIPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egIPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_egIPhi
+        - event.emu_L1Upgrade_egIPhi
+      L1Upgrade.egIso:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egIso
+        - event.emu_L1UpgradeTree_L1Upgrade_egIso
+        - event.emu_L1Upgrade_egIso
+      L1Upgrade.egIsoEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egIsoEt
+        - event.emu_L1UpgradeTree_L1Upgrade_egIsoEt
+        - event.emu_L1Upgrade_egIsoEt
+      L1Upgrade.egNTT:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egNTT
+        - event.emu_L1UpgradeTree_L1Upgrade_egNTT
+        - event.emu_L1Upgrade_egNTT
+      L1Upgrade.egPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_egPhi
+        - event.emu_L1Upgrade_egPhi
+      L1Upgrade.egRawEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egRawEt
+        - event.emu_L1UpgradeTree_L1Upgrade_egRawEt
+        - event.emu_L1Upgrade_egRawEt
+      L1Upgrade.egShape:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egShape
+        - event.emu_L1UpgradeTree_L1Upgrade_egShape
+        - event.emu_L1Upgrade_egShape
+      L1Upgrade.egTowerIEta:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egTowerIEta
+        - event.emu_L1UpgradeTree_L1Upgrade_egTowerIEta
+        - event.emu_L1Upgrade_egTowerIEta
+      L1Upgrade.egTowerIPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_egTowerIPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_egTowerIPhi
+        - event.emu_L1Upgrade_egTowerIPhi
+      L1Upgrade.jetBx:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetBx
+        - event.emu_L1UpgradeTree_L1Upgrade_jetBx
+        - event.emu_L1Upgrade_jetBx
+      L1Upgrade.jetEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetEt
+        - event.emu_L1UpgradeTree_L1Upgrade_jetEt
+        - event.emu_L1Upgrade_jetEt
+      L1Upgrade.jetEta:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetEta
+        - event.emu_L1UpgradeTree_L1Upgrade_jetEta
+        - event.emu_L1Upgrade_jetEta
+      L1Upgrade.jetIEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetIEt
+        - event.emu_L1UpgradeTree_L1Upgrade_jetIEt
+        - event.emu_L1Upgrade_jetIEt
+      L1Upgrade.jetIEta:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetIEta
+        - event.emu_L1UpgradeTree_L1Upgrade_jetIEta
+        - event.emu_L1Upgrade_jetIEta
+      L1Upgrade.jetIPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetIPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_jetIPhi
+        - event.emu_L1Upgrade_jetIPhi
+      L1Upgrade.jetPUDonutEt0:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetPUDonutEt0
+        - event.emu_L1UpgradeTree_L1Upgrade_jetPUDonutEt0
+        - event.emu_L1Upgrade_jetPUDonutEt0
+      L1Upgrade.jetPUDonutEt1:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetPUDonutEt1
+        - event.emu_L1UpgradeTree_L1Upgrade_jetPUDonutEt1
+        - event.emu_L1Upgrade_jetPUDonutEt1
+      L1Upgrade.jetPUDonutEt2:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetPUDonutEt2
+        - event.emu_L1UpgradeTree_L1Upgrade_jetPUDonutEt2
+        - event.emu_L1Upgrade_jetPUDonutEt2
+      L1Upgrade.jetPUDonutEt3:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetPUDonutEt3
+        - event.emu_L1UpgradeTree_L1Upgrade_jetPUDonutEt3
+        - event.emu_L1Upgrade_jetPUDonutEt3
+      L1Upgrade.jetPUEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetPUEt
+        - event.emu_L1UpgradeTree_L1Upgrade_jetPUEt
+        - event.emu_L1Upgrade_jetPUEt
+      L1Upgrade.jetPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_jetPhi
+        - event.emu_L1Upgrade_jetPhi
+      L1Upgrade.jetRawEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetRawEt
+        - event.emu_L1UpgradeTree_L1Upgrade_jetRawEt
+        - event.emu_L1Upgrade_jetRawEt
+      L1Upgrade.jetSeedEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetSeedEt
+        - event.emu_L1UpgradeTree_L1Upgrade_jetSeedEt
+        - event.emu_L1Upgrade_jetSeedEt
+      L1Upgrade.jetTowerIEta:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetTowerIEta
+        - event.emu_L1UpgradeTree_L1Upgrade_jetTowerIEta
+        - event.emu_L1Upgrade_jetTowerIEta
+      L1Upgrade.jetTowerIPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_jetTowerIPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_jetTowerIPhi
+        - event.emu_L1Upgrade_jetTowerIPhi
+      L1Upgrade.muonBx:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_muonBx
+        - event.emu_L1UpgradeTree_L1Upgrade_muonBx
+        - event.emu_L1Upgrade_muonBx
+      L1Upgrade.muonChg:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_muonChg
+        - event.emu_L1UpgradeTree_L1Upgrade_muonChg
+        - event.emu_L1Upgrade_muonChg
+      L1Upgrade.muonEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_muonEt
+        - event.emu_L1UpgradeTree_L1Upgrade_muonEt
+        - event.emu_L1Upgrade_muonEt
+      L1Upgrade.muonEta:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_muonEta
+        - event.emu_L1UpgradeTree_L1Upgrade_muonEta
+        - event.emu_L1Upgrade_muonEta
+      L1Upgrade.muonIEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_muonIEt
+        - event.emu_L1UpgradeTree_L1Upgrade_muonIEt
+        - event.emu_L1Upgrade_muonIEt
+      L1Upgrade.muonIEta:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_muonIEta
+        - event.emu_L1UpgradeTree_L1Upgrade_muonIEta
+        - event.emu_L1Upgrade_muonIEta
+      L1Upgrade.muonIPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_muonIPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_muonIPhi
+        - event.emu_L1Upgrade_muonIPhi
+      L1Upgrade.muonIso:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_muonIso
+        - event.emu_L1UpgradeTree_L1Upgrade_muonIso
+        - event.emu_L1Upgrade_muonIso
+      L1Upgrade.muonPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_muonPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_muonPhi
+        - event.emu_L1Upgrade_muonPhi
+      L1Upgrade.muonQual:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_muonQual
+        - event.emu_L1UpgradeTree_L1Upgrade_muonQual
+        - event.emu_L1Upgrade_muonQual
+      L1Upgrade.muonTfMuonIdx:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_muonTfMuonIdx
+        - event.emu_L1UpgradeTree_L1Upgrade_muonTfMuonIdx
+        - event.emu_L1Upgrade_muonTfMuonIdx
+      L1Upgrade.nEGs:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_nEGs
+        - event.emu_L1UpgradeTree_L1Upgrade_nEGs
+        - event.emu_L1Upgrade_nEGs
+      L1Upgrade.nJets:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_nJets
+        - event.emu_L1UpgradeTree_L1Upgrade_nJets
+        - event.emu_L1Upgrade_nJets
+      L1Upgrade.nMuons:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_nMuons
+        - event.emu_L1UpgradeTree_L1Upgrade_nMuons
+        - event.emu_L1Upgrade_nMuons
+      L1Upgrade.nSums:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_nSums
+        - event.emu_L1UpgradeTree_L1Upgrade_nSums
+        - event.emu_L1Upgrade_nSums
+      L1Upgrade.nTaus:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_nTaus
+        - event.emu_L1UpgradeTree_L1Upgrade_nTaus
+        - event.emu_L1Upgrade_nTaus
+      L1Upgrade.sumBx:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_sumBx
+        - event.emu_L1UpgradeTree_L1Upgrade_sumBx
+        - event.emu_L1Upgrade_sumBx
+      L1Upgrade.sumEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_sumEt
+        - event.emu_L1UpgradeTree_L1Upgrade_sumEt
+        - event.emu_L1Upgrade_sumEt
+      L1Upgrade.sumIEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_sumIEt
+        - event.emu_L1UpgradeTree_L1Upgrade_sumIEt
+        - event.emu_L1Upgrade_sumIEt
+      L1Upgrade.sumIPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_sumIPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_sumIPhi
+        - event.emu_L1Upgrade_sumIPhi
+      L1Upgrade.sumPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_sumPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_sumPhi
+        - event.emu_L1Upgrade_sumPhi
+      L1Upgrade.sumType:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_sumType
+        - event.emu_L1UpgradeTree_L1Upgrade_sumType
+        - event.emu_L1Upgrade_sumType
+      L1Upgrade.tauBx:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauBx
+        - event.emu_L1UpgradeTree_L1Upgrade_tauBx
+        - event.emu_L1Upgrade_tauBx
+      L1Upgrade.tauEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauEt
+        - event.emu_L1UpgradeTree_L1Upgrade_tauEt
+        - event.emu_L1Upgrade_tauEt
+      L1Upgrade.tauEta:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauEta
+        - event.emu_L1UpgradeTree_L1Upgrade_tauEta
+        - event.emu_L1Upgrade_tauEta
+      L1Upgrade.tauHasEM:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauHasEM
+        - event.emu_L1UpgradeTree_L1Upgrade_tauHasEM
+        - event.emu_L1Upgrade_tauHasEM
+      L1Upgrade.tauHwQual:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauHwQual
+        - event.emu_L1UpgradeTree_L1Upgrade_tauHwQual
+        - event.emu_L1Upgrade_tauHwQual
+      L1Upgrade.tauIEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauIEt
+        - event.emu_L1UpgradeTree_L1Upgrade_tauIEt
+        - event.emu_L1Upgrade_tauIEt
+      L1Upgrade.tauIEta:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauIEta
+        - event.emu_L1UpgradeTree_L1Upgrade_tauIEta
+        - event.emu_L1Upgrade_tauIEta
+      L1Upgrade.tauIPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauIPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_tauIPhi
+        - event.emu_L1Upgrade_tauIPhi
+      L1Upgrade.tauIsMerged:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauIsMerged
+        - event.emu_L1UpgradeTree_L1Upgrade_tauIsMerged
+        - event.emu_L1Upgrade_tauIsMerged
+      L1Upgrade.tauIso:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauIso
+        - event.emu_L1UpgradeTree_L1Upgrade_tauIso
+        - event.emu_L1Upgrade_tauIso
+      L1Upgrade.tauIsoEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauIsoEt
+        - event.emu_L1UpgradeTree_L1Upgrade_tauIsoEt
+        - event.emu_L1Upgrade_tauIsoEt
+      L1Upgrade.tauNTT:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauNTT
+        - event.emu_L1UpgradeTree_L1Upgrade_tauNTT
+        - event.emu_L1Upgrade_tauNTT
+      L1Upgrade.tauPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_tauPhi
+        - event.emu_L1Upgrade_tauPhi
+      L1Upgrade.tauRawEt:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauRawEt
+        - event.emu_L1UpgradeTree_L1Upgrade_tauRawEt
+        - event.emu_L1Upgrade_tauRawEt
+      L1Upgrade.tauTowerIEta:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauTowerIEta
+        - event.emu_L1UpgradeTree_L1Upgrade_tauTowerIEta
+        - event.emu_L1Upgrade_tauTowerIEta
+      L1Upgrade.tauTowerIPhi:
+        aliases:
+        - event.l1UpgradeEmuTree_L1UpgradeTree_L1Upgrade_tauTowerIPhi
+        - event.emu_L1UpgradeTree_L1Upgrade_tauTowerIPhi
+        - event.emu_L1Upgrade_tauTowerIPhi
+  l1UpgradeTfMuonEmuTree/L1UpgradeTfMuonTree:
+    name: L1UpgradeTfMuonTree
+    optional: false
+    branches:
+      L1UpgradeBmtfInputs.phAng:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phAng
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phAng
+        - event.emu_bmt_L1UpgradeBmtfInputs_phAng
+      L1UpgradeBmtfInputs.phBandAng:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phBandAng
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phBandAng
+        - event.emu_bmt_L1UpgradeBmtfInputs_phBandAng
+      L1UpgradeBmtfInputs.phBx:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phBx
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phBx
+        - event.emu_bmt_L1UpgradeBmtfInputs_phBx
+      L1UpgradeBmtfInputs.phCode:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phCode
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phCode
+        - event.emu_bmt_L1UpgradeBmtfInputs_phCode
+      L1UpgradeBmtfInputs.phSe:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phSe
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phSe
+        - event.emu_bmt_L1UpgradeBmtfInputs_phSe
+      L1UpgradeBmtfInputs.phSize:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phSize
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phSize
+        - event.emu_bmt_L1UpgradeBmtfInputs_phSize
+      L1UpgradeBmtfInputs.phSt:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phSt
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phSt
+        - event.emu_bmt_L1UpgradeBmtfInputs_phSt
+      L1UpgradeBmtfInputs.phTs2Tag:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phTs2Tag
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phTs2Tag
+        - event.emu_bmt_L1UpgradeBmtfInputs_phTs2Tag
+      L1UpgradeBmtfInputs.phWh:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phWh
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phWh
+        - event.emu_bmt_L1UpgradeBmtfInputs_phWh
+      L1UpgradeBmtfInputs.thBx:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thBx
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thBx
+        - event.emu_bmt_L1UpgradeBmtfInputs_thBx
+      L1UpgradeBmtfInputs.thCode:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thCode
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thCode
+        - event.emu_bmt_L1UpgradeBmtfInputs_thCode
+      L1UpgradeBmtfInputs.thSe:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thSe
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thSe
+        - event.emu_bmt_L1UpgradeBmtfInputs_thSe
+      L1UpgradeBmtfInputs.thSize:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thSize
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thSize
+        - event.emu_bmt_L1UpgradeBmtfInputs_thSize
+      L1UpgradeBmtfInputs.thSt:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thSt
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thSt
+        - event.emu_bmt_L1UpgradeBmtfInputs_thSt
+      L1UpgradeBmtfInputs.thTheta:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thTheta
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thTheta
+        - event.emu_bmt_L1UpgradeBmtfInputs_thTheta
+      L1UpgradeBmtfInputs.thWh:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thWh
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thWh
+        - event.emu_bmt_L1UpgradeBmtfInputs_thWh
+      L1UpgradeBmtfMuon.nTfMuons:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_nTfMuons
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_nTfMuons
+        - event.emu_bmt_L1UpgradeBmtfMuon_nTfMuons
+      L1UpgradeBmtfMuon.tfMuonBx:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonBx
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonBx
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonBx
+      L1UpgradeBmtfMuon.tfMuonGlobalPhi:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonGlobalPhi
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonGlobalPhi
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonGlobalPhi
+      L1UpgradeBmtfMuon.tfMuonHwEta:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwEta
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwEta
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonHwEta
+      L1UpgradeBmtfMuon.tfMuonHwHF:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwHF
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwHF
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonHwHF
+      L1UpgradeBmtfMuon.tfMuonHwPhi:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwPhi
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwPhi
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonHwPhi
+      L1UpgradeBmtfMuon.tfMuonHwPt:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwPt
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwPt
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonHwPt
+      L1UpgradeBmtfMuon.tfMuonHwQual:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwQual
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwQual
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonHwQual
+      L1UpgradeBmtfMuon.tfMuonHwSign:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwSign
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwSign
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonHwSign
+      L1UpgradeBmtfMuon.tfMuonHwSignValid:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwSignValid
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwSignValid
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonHwSignValid
+      L1UpgradeBmtfMuon.tfMuonLink:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonLink
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonLink
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonLink
+      L1UpgradeBmtfMuon.tfMuonProcessor:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonProcessor
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonProcessor
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonProcessor
+      L1UpgradeBmtfMuon.tfMuonTrAdd:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonTrAdd
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonTrAdd
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonTrAdd
+      L1UpgradeBmtfMuon.tfMuonTrackFinderType:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonTrackFinderType
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonTrackFinderType
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonTrackFinderType
+      L1UpgradeBmtfMuon.tfMuonWh:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonWh
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonWh
+        - event.emu_bmt_L1UpgradeBmtfMuon_tfMuonWh
+      L1UpgradeEmtfMuon.nTfMuons:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_nTfMuons
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_nTfMuons
+        - event.emu_emt_L1UpgradeEmtfMuon_nTfMuons
+      L1UpgradeEmtfMuon.tfMuonBx:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonBx
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonBx
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonBx
+      L1UpgradeEmtfMuon.tfMuonGlobalPhi:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonGlobalPhi
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonGlobalPhi
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonGlobalPhi
+      L1UpgradeEmtfMuon.tfMuonHwEta:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwEta
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwEta
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonHwEta
+      L1UpgradeEmtfMuon.tfMuonHwHF:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwHF
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwHF
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonHwHF
+      L1UpgradeEmtfMuon.tfMuonHwPhi:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwPhi
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwPhi
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonHwPhi
+      L1UpgradeEmtfMuon.tfMuonHwPt:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwPt
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwPt
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonHwPt
+      L1UpgradeEmtfMuon.tfMuonHwQual:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwQual
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwQual
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonHwQual
+      L1UpgradeEmtfMuon.tfMuonHwSign:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwSign
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwSign
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonHwSign
+      L1UpgradeEmtfMuon.tfMuonHwSignValid:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwSignValid
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwSignValid
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonHwSignValid
+      L1UpgradeEmtfMuon.tfMuonLink:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonLink
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonLink
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonLink
+      L1UpgradeEmtfMuon.tfMuonProcessor:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonProcessor
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonProcessor
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonProcessor
+      L1UpgradeEmtfMuon.tfMuonTrAdd:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonTrAdd
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonTrAdd
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonTrAdd
+      L1UpgradeEmtfMuon.tfMuonTrackFinderType:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonTrackFinderType
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonTrackFinderType
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonTrackFinderType
+      L1UpgradeEmtfMuon.tfMuonWh:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonWh
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonWh
+        - event.emu_emt_L1UpgradeEmtfMuon_tfMuonWh
+      L1UpgradeOmtfMuon.nTfMuons:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_nTfMuons
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_nTfMuons
+        - event.emu_omt_L1UpgradeOmtfMuon_nTfMuons
+      L1UpgradeOmtfMuon.tfMuonBx:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonBx
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonBx
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonBx
+      L1UpgradeOmtfMuon.tfMuonGlobalPhi:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonGlobalPhi
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonGlobalPhi
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonGlobalPhi
+      L1UpgradeOmtfMuon.tfMuonHwEta:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwEta
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwEta
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonHwEta
+      L1UpgradeOmtfMuon.tfMuonHwHF:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwHF
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwHF
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonHwHF
+      L1UpgradeOmtfMuon.tfMuonHwPhi:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwPhi
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwPhi
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonHwPhi
+      L1UpgradeOmtfMuon.tfMuonHwPt:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwPt
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwPt
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonHwPt
+      L1UpgradeOmtfMuon.tfMuonHwQual:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwQual
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwQual
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonHwQual
+      L1UpgradeOmtfMuon.tfMuonHwSign:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwSign
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwSign
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonHwSign
+      L1UpgradeOmtfMuon.tfMuonHwSignValid:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwSignValid
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwSignValid
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonHwSignValid
+      L1UpgradeOmtfMuon.tfMuonLink:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonLink
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonLink
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonLink
+      L1UpgradeOmtfMuon.tfMuonProcessor:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonProcessor
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonProcessor
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonProcessor
+      L1UpgradeOmtfMuon.tfMuonTrAdd:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonTrAdd
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonTrAdd
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonTrAdd
+      L1UpgradeOmtfMuon.tfMuonTrackFinderType:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonTrackFinderType
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonTrackFinderType
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonTrackFinderType
+      L1UpgradeOmtfMuon.tfMuonWh:
+        aliases:
+        - event.l1UpgradeTfMuonEmuTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonWh
+        - event.emu_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonWh
+        - event.emu_omt_L1UpgradeOmtfMuon_tfMuonWh
+  l1UpgradeTfMuonTree/L1UpgradeTfMuonTree:
+    name: L1UpgradeTfMuonTree
+    optional: false
+    branches:
+      L1UpgradeBmtfInputs.phAng:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phAng
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phAng
+        - event.bmt_L1UpgradeBmtfInputs_phAng
+      L1UpgradeBmtfInputs.phBandAng:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phBandAng
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phBandAng
+        - event.bmt_L1UpgradeBmtfInputs_phBandAng
+      L1UpgradeBmtfInputs.phBx:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phBx
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phBx
+        - event.bmt_L1UpgradeBmtfInputs_phBx
+      L1UpgradeBmtfInputs.phCode:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phCode
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phCode
+        - event.bmt_L1UpgradeBmtfInputs_phCode
+      L1UpgradeBmtfInputs.phSe:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phSe
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phSe
+        - event.bmt_L1UpgradeBmtfInputs_phSe
+      L1UpgradeBmtfInputs.phSize:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phSize
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phSize
+        - event.bmt_L1UpgradeBmtfInputs_phSize
+      L1UpgradeBmtfInputs.phSt:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phSt
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phSt
+        - event.bmt_L1UpgradeBmtfInputs_phSt
+      L1UpgradeBmtfInputs.phTs2Tag:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phTs2Tag
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phTs2Tag
+        - event.bmt_L1UpgradeBmtfInputs_phTs2Tag
+      L1UpgradeBmtfInputs.phWh:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phWh
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_phWh
+        - event.bmt_L1UpgradeBmtfInputs_phWh
+      L1UpgradeBmtfInputs.thBx:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thBx
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thBx
+        - event.bmt_L1UpgradeBmtfInputs_thBx
+      L1UpgradeBmtfInputs.thCode:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thCode
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thCode
+        - event.bmt_L1UpgradeBmtfInputs_thCode
+      L1UpgradeBmtfInputs.thSe:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thSe
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thSe
+        - event.bmt_L1UpgradeBmtfInputs_thSe
+      L1UpgradeBmtfInputs.thSize:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thSize
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thSize
+        - event.bmt_L1UpgradeBmtfInputs_thSize
+      L1UpgradeBmtfInputs.thSt:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thSt
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thSt
+        - event.bmt_L1UpgradeBmtfInputs_thSt
+      L1UpgradeBmtfInputs.thTheta:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thTheta
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thTheta
+        - event.bmt_L1UpgradeBmtfInputs_thTheta
+      L1UpgradeBmtfInputs.thWh:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thWh
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfInputs_thWh
+        - event.bmt_L1UpgradeBmtfInputs_thWh
+      L1UpgradeBmtfMuon.nTfMuons:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_nTfMuons
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_nTfMuons
+        - event.bmt_L1UpgradeBmtfMuon_nTfMuons
+      L1UpgradeBmtfMuon.tfMuonBx:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonBx
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonBx
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonBx
+      L1UpgradeBmtfMuon.tfMuonGlobalPhi:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonGlobalPhi
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonGlobalPhi
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonGlobalPhi
+      L1UpgradeBmtfMuon.tfMuonHwEta:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwEta
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwEta
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonHwEta
+      L1UpgradeBmtfMuon.tfMuonHwHF:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwHF
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwHF
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonHwHF
+      L1UpgradeBmtfMuon.tfMuonHwPhi:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwPhi
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwPhi
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonHwPhi
+      L1UpgradeBmtfMuon.tfMuonHwPt:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwPt
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwPt
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonHwPt
+      L1UpgradeBmtfMuon.tfMuonHwQual:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwQual
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwQual
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonHwQual
+      L1UpgradeBmtfMuon.tfMuonHwSign:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwSign
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwSign
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonHwSign
+      L1UpgradeBmtfMuon.tfMuonHwSignValid:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwSignValid
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonHwSignValid
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonHwSignValid
+      L1UpgradeBmtfMuon.tfMuonLink:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonLink
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonLink
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonLink
+      L1UpgradeBmtfMuon.tfMuonProcessor:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonProcessor
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonProcessor
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonProcessor
+      L1UpgradeBmtfMuon.tfMuonTrAdd:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonTrAdd
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonTrAdd
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonTrAdd
+      L1UpgradeBmtfMuon.tfMuonTrackFinderType:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonTrackFinderType
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonTrackFinderType
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonTrackFinderType
+      L1UpgradeBmtfMuon.tfMuonWh:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonWh
+        - event.L1UpgradeTfMuonTree_L1UpgradeBmtfMuon_tfMuonWh
+        - event.bmt_L1UpgradeBmtfMuon_tfMuonWh
+      L1UpgradeEmtfMuon.nTfMuons:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_nTfMuons
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_nTfMuons
+        - event.emt_L1UpgradeEmtfMuon_nTfMuons
+      L1UpgradeEmtfMuon.tfMuonBx:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonBx
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonBx
+        - event.emt_L1UpgradeEmtfMuon_tfMuonBx
+      L1UpgradeEmtfMuon.tfMuonGlobalPhi:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonGlobalPhi
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonGlobalPhi
+        - event.emt_L1UpgradeEmtfMuon_tfMuonGlobalPhi
+      L1UpgradeEmtfMuon.tfMuonHwEta:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwEta
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwEta
+        - event.emt_L1UpgradeEmtfMuon_tfMuonHwEta
+      L1UpgradeEmtfMuon.tfMuonHwHF:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwHF
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwHF
+        - event.emt_L1UpgradeEmtfMuon_tfMuonHwHF
+      L1UpgradeEmtfMuon.tfMuonHwPhi:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwPhi
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwPhi
+        - event.emt_L1UpgradeEmtfMuon_tfMuonHwPhi
+      L1UpgradeEmtfMuon.tfMuonHwPt:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwPt
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwPt
+        - event.emt_L1UpgradeEmtfMuon_tfMuonHwPt
+      L1UpgradeEmtfMuon.tfMuonHwQual:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwQual
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwQual
+        - event.emt_L1UpgradeEmtfMuon_tfMuonHwQual
+      L1UpgradeEmtfMuon.tfMuonHwSign:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwSign
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwSign
+        - event.emt_L1UpgradeEmtfMuon_tfMuonHwSign
+      L1UpgradeEmtfMuon.tfMuonHwSignValid:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwSignValid
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonHwSignValid
+        - event.emt_L1UpgradeEmtfMuon_tfMuonHwSignValid
+      L1UpgradeEmtfMuon.tfMuonLink:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonLink
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonLink
+        - event.emt_L1UpgradeEmtfMuon_tfMuonLink
+      L1UpgradeEmtfMuon.tfMuonProcessor:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonProcessor
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonProcessor
+        - event.emt_L1UpgradeEmtfMuon_tfMuonProcessor
+      L1UpgradeEmtfMuon.tfMuonTrAdd:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonTrAdd
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonTrAdd
+        - event.emt_L1UpgradeEmtfMuon_tfMuonTrAdd
+      L1UpgradeEmtfMuon.tfMuonTrackFinderType:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonTrackFinderType
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonTrackFinderType
+        - event.emt_L1UpgradeEmtfMuon_tfMuonTrackFinderType
+      L1UpgradeEmtfMuon.tfMuonWh:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonWh
+        - event.L1UpgradeTfMuonTree_L1UpgradeEmtfMuon_tfMuonWh
+        - event.emt_L1UpgradeEmtfMuon_tfMuonWh
+      L1UpgradeOmtfMuon.nTfMuons:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_nTfMuons
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_nTfMuons
+        - event.omt_L1UpgradeOmtfMuon_nTfMuons
+      L1UpgradeOmtfMuon.tfMuonBx:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonBx
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonBx
+        - event.omt_L1UpgradeOmtfMuon_tfMuonBx
+      L1UpgradeOmtfMuon.tfMuonGlobalPhi:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonGlobalPhi
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonGlobalPhi
+        - event.omt_L1UpgradeOmtfMuon_tfMuonGlobalPhi
+      L1UpgradeOmtfMuon.tfMuonHwEta:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwEta
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwEta
+        - event.omt_L1UpgradeOmtfMuon_tfMuonHwEta
+      L1UpgradeOmtfMuon.tfMuonHwHF:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwHF
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwHF
+        - event.omt_L1UpgradeOmtfMuon_tfMuonHwHF
+      L1UpgradeOmtfMuon.tfMuonHwPhi:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwPhi
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwPhi
+        - event.omt_L1UpgradeOmtfMuon_tfMuonHwPhi
+      L1UpgradeOmtfMuon.tfMuonHwPt:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwPt
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwPt
+        - event.omt_L1UpgradeOmtfMuon_tfMuonHwPt
+      L1UpgradeOmtfMuon.tfMuonHwQual:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwQual
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwQual
+        - event.omt_L1UpgradeOmtfMuon_tfMuonHwQual
+      L1UpgradeOmtfMuon.tfMuonHwSign:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwSign
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwSign
+        - event.omt_L1UpgradeOmtfMuon_tfMuonHwSign
+      L1UpgradeOmtfMuon.tfMuonHwSignValid:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwSignValid
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonHwSignValid
+        - event.omt_L1UpgradeOmtfMuon_tfMuonHwSignValid
+      L1UpgradeOmtfMuon.tfMuonLink:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonLink
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonLink
+        - event.omt_L1UpgradeOmtfMuon_tfMuonLink
+      L1UpgradeOmtfMuon.tfMuonProcessor:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonProcessor
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonProcessor
+        - event.omt_L1UpgradeOmtfMuon_tfMuonProcessor
+      L1UpgradeOmtfMuon.tfMuonTrAdd:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonTrAdd
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonTrAdd
+        - event.omt_L1UpgradeOmtfMuon_tfMuonTrAdd
+      L1UpgradeOmtfMuon.tfMuonTrackFinderType:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonTrackFinderType
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonTrackFinderType
+        - event.omt_L1UpgradeOmtfMuon_tfMuonTrackFinderType
+      L1UpgradeOmtfMuon.tfMuonWh:
+        aliases:
+        - event.l1UpgradeTfMuonTree_L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonWh
+        - event.L1UpgradeTfMuonTree_L1UpgradeOmtfMuon_tfMuonWh
+        - event.omt_L1UpgradeOmtfMuon_tfMuonWh
+  l1UpgradeTree/L1UpgradeTree:
+    name: L1UpgradeTree
+    optional: false
+    branches:
+      L1Upgrade.egBx:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egBx
+        - event.L1UpgradeTree_L1Upgrade_egBx
+        - event.L1Upgrade_egBx
+      L1Upgrade.egEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egEt
+        - event.L1UpgradeTree_L1Upgrade_egEt
+        - event.L1Upgrade_egEt
+      L1Upgrade.egEta:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egEta
+        - event.L1UpgradeTree_L1Upgrade_egEta
+        - event.L1Upgrade_egEta
+      L1Upgrade.egFootprintEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egFootprintEt
+        - event.L1UpgradeTree_L1Upgrade_egFootprintEt
+        - event.L1Upgrade_egFootprintEt
+      L1Upgrade.egIEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egIEt
+        - event.L1UpgradeTree_L1Upgrade_egIEt
+        - event.L1Upgrade_egIEt
+      L1Upgrade.egIEta:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egIEta
+        - event.L1UpgradeTree_L1Upgrade_egIEta
+        - event.L1Upgrade_egIEta
+      L1Upgrade.egIPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egIPhi
+        - event.L1UpgradeTree_L1Upgrade_egIPhi
+        - event.L1Upgrade_egIPhi
+      L1Upgrade.egIso:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egIso
+        - event.L1UpgradeTree_L1Upgrade_egIso
+        - event.L1Upgrade_egIso
+      L1Upgrade.egIsoEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egIsoEt
+        - event.L1UpgradeTree_L1Upgrade_egIsoEt
+        - event.L1Upgrade_egIsoEt
+      L1Upgrade.egNTT:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egNTT
+        - event.L1UpgradeTree_L1Upgrade_egNTT
+        - event.L1Upgrade_egNTT
+      L1Upgrade.egPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egPhi
+        - event.L1UpgradeTree_L1Upgrade_egPhi
+        - event.L1Upgrade_egPhi
+      L1Upgrade.egRawEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egRawEt
+        - event.L1UpgradeTree_L1Upgrade_egRawEt
+        - event.L1Upgrade_egRawEt
+      L1Upgrade.egShape:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egShape
+        - event.L1UpgradeTree_L1Upgrade_egShape
+        - event.L1Upgrade_egShape
+      L1Upgrade.egTowerIEta:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egTowerIEta
+        - event.L1UpgradeTree_L1Upgrade_egTowerIEta
+        - event.L1Upgrade_egTowerIEta
+      L1Upgrade.egTowerIPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_egTowerIPhi
+        - event.L1UpgradeTree_L1Upgrade_egTowerIPhi
+        - event.L1Upgrade_egTowerIPhi
+      L1Upgrade.jetBx:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetBx
+        - event.L1UpgradeTree_L1Upgrade_jetBx
+        - event.L1Upgrade_jetBx
+      L1Upgrade.jetEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetEt
+        - event.L1UpgradeTree_L1Upgrade_jetEt
+        - event.L1Upgrade_jetEt
+      L1Upgrade.jetEta:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetEta
+        - event.L1UpgradeTree_L1Upgrade_jetEta
+        - event.L1Upgrade_jetEta
+      L1Upgrade.jetIEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetIEt
+        - event.L1UpgradeTree_L1Upgrade_jetIEt
+        - event.L1Upgrade_jetIEt
+      L1Upgrade.jetIEta:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetIEta
+        - event.L1UpgradeTree_L1Upgrade_jetIEta
+        - event.L1Upgrade_jetIEta
+      L1Upgrade.jetIPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetIPhi
+        - event.L1UpgradeTree_L1Upgrade_jetIPhi
+        - event.L1Upgrade_jetIPhi
+      L1Upgrade.jetPUDonutEt0:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetPUDonutEt0
+        - event.L1UpgradeTree_L1Upgrade_jetPUDonutEt0
+        - event.L1Upgrade_jetPUDonutEt0
+      L1Upgrade.jetPUDonutEt1:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetPUDonutEt1
+        - event.L1UpgradeTree_L1Upgrade_jetPUDonutEt1
+        - event.L1Upgrade_jetPUDonutEt1
+      L1Upgrade.jetPUDonutEt2:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetPUDonutEt2
+        - event.L1UpgradeTree_L1Upgrade_jetPUDonutEt2
+        - event.L1Upgrade_jetPUDonutEt2
+      L1Upgrade.jetPUDonutEt3:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetPUDonutEt3
+        - event.L1UpgradeTree_L1Upgrade_jetPUDonutEt3
+        - event.L1Upgrade_jetPUDonutEt3
+      L1Upgrade.jetPUEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetPUEt
+        - event.L1UpgradeTree_L1Upgrade_jetPUEt
+        - event.L1Upgrade_jetPUEt
+      L1Upgrade.jetPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetPhi
+        - event.L1UpgradeTree_L1Upgrade_jetPhi
+        - event.L1Upgrade_jetPhi
+      L1Upgrade.jetRawEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetRawEt
+        - event.L1UpgradeTree_L1Upgrade_jetRawEt
+        - event.L1Upgrade_jetRawEt
+      L1Upgrade.jetSeedEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetSeedEt
+        - event.L1UpgradeTree_L1Upgrade_jetSeedEt
+        - event.L1Upgrade_jetSeedEt
+      L1Upgrade.jetTowerIEta:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetTowerIEta
+        - event.L1UpgradeTree_L1Upgrade_jetTowerIEta
+        - event.L1Upgrade_jetTowerIEta
+      L1Upgrade.jetTowerIPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_jetTowerIPhi
+        - event.L1UpgradeTree_L1Upgrade_jetTowerIPhi
+        - event.L1Upgrade_jetTowerIPhi
+      L1Upgrade.muonBx:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_muonBx
+        - event.L1UpgradeTree_L1Upgrade_muonBx
+        - event.L1Upgrade_muonBx
+      L1Upgrade.muonChg:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_muonChg
+        - event.L1UpgradeTree_L1Upgrade_muonChg
+        - event.L1Upgrade_muonChg
+      L1Upgrade.muonEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_muonEt
+        - event.L1UpgradeTree_L1Upgrade_muonEt
+        - event.L1Upgrade_muonEt
+      L1Upgrade.muonEta:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_muonEta
+        - event.L1UpgradeTree_L1Upgrade_muonEta
+        - event.L1Upgrade_muonEta
+      L1Upgrade.muonIEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_muonIEt
+        - event.L1UpgradeTree_L1Upgrade_muonIEt
+        - event.L1Upgrade_muonIEt
+      L1Upgrade.muonIEta:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_muonIEta
+        - event.L1UpgradeTree_L1Upgrade_muonIEta
+        - event.L1Upgrade_muonIEta
+      L1Upgrade.muonIPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_muonIPhi
+        - event.L1UpgradeTree_L1Upgrade_muonIPhi
+        - event.L1Upgrade_muonIPhi
+      L1Upgrade.muonIso:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_muonIso
+        - event.L1UpgradeTree_L1Upgrade_muonIso
+        - event.L1Upgrade_muonIso
+      L1Upgrade.muonPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_muonPhi
+        - event.L1UpgradeTree_L1Upgrade_muonPhi
+        - event.L1Upgrade_muonPhi
+      L1Upgrade.muonQual:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_muonQual
+        - event.L1UpgradeTree_L1Upgrade_muonQual
+        - event.L1Upgrade_muonQual
+      L1Upgrade.muonTfMuonIdx:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_muonTfMuonIdx
+        - event.L1UpgradeTree_L1Upgrade_muonTfMuonIdx
+        - event.L1Upgrade_muonTfMuonIdx
+      L1Upgrade.nEGs:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_nEGs
+        - event.L1UpgradeTree_L1Upgrade_nEGs
+        - event.L1Upgrade_nEGs
+      L1Upgrade.nJets:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_nJets
+        - event.L1UpgradeTree_L1Upgrade_nJets
+        - event.L1Upgrade_nJets
+      L1Upgrade.nMuons:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_nMuons
+        - event.L1UpgradeTree_L1Upgrade_nMuons
+        - event.L1Upgrade_nMuons
+      L1Upgrade.nSums:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_nSums
+        - event.L1UpgradeTree_L1Upgrade_nSums
+        - event.L1Upgrade_nSums
+      L1Upgrade.nTaus:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_nTaus
+        - event.L1UpgradeTree_L1Upgrade_nTaus
+        - event.L1Upgrade_nTaus
+      L1Upgrade.sumBx:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_sumBx
+        - event.L1UpgradeTree_L1Upgrade_sumBx
+        - event.L1Upgrade_sumBx
+      L1Upgrade.sumEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_sumEt
+        - event.L1UpgradeTree_L1Upgrade_sumEt
+        - event.L1Upgrade_sumEt
+      L1Upgrade.sumIEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_sumIEt
+        - event.L1UpgradeTree_L1Upgrade_sumIEt
+        - event.L1Upgrade_sumIEt
+      L1Upgrade.sumIPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_sumIPhi
+        - event.L1UpgradeTree_L1Upgrade_sumIPhi
+        - event.L1Upgrade_sumIPhi
+      L1Upgrade.sumPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_sumPhi
+        - event.L1UpgradeTree_L1Upgrade_sumPhi
+        - event.L1Upgrade_sumPhi
+      L1Upgrade.sumType:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_sumType
+        - event.L1UpgradeTree_L1Upgrade_sumType
+        - event.L1Upgrade_sumType
+      L1Upgrade.tauBx:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauBx
+        - event.L1UpgradeTree_L1Upgrade_tauBx
+        - event.L1Upgrade_tauBx
+      L1Upgrade.tauEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauEt
+        - event.L1UpgradeTree_L1Upgrade_tauEt
+        - event.L1Upgrade_tauEt
+      L1Upgrade.tauEta:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauEta
+        - event.L1UpgradeTree_L1Upgrade_tauEta
+        - event.L1Upgrade_tauEta
+      L1Upgrade.tauHasEM:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauHasEM
+        - event.L1UpgradeTree_L1Upgrade_tauHasEM
+        - event.L1Upgrade_tauHasEM
+      L1Upgrade.tauHwQual:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauHwQual
+        - event.L1UpgradeTree_L1Upgrade_tauHwQual
+        - event.L1Upgrade_tauHwQual
+      L1Upgrade.tauIEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauIEt
+        - event.L1UpgradeTree_L1Upgrade_tauIEt
+        - event.L1Upgrade_tauIEt
+      L1Upgrade.tauIEta:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauIEta
+        - event.L1UpgradeTree_L1Upgrade_tauIEta
+        - event.L1Upgrade_tauIEta
+      L1Upgrade.tauIPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauIPhi
+        - event.L1UpgradeTree_L1Upgrade_tauIPhi
+        - event.L1Upgrade_tauIPhi
+      L1Upgrade.tauIsMerged:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauIsMerged
+        - event.L1UpgradeTree_L1Upgrade_tauIsMerged
+        - event.L1Upgrade_tauIsMerged
+      L1Upgrade.tauIso:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauIso
+        - event.L1UpgradeTree_L1Upgrade_tauIso
+        - event.L1Upgrade_tauIso
+      L1Upgrade.tauIsoEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauIsoEt
+        - event.L1UpgradeTree_L1Upgrade_tauIsoEt
+        - event.L1Upgrade_tauIsoEt
+      L1Upgrade.tauNTT:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauNTT
+        - event.L1UpgradeTree_L1Upgrade_tauNTT
+        - event.L1Upgrade_tauNTT
+      L1Upgrade.tauPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauPhi
+        - event.L1UpgradeTree_L1Upgrade_tauPhi
+        - event.L1Upgrade_tauPhi
+      L1Upgrade.tauRawEt:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauRawEt
+        - event.L1UpgradeTree_L1Upgrade_tauRawEt
+        - event.L1Upgrade_tauRawEt
+      L1Upgrade.tauTowerIEta:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauTowerIEta
+        - event.L1UpgradeTree_L1Upgrade_tauTowerIEta
+        - event.L1Upgrade_tauTowerIEta
+      L1Upgrade.tauTowerIPhi:
+        aliases:
+        - event.l1UpgradeTree_L1UpgradeTree_L1Upgrade_tauTowerIPhi
+        - event.L1UpgradeTree_L1Upgrade_tauTowerIPhi
+        - event.L1Upgrade_tauTowerIPhi
+  l1uGTEmuTree/L1uGTTree:
+    name: L1uGTTree
+    optional: false
+    branches:
+      L1uGT.m_algoDecisionFinal:
+        aliases:
+        - event.l1uGTEmuTree_L1uGTTree_L1uGT_m_algoDecisionFinal
+        - event.emu_L1uGTTree_L1uGT_m_algoDecisionFinal
+        - event.emu_L1uGT_m_algoDecisionFinal
+      L1uGT.m_algoDecisionInitial:
+        aliases:
+        - event.l1uGTEmuTree_L1uGTTree_L1uGT_m_algoDecisionInitial
+        - event.emu_L1uGTTree_L1uGT_m_algoDecisionInitial
+        - event.emu_L1uGT_m_algoDecisionInitial
+      L1uGT.m_algoDecisionPreScaled:
+        aliases:
+        - event.l1uGTEmuTree_L1uGTTree_L1uGT_m_algoDecisionPreScaled
+        - event.emu_L1uGTTree_L1uGT_m_algoDecisionPreScaled
+        - event.emu_L1uGT_m_algoDecisionPreScaled
+      L1uGT.m_bxInEvent:
+        aliases:
+        - event.l1uGTEmuTree_L1uGTTree_L1uGT_m_bxInEvent
+        - event.emu_L1uGTTree_L1uGT_m_bxInEvent
+        - event.emu_L1uGT_m_bxInEvent
+      L1uGT.m_bxNr:
+        aliases:
+        - event.l1uGTEmuTree_L1uGTTree_L1uGT_m_bxNr
+        - event.emu_L1uGTTree_L1uGT_m_bxNr
+        - event.emu_L1uGT_m_bxNr
+      L1uGT.m_finalOR:
+        aliases:
+        - event.l1uGTEmuTree_L1uGTTree_L1uGT_m_finalOR
+        - event.emu_L1uGTTree_L1uGT_m_finalOR
+        - event.emu_L1uGT_m_finalOR
+      L1uGT.m_finalORPreVeto:
+        aliases:
+        - event.l1uGTEmuTree_L1uGTTree_L1uGT_m_finalORPreVeto
+        - event.emu_L1uGTTree_L1uGT_m_finalORPreVeto
+        - event.emu_L1uGT_m_finalORPreVeto
+      L1uGT.m_finalORVeto:
+        aliases:
+        - event.l1uGTEmuTree_L1uGTTree_L1uGT_m_finalORVeto
+        - event.emu_L1uGTTree_L1uGT_m_finalORVeto
+        - event.emu_L1uGT_m_finalORVeto
+      L1uGT.m_orbitNr:
+        aliases:
+        - event.l1uGTEmuTree_L1uGTTree_L1uGT_m_orbitNr
+        - event.emu_L1uGTTree_L1uGT_m_orbitNr
+        - event.emu_L1uGT_m_orbitNr
+      L1uGT.m_preScColumn:
+        aliases:
+        - event.l1uGTEmuTree_L1uGTTree_L1uGT_m_preScColumn
+        - event.emu_L1uGTTree_L1uGT_m_preScColumn
+        - event.emu_L1uGT_m_preScColumn
+  l1uGTTree/L1uGTTree:
+    name: L1uGTTree
+    optional: false
+    branches:
+      L1uGT.m_algoDecisionFinal:
+        aliases:
+        - event.l1uGTTree_L1uGTTree_L1uGT_m_algoDecisionFinal
+        - event.L1uGTTree_L1uGT_m_algoDecisionFinal
+        - event.L1uGT_m_algoDecisionFinal
+      L1uGT.m_algoDecisionInitial:
+        aliases:
+        - event.l1uGTTree_L1uGTTree_L1uGT_m_algoDecisionInitial
+        - event.L1uGTTree_L1uGT_m_algoDecisionInitial
+        - event.L1uGT_m_algoDecisionInitial
+      L1uGT.m_algoDecisionPreScaled:
+        aliases:
+        - event.l1uGTTree_L1uGTTree_L1uGT_m_algoDecisionPreScaled
+        - event.L1uGTTree_L1uGT_m_algoDecisionPreScaled
+        - event.L1uGT_m_algoDecisionPreScaled
+      L1uGT.m_bxInEvent:
+        aliases:
+        - event.l1uGTTree_L1uGTTree_L1uGT_m_bxInEvent
+        - event.L1uGTTree_L1uGT_m_bxInEvent
+        - event.L1uGT_m_bxInEvent
+      L1uGT.m_bxNr:
+        aliases:
+        - event.l1uGTTree_L1uGTTree_L1uGT_m_bxNr
+        - event.L1uGTTree_L1uGT_m_bxNr
+        - event.L1uGT_m_bxNr
+      L1uGT.m_finalOR:
+        aliases:
+        - event.l1uGTTree_L1uGTTree_L1uGT_m_finalOR
+        - event.L1uGTTree_L1uGT_m_finalOR
+        - event.L1uGT_m_finalOR
+      L1uGT.m_finalORPreVeto:
+        aliases:
+        - event.l1uGTTree_L1uGTTree_L1uGT_m_finalORPreVeto
+        - event.L1uGTTree_L1uGT_m_finalORPreVeto
+        - event.L1uGT_m_finalORPreVeto
+      L1uGT.m_finalORVeto:
+        aliases:
+        - event.l1uGTTree_L1uGTTree_L1uGT_m_finalORVeto
+        - event.L1uGTTree_L1uGT_m_finalORVeto
+        - event.L1uGT_m_finalORVeto
+      L1uGT.m_orbitNr:
+        aliases:
+        - event.l1uGTTree_L1uGTTree_L1uGT_m_orbitNr
+        - event.L1uGTTree_L1uGT_m_orbitNr
+        - event.L1uGT_m_orbitNr
+      L1uGT.m_preScColumn:
+        aliases:
+        - event.l1uGTTree_L1uGTTree_L1uGT_m_preScColumn
+        - event.L1uGTTree_L1uGT_m_preScColumn
+        - event.L1uGT_m_preScColumn
