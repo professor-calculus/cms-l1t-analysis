@@ -1,0 +1,117 @@
+#!/usr/bin/env python
+from __future__ import print_function
+import os
+import click
+import click_log
+import logging
+
+import ROOT
+from rootpy.io import root_open
+from rootpy.tree import Tree
+from cmsl1t.utils.module import load_L1TNTupleLibrary
+
+import yaml
+import collections
+
+logger = logging.getLogger(__name__)
+logging.getLogger("rootpy.tree.chain").setLevel(logging.WARNING)
+click_log.basic_config(logger)
+
+ALIAS_REGISTRY = []
+
+def extract_branches(tree):
+    paths = []
+    for branch in tree.branches:
+        branchName = branch.GetName()
+
+        if isinstance(branch, ROOT.TBranchElement):
+            branchClass = branch.GetClass()
+            branchClassName = branch.GetClass().GetName()
+            leaves = ['.'.join([branchName, l.GetName()])
+                      for l in branch.GetListOfBranches()]
+            if leaves:
+                paths += leaves
+            else:
+                paths.append(branchName)
+
+    return sorted(paths, key=lambda s: s.lower())
+
+
+def extract_trees(input_file):
+    trees = {}
+
+    with root_open(input_file) as f:
+        for path, dirs, objects in f.walk():
+            for objName in objects:
+                objPath = os.path.join(path, objName)
+                obj = f.Get(objPath)
+                if isinstance(obj, Tree):
+                    trees[objPath] = dict(
+                        name=objName,
+                        branches=extract_branches(obj),
+                    )
+        return trees
+
+def convert_to_dict(trees):
+    trees_dict = {}
+    for path, tree in trees.items():
+        trees_dict[path] = dict(
+            name=tree['name'],
+            branches={b:{} for b in tree['branches']},
+        )
+    return trees_dict
+
+def getDefaultAlias(treeName, objName):
+    tokens = [treeName]
+    tokens += objName.split('.')
+    return 'event.' + '_'.join(tokens)
+
+def add_aliases(trees):
+    for path, tree in trees.items():
+        branches = tree['branches']
+        for name, value in branches.items():
+            defaultAlias = getDefaultAlias(tree['name'], name)
+            ALIAS_REGISTRY.append(defaultAlias)
+            value['aliases'] = [defaultAlias]
+    return trees
+
+def print_yaml(trees, toFile=None):
+    if toFile:
+        with open(toFile, 'w') as f:
+            yaml.dump(trees, f)
+    else:
+        print(yaml.dump(trees))
+
+def check_for_duplicates():
+    unique_aliases = set(ALIAS_REGISTRY)
+    noClashes = len(ALIAS_REGISTRY) == len(unique_aliases)
+    if noClashes:
+        print('All aliases are unique')
+    else:
+        print('Found duplicate aliases')
+        counter = collections.Counter(ALIAS_REGISTRY)
+        duplicates = [item for item, count in counter.items() if count > 1]
+        print('Found', len(duplicates), 'duplicates:')
+        for d in duplicates:
+            print('-->', d)
+
+
+@click.command()
+@click.argument('input_file', type=click.Path(exists=True))
+@click_log.simple_verbosity_option(logger)
+def main(input_file):
+    load_L1TNTupleLibrary()
+    trees = extract_trees(input_file)
+    trees = convert_to_dict(trees)
+    # print(trees)
+    trees = add_aliases(trees)
+
+    print_yaml(trees, 'test.yaml')
+
+    check_for_duplicates()
+
+
+
+
+if __name__ == '__main__':
+    main()
