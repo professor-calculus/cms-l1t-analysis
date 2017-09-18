@@ -13,6 +13,7 @@ from textwrap import dedent
 import logging
 import subprocess
 logger = logging.getLogger(__name__)
+click_log.basic_config(logger)
 
 
 class cmsl1t_batch_job_htcondor(object):
@@ -116,20 +117,41 @@ class cmsl1t_batch_job_bsub(object):
         return True
 
 
+def prepare_input_file_groups(input_ntuples, files_per_job):
+    file_lists = []
+    current_list = []
+    for infile in input_ntuples:
+        if not infile.startswith("root:"):
+            infile = os.path.realpath(infile)
+        current_list.append(infile)
+
+        # Is the current list full?
+        if len(current_list) >= files_per_job:
+            file_lists.append(current_list)
+            current_list = []
+
+    # Even if the last list had fewer files than needed, make sure to use this too
+    if current_list:
+        file_lists.append(current_list)
+
+    return file_lists
+
+
 @click.command()
 @click.option('-c', '--config_file', help='YAML style config file', type=click.File(), required=True)
+@click.option('-f', '--files-per-job', help='Give each job this many files', type=int, default=1)
 @click.option('--debug/--no-debug', help='Debug mode for the job submission', default=False)
 @click.option('--batch', default="bsub", type=click.Choice(["bsub", "htcondor"]),
               help='Select the job submission system to use')
-@click_log.simple_verbosity_option()
-@click_log.init(__name__)
-def run(config_file, debug, batch):
+@click_log.simple_verbosity_option(logger)
+def run(config_file, debug, batch, files_per_job):
     # Read the config file
     config = ConfigParser()
     config.read(config_file)
 
-    # Get the list of input files (we're going to run one of these per job)
+    # Get the list of input files
     input_ntuples = config.get('input', 'files')
+    input_ntuples = prepare_input_file_groups(input_ntuples, files_per_job)
 
     # Get the output directory
     output_directory = config.get('output', 'folder')
@@ -155,11 +177,11 @@ def run(config_file, debug, batch):
 
     # Prepare input jobs
     job_configs = []
-    for i, ntuple in enumerate(input_ntuples):
+    for i, in_files in enumerate(input_ntuples):
         padded_index = padding.format(i)
 
         # Reset the input file list
-        config.config['input']['files'] = [os.path.realpath(ntuple)]
+        config.config['input']['files'] = in_files
 
         # Reset the output directory
         config.config['output']['folder'] = out_dir.format(index=padded_index)

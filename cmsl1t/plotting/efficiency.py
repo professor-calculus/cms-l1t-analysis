@@ -40,8 +40,7 @@ class EfficiencyPlot(BasePlotter):
         self.offline_title = offline_title
         self.pileup_bins = bn.Sorted(pileup_bins, "pileup",
                                      use_everything_bin=True)
-        self.thresholds = bn.GreaterThan(thresholds, "threshold",
-                                         use_everything_bin=True)
+        self.thresholds = bn.GreaterThan(thresholds, "threshold")
 
         name = ["efficiency", self.online_name, self.offline_name]
         name += ["thresh_{threshold}", "pu_{pileup}"]
@@ -61,14 +60,17 @@ class EfficiencyPlot(BasePlotter):
                                                 make_efficiency)
 
     def fill(self, pileup, online, offline):
-        for bins, hist in self.efficiencies[pileup, online].items():
-            threshold = self.thresholds.get_bin_center(bins[1])
+        efficiencies = {(pu, thresh): eff
+                        for (pu,), thresholds in self.efficiencies[pileup].items()
+                        for thresh, eff in thresholds.items()}
+        for (pu_bin, threshold_bin), efficiency in efficiencies.items():
+            threshold = self.thresholds.get_bin_center(threshold_bin)
             passed = False
-            if isinstance(threshold, str) and threshold == bn.Base.overflow:
-                passed = True
+            if isinstance(threshold, str):
+                continue
             elif online > threshold:
                 passed = True
-            self.efficiencies[pileup, online].fill(passed, offline)
+            efficiency.fill(passed, offline)
 
     def draw(self, with_fits=True):
         # Fit the efficiencies if requested
@@ -157,13 +159,15 @@ class EfficiencyPlot(BasePlotter):
         """
         Check the two plotters are the consistent, so same binning and same axis names
         """
-        return (self.pileup_bins.bins == new.pileup_bins.bins) and \
-               (self.thresholds.bins == new.thresholds.bins) and \
-               (self.online_name == new.online_name) and \
-               (self.offline_name == new.offline_name)
+        return all([self.pileup_bins.bins == new.pileup_bins.bins,
+                    self.thresholds.bins == new.thresholds.bins,
+                    self.online_name == new.online_name,
+                    self.offline_name == new.offline_name,
+                    ])
 
     def _merge(self, other):
         """
         Merge another plotter into this one
         """
         self.efficiencies += other.efficiencies
+        return self.efficiencies

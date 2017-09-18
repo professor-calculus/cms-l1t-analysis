@@ -1,5 +1,5 @@
 import bisect
-from exceptions import KeyError
+from exceptions import KeyError, IndexError
 from copy import deepcopy
 import logging
 
@@ -92,6 +92,13 @@ class Base():
         for i in self.values:
             yield i
 
+    def items(self):
+        """
+        Like a dict's items() generator, iterating over all bins, including everthing, underflow, and overflow
+        """
+        for k, v in self.values.items():
+            yield (k, v)
+
 
 class Sorted(Base):
     """
@@ -100,7 +107,7 @@ class Sorted(Base):
     import bisect
 
     def __init__(self, bin_edges, label, use_everything_bin=False):
-        Base.__init__(self, len(bin_edges), label,
+        Base.__init__(self, len(bin_edges) - 1, label,
                       use_everything_bin=use_everything_bin)
         self.bins = sorted(bin_edges)
 
@@ -114,7 +121,11 @@ class Sorted(Base):
         return [found_bin]
 
     def _bin_center(self, bin_index):
-        return (self.bins[bin_index + 1] + self.bins[bin_index]) * 0.5
+        try:
+            return (self.bins[bin_index + 1] + self.bins[bin_index]) * 0.5
+        except IndexError as e:
+            logger.error("Cannot get bin center for index " + str(bin_index))
+            raise e
 
 
 class GreaterThan(Base):
