@@ -1,5 +1,9 @@
 from importlib import import_module
 import os
+import logging
+import sys
+
+logger = logging.getLogger(__name__)
 
 
 def exists(module_name):
@@ -26,4 +30,6 @@ def load_L1TNTupleLibrary(lib_name='L1TAnalysisDataformats.so'):
     if lib_name not in ROOT.gSystem.GetLibraries():
         path_to_lib = os.path.join(PROJECT_ROOT, 'build', lib_name)
         ROOT.gSystem.Load(path_to_lib)
-        assert (lib_name in ROOT.gSystem.GetLibraries())
+        if lib_name not in ROOT.gSystem.GetLibraries():
+            logger.error('Could not load ROOT library {0}'.format(lib_name))
+            sys.exit(-1)
