@@ -33,7 +33,7 @@ def extract_branches(tree):
                 paths += leaves
             else:
                 paths.append(branchName)
-        elif isinstance(branch, ROOT.TBranch): # plain branches
+        elif isinstance(branch, ROOT.TBranch):  # plain branches
             paths.append(branchName)
 
     return sorted(paths, key=lambda s: s.lower())
@@ -98,10 +98,14 @@ def _shorthand_alias(path, treeName, objName):
 
 
 def getDefaultAliases(path, treeName, objName):
-    alias1 = _full_path_alias(path, objName)
-    alias2 = _default_alias(path, treeName, objName)
-    alias3 = _shorthand_alias(path, treeName, objName)
-    return [alias1, alias2, alias3]
+    # full_path_alias = _full_path_alias(path, objName)
+    # default_alias = _default_alias(path, treeName, objName)
+    shorthand_alias = _shorthand_alias(path, treeName, objName)
+    return [
+        # full_path_alias,
+        # default_alias,
+        shorthand_alias,
+    ]
 
 
 def add_aliases(trees):
