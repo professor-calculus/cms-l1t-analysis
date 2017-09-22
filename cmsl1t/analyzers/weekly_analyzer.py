@@ -92,7 +92,7 @@ class Analyzer(BaseAnalyzer):
 
         self.res_vs_eta_CentralJets.build("Online Jet energy (GeV)",
                                           "Offline Jet energy (GeV)", "Offline Jet Eta (rad)",
-                                          puBins, 50, -10, 10, 30, 0, 6)
+                                          puBins, 50, -5., 5., 50, -5., 5.)
         return True
 
     def fill_histograms(self, entry, event):

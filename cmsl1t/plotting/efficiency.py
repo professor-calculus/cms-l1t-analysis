@@ -88,7 +88,7 @@ class EfficiencyPlot(BasePlotter):
             hist = all_pileup_effs.get_bin_contents(threshold)
             hist.drawstyle = "EP"
             hists.append(hist)
-            labels.append("> " + str(self.thresholds.bins[threshold]))
+            labels.append(str(self.online_name) + " > " + str(self.thresholds.bins[threshold]) + " (GeV)")
             if with_fits:
                 fits.append(self.fits.get_bin_contents([bn.Base.everything, threshold]))
         self.__make_overlay("all", "all", hists, fits, labels, self.online_title)
@@ -139,10 +139,11 @@ class EfficiencyPlot(BasePlotter):
             label_canvas()
 
             # Add a legend
-            legend = Legend(len(hists), header=header,
-                            topmargin=0.35, entryheight=0.035)
+            legend = Legend(len(hists), header="",
+                            topmargin=0.35, rightmargin=0.3, textsize=0.035, entryheight=0.035)
             for hist, label in zip(hists, labels):
                 legend.AddEntry(hist, label)
+            legend.SetBorderSize(0)
             legend.Draw()
 
             # Save canvas to file

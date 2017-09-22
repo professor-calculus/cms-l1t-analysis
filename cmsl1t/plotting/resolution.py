@@ -81,6 +81,7 @@ class ResolutionPlot(BasePlotter):
                             topmargin=0.35, entryheight=0.035)
             for hist, label in zip(hists, labels):
                 legend.AddEntry(hist, label)
+            legend.SetBorderSize(0)
             legend.Draw()
 
             # Save canvas to file

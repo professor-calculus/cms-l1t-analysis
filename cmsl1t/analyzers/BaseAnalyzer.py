@@ -120,7 +120,7 @@ class BaseAnalyzer(object):
         """
         Register a plotter with this analyzer, and set up it's outputs
         """
-        file_format = self.config.try_get('output', 'plot_format', "png")
+        file_format = self.config.try_get('output', 'plot_format', "pdf")
         plotter.set_plot_output_cfg(self.plots_folder, file_format)
         self.all_plots.append(plotter)
 
