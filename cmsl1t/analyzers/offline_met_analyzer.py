@@ -90,7 +90,13 @@ class Analyzer(BaseAnalyzer):
         puBins = range(0, 50, 10) + [999]
         thresholds = [40, 60, 80, 100, 120]
         thresholds2 = [160, 220, 280, 340, 400]
-        xbins = np.array([0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150, 200, 300, 400, 500, 600, 700.])
+        tmpbins1 = range(0, 410, 10)
+        tmpbins2 = range(450, 1050, 50)
+        tmpbins3 = range(1100, 2100, 100)
+        tmpbins1.extend(tmpbins2)
+        tmpbins1.extend(tmpbins3)
+        xbins = np.asarray(tmpbins1, 'd')    #The 'd' arg is vital here, else it will claim axis length zero...
+
 
         Config = namedtuple("Config", "name off_title on_title off_max on_max")
         HTT_cfg = Config("HTT", "Offline HTT", "L1 HTT", 600, 600)
@@ -136,7 +142,7 @@ class Analyzer(BaseAnalyzer):
             res_plot_HR = getattr(self, cfg.name + "_res_HR")
             twoD_plot_HR = getattr(self, cfg.name + "_2D_HR")
             eff_plot_HR.build(cfg.on_title + " (GeV)", cfg.off_title + " (GeV)",
-                           puBins, thresholds, 21, xbins)
+                           puBins, thresholds, xbins.size - 1, xbins)
             twoD_plot_HR.build(cfg.on_title + " (GeV)", cfg.off_title + " (GeV)",
                             puBins, 200, 0, cfg.off_max)
             res_plot_HR.build(cfg.on_title, cfg.off_title,

@@ -7,7 +7,6 @@ from cmsl1t.utils.draw import draw, label_canvas
 from cmsl1t.utils.fit_efficiency import fit_efficiency
 import numpy as np
 
-
 from rootpy.plotting import Legend, HistStack, Efficiency
 from rootpy.context import preserve_current_style
 from rootpy import asrootpy, ROOT
