@@ -5,6 +5,7 @@ from cmsl1t.hist.factory import HistFactory
 import cmsl1t.hist.binning as bn
 from cmsl1t.utils.draw import draw, label_canvas
 from cmsl1t.utils.fit_efficiency import fit_efficiency
+import numpy as np
 
 
 from rootpy.plotting import Legend, HistStack, Efficiency
@@ -33,7 +34,7 @@ class EfficiencyPlot(BasePlotter):
     def create_histograms(self,
                           online_title, offline_title,
                           pileup_bins, thresholds,
-                          n_bins, low, high):
+                          n_bins, low, high=400):
         """ This is not in an init function so that we can by-pass this in the
         case where we reload things from disk """
         self.online_title = online_title
@@ -52,7 +53,13 @@ class EfficiencyPlot(BasePlotter):
         def make_efficiency(labels):
             this_name = "efficiency" + name.format(**labels)
             this_title = title.format(**labels)
-            eff = asrootpy(ROOT.TEfficiency(this_name, this_title,
+            '''Checking type of 'low' to see whether it's int (x-range minimum)
+                    or array (bin edges) for constructing TEfficiency'''
+            if isinstance(low, np.ndarray):
+                eff = asrootpy(ROOT.TEfficiency(this_name, this_title,
+                                            n_bins, low))
+            else:
+                eff = asrootpy(ROOT.TEfficiency(this_name, this_title,
                                             n_bins, low, high))
             eff.drawstyle = "EP"
             return eff

@@ -143,6 +143,7 @@ def draw(hists, colourmap="RainBow", colour_values=None,
     axis_hist.title = ""
 
     canvas.SetGridx()
+    canvas.Update()
 
     r_draw(hists, canvas, xaxis=xaxis, yaxis=yaxis, **draw_args)
     return canvas

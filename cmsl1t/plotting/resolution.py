@@ -54,6 +54,7 @@ class ResolutionPlot(BasePlotter):
                 label = "~ {:.0f}".format(self.pileup_bins.get_bin_center(pile_up))
             else:
                 continue
+            hist.SetMarkerSize(0.5)
             hists.append(hist)
             labels.append(label)
             # if with_fits:
