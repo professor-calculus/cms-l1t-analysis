@@ -33,7 +33,7 @@ class EfficiencyPlot(BasePlotter):
     def create_histograms(self,
                           online_title, offline_title,
                           pileup_bins, thresholds,
-                          n_bins, low, high=400):
+                          n_bins, low, high=400, legend_title=""):
         """ This is not in an init function so that we can by-pass this in the
         case where we reload things from disk """
         self.online_title = online_title
@@ -41,6 +41,7 @@ class EfficiencyPlot(BasePlotter):
         self.pileup_bins = bn.Sorted(pileup_bins, "pileup",
                                      use_everything_bin=True)
         self.thresholds = bn.GreaterThan(thresholds, "threshold")
+        self.legend_title = legend_title
 
         name = ["efficiency", self.online_name, self.offline_name]
         name += ["thresh_{threshold}", "pu_{pileup}"]
@@ -94,7 +95,7 @@ class EfficiencyPlot(BasePlotter):
             hist = all_pileup_effs.get_bin_contents(threshold)
             hist.drawstyle = "EP"
             hists.append(hist)
-            labels.append(str(self.online_name) + " > " + str(self.thresholds.bins[threshold]) + " (GeV)")
+            labels.append(str(self.online_title) + " > " + str(self.thresholds.bins[threshold]) + " (GeV)")
             if with_fits:
                 fits.append(self.fits.get_bin_contents([bn.Base.everything, threshold]))
         self.__make_overlay("all", "all", hists, fits, labels, self.online_title)
@@ -145,8 +146,8 @@ class EfficiencyPlot(BasePlotter):
             label_canvas()
 
             # Add a legend
-            legend = Legend(len(hists), header="",
-                            topmargin=0.35, rightmargin=0.3, textsize=0.035, entryheight=0.035)
+            legend = Legend(len(hists), header=self.legend_title,
+                            topmargin=0.35, rightmargin=0.3, leftmargin=0.7, textsize=0.035, entryheight=0.035)
             for hist, label in zip(hists, labels):
                 legend.AddEntry(hist, label)
             legend.SetBorderSize(0)
