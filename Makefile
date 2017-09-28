@@ -38,6 +38,7 @@ create-data-dir:
 setup-data-dir: create-data-dir data/L1Ntuple_test_1.root data/L1Ntuple_test_2.root data/L1Ntuple_test_3.root
 
 data/L1Ntuple_test_1.root:
+	@rm ./data/test_*.root
 	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/bundocka/test_0.root ./data
 
 data/L1Ntuple_test_2.root:
