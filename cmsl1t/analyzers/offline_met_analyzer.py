@@ -107,7 +107,7 @@ class Analyzer(BaseAnalyzer):
         tmpbins0.extend(tmpbins1)
         tmpbins0.extend(tmpbins2)
         tmpbins0.extend(tmpbins3)
-        tmpbins0.extent(tmpbins4)
+        tmpbins0.extend(tmpbins4)
         xbins = np.asarray(tmpbins0, 'd')    #The 'd' arg is vital here, else it will claim axis length zero...
 
         # Eta ranges so we can put |\eta| < val as the legend header on the efficiency plots.
