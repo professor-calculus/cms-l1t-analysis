@@ -99,12 +99,16 @@ class Analyzer(BaseAnalyzer):
     def prepare_for_events(self, reader):
         # TODO: Get these from a common place, and / or the config file
         puBins = range(0, 50, 10) + [999]
-        tmpbins1 = range(0, 410, 10)
-        tmpbins2 = range(450, 1050, 50)
-        tmpbins3 = range(1100, 2100, 100)
-        tmpbins1.extend(tmpbins2)
-        tmpbins1.extend(tmpbins3)
-        xbins = np.asarray(tmpbins1, 'd')    #The 'd' arg is vital here, else it will claim axis length zero...
+        tmpbins0 = range(0, 100, 5)
+        tmpbins1 = range(100, 400, 10)
+        tmpbins2 = range(400, 1000, 50)
+        tmpbins3 = range(1000, 1400, 100)
+        tmpbins4 = range(1400, 2100, 200)
+        tmpbins0.extend(tmpbins1)
+        tmpbins0.extend(tmpbins2)
+        tmpbins0.extend(tmpbins3)
+        tmpbins0.extent(tmpbins4)
+        xbins = np.asarray(tmpbins0, 'd')    #The 'd' arg is vital here, else it will claim axis length zero...
 
         # Eta ranges so we can put |\eta| < val as the legend header on the efficiency plots.
         eta_ranges = dict(HTT="|\\eta| < 2.5",
@@ -153,10 +157,10 @@ class Analyzer(BaseAnalyzer):
         MET_PF_HF_cfg_HR = Config("MET_PF_HF", "Offline PF MET with HF", "L1 MET", 2000, 2000)
         MET_PF_NoMu_HF_cfg_HR = Config("MET_PF_NoMu_HF", "Offline PF MET with HF without Muons", "L1 MET", 2000, 2000)
 
-        jetET_Barrel_cfg = Config("jetET_B", "Offline Jet ET in Barrel Region", "L1 Jet ET", 600, 600)
-        jetET_Endcap_cfg = Config("jetET_E", "Offline Jet ET in Barrel Region", "L1 Jet ET", 600, 600)
-        jetET_Central_cfg = Config("jetET_BE", "Offline Jet ET in Central Region", "L1 Jet ET", 600, 600)
-        jetET_HF_cfg = Config("jetET_HF", "Offline Jet ET in HF Region", "L1 Jet ET", 600, 600)
+        jetET_Barrel_cfg = Config("jetET_B", "Offline Jet ET in Barrel Region", "L1 Jet ET", 400, 400)
+        jetET_Endcap_cfg = Config("jetET_E", "Offline Jet ET in Barrel Region", "L1 Jet ET", 400, 400)
+        jetET_Central_cfg = Config("jetET_BE", "Offline Jet ET in Central Region", "L1 Jet ET", 400, 400)
+        jetET_HF_cfg = Config("jetET_HF", "Offline Jet ET in HF Region", "L1 Jet ET", 400, 400)
         jetET_Barrel_cfg_HR = Config("jetET_B", "Offline Jet ET in Barrel Region", "L1 Jet ET", 2000, 2000)
         jetET_Endcap_cfg_HR = Config("jetET_E", "Offline Jet ET in Barrel Region", "L1 Jet ET", 2000, 2000)
         jetET_Central_cfg_HR = Config("jetET_BE", "Offline Jet ET in Central Region", "L1 Jet ET", 2000, 2000)
