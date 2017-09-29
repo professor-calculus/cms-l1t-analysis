@@ -129,10 +129,10 @@ class Analyzer(BaseAnalyzer):
                   MET_PF_NoMu=[40, 60, 80, 100, 120],
                   MET_PF_HF=[40, 60, 80, 100, 120],
                   MET_PF_NoMu_HF=[40, 60, 80, 100, 120],
-                  jetET_B=[40, 60, 80, 100, 120],
-                  jetET_E=[40, 60, 80, 100, 120],
-                  jetET_BE=[40, 60, 80, 100, 120],
-                  jetET_HF=[40, 60, 80, 100, 120]
+                  jetET_B=[35, 60, 90, 140, 180],
+                  jetET_E=[35, 60, 90, 140, 180],
+                  jetET_BE=[35, 60, 90, 140, 180],
+                  jetET_HF=[35, 60, 90, 140, 180]
                   )
 
         Config = namedtuple("Config", "name off_title on_title off_max on_max")
@@ -195,7 +195,7 @@ class Analyzer(BaseAnalyzer):
 
         self.res_vs_eta_CentralJets.build("Online Jet energy (GeV)",
                                           "Offline Jet energy (GeV)", "Offline Jet Eta (rad)",
-                                          puBins, 50, -0.5, 3.5, 50, -5., 5.)
+                                          puBins, 50, -0.5, 3.5, 50, -5.0, 5.0)
         return True
 
     def fill_histograms(self, entry, event):
@@ -222,7 +222,7 @@ class Analyzer(BaseAnalyzer):
         goodJets = event.goodJets()
 
         for recoJet in event.goodJets():
-            l1Jet = event.getMatchedL1Jet(recoJet)
+            l1Jet = event.getMatchedL1Jet(recoJet, l1Type='EMU')
             if not l1Jet:
                 continue
             self.res_vs_eta_CentralJets.fill(pileup, recoJet.eta, recoJet.etCorr, l1Jet.et)
@@ -230,7 +230,7 @@ class Analyzer(BaseAnalyzer):
         leadingRecoJet = event.getLeadingRecoJet()
         if not leadingRecoJet:
             return True
-        l1Jet = event.getMatchedL1Jet(leadingRecoJet)
+        l1Jet = event.getMatchedL1Jet(leadingRecoJet, l1Type='EMU')
         if not l1Jet:
             return True
 

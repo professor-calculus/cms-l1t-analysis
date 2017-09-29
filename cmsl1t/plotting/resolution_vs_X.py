@@ -31,6 +31,8 @@ class ResolutionVsXPlot(BasePlotter):
         self.online_title = online_title
         self.offline_title = offline_title
         self.versus_title = versus_title
+        self.ymin = res_low
+        self.ymax = res_high
         self.pileup_bins = bn.Sorted(pileup_bins, "pileup",
                                      use_everything_bin=True)
 
@@ -62,6 +64,8 @@ class ResolutionVsXPlot(BasePlotter):
                 hist3.SetBinContent(i, sqrt(hist4.GetBinContent(i))*hist2.GetBinError(i)/hist2.GetBinContent(i))
                 hist3.SetBinError(i, 0.)
                 hist2.SetBinError(i, hist4.GetBinContent(i)*hist2.GetBinError(i))
+            if hist3.GetMaximum() > 3.:
+                hist3.GetYaxis().SetRangeUser(0., 2.)
             self.__do_draw(pileup, hist2, "_profile2")
             self.__do_draw(pileup, hist3, "_profile")
 
