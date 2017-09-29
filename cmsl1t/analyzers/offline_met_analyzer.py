@@ -230,7 +230,7 @@ class Analyzer(BaseAnalyzer):
         leadingRecoJet = event.getLeadingRecoJet()
         if not leadingRecoJet:
             return True
-        l1Jet = event.getMatchedL1Jet(leadingRecoJet, l1Type='EMU')
+        l1Jet = event.getMatchedL1Jet(leadingRecoJet)
         if not l1Jet:
             return True
 
