@@ -229,7 +229,8 @@ class Analyzer(BaseAnalyzer):
             l1Jet = event.getMatchedL1Jet(recoJet, l1Type='EMU')
             if not l1Jet:
                 continue
-            self.res_vs_eta_CentralJets.fill(pileup, recoJet.eta, recoJet.etCorr, l1Jet.et)
+            if recoJet.etCorr > 30.:
+                self.res_vs_eta_CentralJets.fill(pileup, recoJet.eta, recoJet.etCorr, l1Jet.et)
 
         leadingRecoJet = event.getLeadingRecoJet()
         if not leadingRecoJet:
