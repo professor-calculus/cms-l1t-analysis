@@ -12,3 +12,5 @@ Fixes #<ISSUE_NUMBER>
 
 
 #### Any other comments?
+An example would be if you require another pull request to be merged before this one.
+If you do, please reference it.
