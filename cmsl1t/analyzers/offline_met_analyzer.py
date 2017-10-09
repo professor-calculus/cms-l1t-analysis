@@ -16,7 +16,7 @@ from collections import namedtuple
 import numpy as np
 
 
-sum_types = ["HTT", "MHT", "MET_HF", "MET_noHF", "MET_PF", "MET_PF_NoMu", "MET_PF_HF", "MET_PF_NoMu_HF"]
+sum_types = ["HTT", "MHT", "MET_HF", "MET", "MET_PF", "MET_PF_NoMu", "MET_PF_HF", "MET_PF_NoMu_HF"]
 jet_types = ["jetET_B", "jetET_E", "jetET_BE", "jetET_HF"]
 Sums = namedtuple("Sums", sum_types)
 
@@ -25,7 +25,7 @@ def ExtractSums(event):
     offline = dict(HTT=Sum(event.sums.Ht),
                    MHT=Met(event.sums.mHt, event.sums.mHtPhi),
                    MET_HF=Met(event.sums.caloMet, event.sums.caloMetPhi),
-                   MET_noHF=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE),
+                   MET=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE),
                    MET_PF=Met(event.sums.met, event.sums.metPhi),
                    MET_PF_NoMu=Met(event.sums.pfMetNoMu, event.sums.pfMetNoMuPhi),
                    MET_PF_HF=Met(event.sums.met, event.sums.metPhi),
@@ -34,7 +34,7 @@ def ExtractSums(event):
     online = dict(HTT=event.l1Sums["L1Htt"],
                   MHT=event.l1Sums["L1Mht"],
                   MET_HF=event.l1Sums["L1MetHF"],
-                  MET_noHF=event.l1Sums["L1Met"],
+                  MET=event.l1Sums["L1Met"],
                   MET_PF=event.l1Sums["L1Met"],
                   MET_PF_NoMu=event.l1Sums["L1Met"],
                   MET_PF_HF=event.l1Sums["L1MetHF"],
@@ -114,7 +114,7 @@ class Analyzer(BaseAnalyzer):
         eta_ranges = dict(HTT="|\\eta| < 2.5",
                   MHT="|\\eta| < 2.5",
                   MET_HF="|\\eta| < 5.0",
-                  MET_noHF="|\\eta| < 3.0",
+                  MET="|\\eta| < 3.0",
                   MET_PF="|\\eta| < 3.0",
                   MET_PF_NoMu="|\\eta| < 3.0",
                   MET_PF_HF="|\\eta| < 5.0",
@@ -125,13 +125,10 @@ class Analyzer(BaseAnalyzer):
                   jetET_HF="3.0 < |\\eta| < 5.0"
                   )
 
-        min_x = dict(HTT=30
-                  )
-
         thresholds = dict(HTT=[160, 220, 280, 340, 400],
                   MHT=[40, 60, 80, 100, 120],
                   MET_HF=[40, 60, 80, 100, 120],
-                  MET_noHF=[40, 60, 80, 100, 120],
+                  MET=[40, 60, 80, 100, 120],
                   MET_PF=[40, 60, 80, 100, 120],
                   MET_PF_NoMu=[40, 60, 80, 100, 120],
                   MET_PF_HF=[40, 60, 80, 100, 120],
@@ -142,44 +139,45 @@ class Analyzer(BaseAnalyzer):
                   jetET_HF=[35, 60, 90, 140, 180]
                   )
 
-        Config = namedtuple("Config", "name off_title on_title off_max on_max")
-        HTT_cfg = Config("HTT", "Offline HTT", "L1 HTT", 600, 600)
-        MHT_cfg = Config("MHT", "Offline MHT", "L1 MHT", 400, 400)
-        MET_HF_cfg = Config("MET_HF", "Offline MET with HF", "L1 MET", 400, 400)
-        MET_noHF_cfg = Config("MET_noHF", "Offline MET no HF", "L1 MET", 400, 400)
-        MET_PF_cfg = Config("MET_PF", "Offline PF MET", "L1 MET", 400, 400)
-        MET_PF_NoMu_cfg = Config("MET_PF_NoMu", "Offline PF MET without Muons", "L1 MET", 400, 400)
-        MET_PF_HF_cfg = Config("MET_PF_HF", "Offline PF MET with HF", "L1 MET", 400, 400)
-        MET_PF_NoMu_HF_cfg = Config("MET_PF_NoMu_HF", "Offline PF MET with HF without Muons", "L1 MET", 400, 400)
-        HTT_cfg_HR = Config("HTT", "Offline HTT", "L1 HTT", 2000, 2000)
-        MHT_cfg_HR = Config("MHT", "Offline MHT", "L1 MHT", 2000, 2000)
-        MET_HF_cfg_HR = Config("MET_HF", "Offline MET with HF", "L1 MET", 2000, 2000)
-        MET_noHF_cfg_HR = Config("MET_noHF", "Offline MET no HF", "L1 MET", 2000, 2000)
-        MET_PF_cfg_HR = Config("MET_PF", "Offline PF MET", "L1 MET", 2000, 2000)
-        MET_PF_NoMu_cfg_HR = Config("MET_PF_NoMu", "Offline PF MET without Muons", "L1 MET", 2000, 2000)
-        MET_PF_HF_cfg_HR = Config("MET_PF_HF", "Offline PF MET with HF", "L1 MET", 2000, 2000)
-        MET_PF_NoMu_HF_cfg_HR = Config("MET_PF_NoMu_HF", "Offline PF MET with HF without Muons", "L1 MET", 2000, 2000)
+        Config = namedtuple("Config", "name off_title on_title min off_max on_max")
+        HTT_cfg = Config("HTT", "Offline HTT", "L1 HTT", 30, 600, 600)
+        MHT_cfg = Config("MHT", "Offline MHT", "L1 MHT", 0, 400, 400)
+        MET_HF_cfg = Config("MET_HF", "Offline MET with HF", "L1 MET", 0, 400, 400)
+        MET_cfg = Config("MET", "Offline MET no HF", "L1 MET", 0, 400, 400)
+        MET_PF_cfg = Config("MET_PF", "Offline PF MET", "L1 MET", 0, 400, 400)
+        MET_PF_NoMu_cfg = Config("MET_PF_NoMu", "Offline PF MET without Muons", "L1 MET", 0, 400, 400)
+        MET_PF_HF_cfg = Config("MET_PF_HF", "Offline PF MET with HF", "L1 MET", 0, 400, 400)
+        MET_PF_NoMu_HF_cfg = Config("MET_PF_NoMu_HF", "Offline PF MET with HF without Muons", "L1 MET", 0, 400, 400)
+        HTT_cfg_HR = Config("HTT", "Offline HTT", "L1 HTT", 30, 2000, 2000)
+        MHT_cfg_HR = Config("MHT", "Offline MHT", "L1 MHT", 0, 2000, 2000)
+        MET_HF_cfg_HR = Config("MET_HF", "Offline MET with HF", "L1 MET", 0, 2000, 2000)
+        MET_cfg_HR = Config("MET", "Offline MET no HF", "L1 MET", 0, 2000, 2000)
+        MET_PF_cfg_HR = Config("MET_PF", "Offline PF MET", "L1 MET", 0, 2000, 2000)
+        MET_PF_NoMu_cfg_HR = Config("MET_PF_NoMu", "Offline PF MET without Muons", "L1 MET", 0, 2000, 2000)
+        MET_PF_HF_cfg_HR = Config("MET_PF_HF", "Offline PF MET with HF", "L1 MET", 0, 2000, 2000)
+        MET_PF_NoMu_HF_cfg_HR = Config("MET_PF_NoMu_HF", "Offline PF MET with HF without Muons", "L1 MET", 0, 2000, 2000)
 
-        jetET_Barrel_cfg = Config("jetET_B", "Offline Jet ET in Barrel Region", "L1 Jet ET", 400, 400)
-        jetET_Endcap_cfg = Config("jetET_E", "Offline Jet ET in Barrel Region", "L1 Jet ET", 400, 400)
-        jetET_Central_cfg = Config("jetET_BE", "Offline Jet ET in Central Region", "L1 Jet ET", 400, 400)
-        jetET_HF_cfg = Config("jetET_HF", "Offline Jet ET in HF Region", "L1 Jet ET", 400, 400)
-        jetET_Barrel_cfg_HR = Config("jetET_B", "Offline Jet ET in Barrel Region", "L1 Jet ET", 2000, 2000)
-        jetET_Endcap_cfg_HR = Config("jetET_E", "Offline Jet ET in Barrel Region", "L1 Jet ET", 2000, 2000)
-        jetET_Central_cfg_HR = Config("jetET_BE", "Offline Jet ET in Central Region", "L1 Jet ET", 2000, 2000)
-        jetET_HF_cfg_HR = Config("jetET_HF", "Offline Jet ET in HF Region", "L1 Jet ET", 2000, 2000)
+        jetET_Barrel_cfg = Config("jetET_B", "Offline Jet ET in Barrel Region", "L1 Jet ET", 0, 400, 400)
+        jetET_Endcap_cfg = Config("jetET_E", "Offline Jet ET in Barrel Region", "L1 Jet ET", 0, 400, 400)
+        jetET_Central_cfg = Config("jetET_BE", "Offline Jet ET in Central Region", "L1 Jet ET", 0, 400, 400)
+        jetET_HF_cfg = Config("jetET_HF", "Offline Jet ET in HF Region", "L1 Jet ET", 0, 400, 400)
+        jetET_Barrel_cfg_HR = Config("jetET_B", "Offline Jet ET in Barrel Region", "L1 Jet ET", 0, 2000, 2000)
+        jetET_Endcap_cfg_HR = Config("jetET_E", "Offline Jet ET in Barrel Region", "L1 Jet ET", 0, 2000, 2000)
+        jetET_Central_cfg_HR = Config("jetET_BE", "Offline Jet ET in Central Region", "L1 Jet ET", 0, 2000, 2000)
+        jetET_HF_cfg_HR = Config("jetET_HF", "Offline Jet ET in HF Region", "L1 Jet ET", 0, 2000, 2000)
 
-        cfgs = [HTT_cfg, MHT_cfg, MET_HF_cfg, MET_noHF_cfg, MET_PF_cfg, MET_PF_NoMu_cfg, MET_PF_HF_cfg, MET_PF_NoMu_HF_cfg, jetET_Barrel_cfg, jetET_Endcap_cfg, jetET_Central_cfg, jetET_HF_cfg]
-        cfgs2 = [HTT_cfg_HR, MHT_cfg_HR, MET_HF_cfg_HR, MET_noHF_cfg_HR, MET_PF_cfg_HR, MET_PF_NoMu_cfg_HR, MET_PF_HF_cfg_HR, MET_PF_NoMu_HF_cfg_HR, jetET_Barrel_cfg_HR, jetET_Endcap_cfg_HR, jetET_Central_cfg_HR, jetET_HF_cfg_HR]
+        cfgs = [HTT_cfg, MHT_cfg, MET_HF_cfg, MET_cfg, MET_PF_cfg, MET_PF_NoMu_cfg, MET_PF_HF_cfg, MET_PF_NoMu_HF_cfg, jetET_Barrel_cfg, jetET_Endcap_cfg, jetET_Central_cfg, jetET_HF_cfg]
+        cfgs2 = [HTT_cfg_HR, MHT_cfg_HR, MET_HF_cfg_HR, MET_cfg_HR, MET_PF_cfg_HR, MET_PF_NoMu_cfg_HR, MET_PF_HF_cfg_HR, MET_PF_NoMu_HF_cfg_HR, jetET_Barrel_cfg_HR, jetET_Endcap_cfg_HR, jetET_Central_cfg_HR, jetET_HF_cfg_HR]
 
         for cfg in cfgs:
             eff_plot = getattr(self, cfg.name + "_eff")
             res_plot = getattr(self, cfg.name + "_res")
             twoD_plot = getattr(self, cfg.name + "_2D")
+            print(cfg.min)
             eff_plot.build(cfg.on_title, cfg.off_title + " (GeV)",
-                           puBins, thresholds.get(cfg.name), 50, min_x.get(cfg.name, 0), cfg.off_max, legend_title=eta_ranges.get(cfg.name, ""))
+                           puBins, thresholds.get(cfg.name), 50, cfg.min, cfg.off_max, legend_title=eta_ranges.get(cfg.name, ""))
             twoD_plot.build(cfg.on_title, cfg.off_title + " (GeV)",
-                            puBins, 50, min_x.get(cfg.name, 0), cfg.off_max)
+                            puBins, 50, cfg.min, cfg.off_max)
             res_plot.build(cfg.on_title, cfg.off_title,
                            puBins, 50, -10, 10)
 
