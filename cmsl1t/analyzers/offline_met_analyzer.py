@@ -125,6 +125,9 @@ class Analyzer(BaseAnalyzer):
                   jetET_HF="3.0 < |\\eta| < 5.0"
                   )
 
+        min_x = dict(HTT=30
+                  )
+
         thresholds = dict(HTT=[160, 220, 280, 340, 400],
                   MHT=[40, 60, 80, 100, 120],
                   MET_HF=[40, 60, 80, 100, 120],
@@ -174,9 +177,9 @@ class Analyzer(BaseAnalyzer):
             res_plot = getattr(self, cfg.name + "_res")
             twoD_plot = getattr(self, cfg.name + "_2D")
             eff_plot.build(cfg.on_title, cfg.off_title + " (GeV)",
-                           puBins, thresholds.get(cfg.name), 50, 0, cfg.off_max, legend_title=eta_ranges.get(cfg.name, ""))
+                           puBins, thresholds.get(cfg.name), 50, min_x.get(cfg.name, 0), cfg.off_max, legend_title=eta_ranges.get(cfg.name, ""))
             twoD_plot.build(cfg.on_title, cfg.off_title + " (GeV)",
-                            puBins, 50, 0, cfg.off_max)
+                            puBins, 50, min_x.get(cfg.name, 0), cfg.off_max)
             res_plot.build(cfg.on_title, cfg.off_title,
                            puBins, 50, -10, 10)
 
