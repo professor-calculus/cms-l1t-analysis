@@ -81,9 +81,4 @@ PYTHONPATH="${USER_SITE_PACKAGES}:$PYTHONPATH"
 git submodule init
 git submodule update
 
-presdir=`pwd`
-cd /afs/cern.ch/work/a/atittert/private/CMSSW/CMSSW_9_2_8/src/
-eval `scramv1 runtime -sh`
-cd $presdir
-
 echo "Environment for ${PROJECT_NAME} is ready"
