@@ -173,7 +173,6 @@ class Analyzer(BaseAnalyzer):
             eff_plot = getattr(self, cfg.name + "_eff")
             res_plot = getattr(self, cfg.name + "_res")
             twoD_plot = getattr(self, cfg.name + "_2D")
-            print(cfg.min)
             eff_plot.build(cfg.on_title, cfg.off_title + " (GeV)",
                            puBins, thresholds.get(cfg.name), 50, cfg.min, cfg.off_max, legend_title=eta_ranges.get(cfg.name, ""))
             twoD_plot.build(cfg.on_title, cfg.off_title + " (GeV)",
