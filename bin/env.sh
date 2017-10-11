@@ -81,4 +81,6 @@ PYTHONPATH="${USER_SITE_PACKAGES}:$PYTHONPATH"
 git submodule init
 git submodule update
 
+ulimit -c 0
+
 echo "Environment for ${PROJECT_NAME} is ready"
