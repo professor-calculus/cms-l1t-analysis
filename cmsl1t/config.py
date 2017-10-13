@@ -227,10 +227,12 @@ class ConfigParser(object):
                     # Essentially, this is a new analysis output
                     output_folder = get_unique_out_dir(output_folder)
 
+        plots_folder = output_folder + "_plots"
+        plots_folder = os.path.realpath(plots_folder)
         output_folder = os.path.realpath(output_folder)
-        plots_folder = os.path.join(output_folder, "plots")
+        #plots_folder = os.path.join(output_folder, "plots")
         cfg['output']['folder'] = output_folder
-        cfg['output']['plots_folder'] = get_unique_out_dir(plots_folder)
+        cfg['output']['plots_folder'] = plots_folder
 
     def describe(self):
         return __doc__
