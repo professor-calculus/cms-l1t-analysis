@@ -22,7 +22,7 @@ clean: clean-build clean-so clean-pyc clean-external
 
 
 # setup
-setup: setup-build-dir setup-external
+setup: setup-build-dir setup-external setup-data-dir
 
 
 setup-external:
@@ -38,13 +38,13 @@ create-data-dir:
 setup-data-dir: create-data-dir data/L1Ntuple_test_1.root data/L1Ntuple_test_2.root data/L1Ntuple_test_3.root
 
 data/L1Ntuple_test_1.root:
-	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/bundocka/test_0.root ./data/L1Ntuple_test_1.root
+	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/bundocka/test_0.root ./data/L1Ntuple_test_1.root || true
 
 data/L1Ntuple_test_2.root:
-	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/bundocka/test_1.root ./data/L1Ntuple_test_2.root
+	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/bundocka/test_1.root ./data/L1Ntuple_test_2.root || true
 
 data/L1Ntuple_test_3.root:
-	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/bundocka/test_2.root ./data/L1Ntuple_test_3.root
+	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/bundocka/test_2.root ./data/L1Ntuple_test_3.root || true
 
 
 # tests
@@ -70,9 +70,9 @@ endif
 run-benchmark:
 	@time python -m memory_profiler bin/run_benchmark
 
-test: setup-data-dir test-code flake8
+test: test-code flake8
 
-test-all: setup-data-dir test-code-full flake8
+test-all: test-code-full flake8
 
 test-code:
 	@$(NOSETESTS) -v -A "not slow and not grid_access" -s test
