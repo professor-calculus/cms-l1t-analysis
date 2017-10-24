@@ -20,7 +20,7 @@ class BaseAnalyzer(object):
             os.makedirs(self.plots_folder)
         self.all_plots = []
 
-    def prepare_for_events(self, reader):
+    def prepare_for_events(self, reader, puBins=[0,10,20,30,40,999]):
         """
         Can be overloaded in the derived class.
         Called once, after the input trees have been prepared.

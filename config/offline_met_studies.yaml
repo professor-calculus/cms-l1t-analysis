@@ -25,9 +25,10 @@ input:
 analysis:
   do_fit: True
   pu_type: 0PU12,13PU19,20PU
-  pu_bins: 0,13,20,999
+  pu_bins: [0,13,20,999]
   analyzers:
-      - cmsl1t.analyzers.offline_met_analyzer
+#      - cmsl1t.analyzers.offline_met_analyzer
+      - cmsl1t.analyzers.weekly_analyzer
   modifiers: []
   progress_bar:
     report_every: 1000

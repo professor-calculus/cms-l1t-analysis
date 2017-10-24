@@ -65,9 +65,9 @@ class Analyzer(BaseAnalyzer):
         super(Analyzer, self).__init__("offline_met_analyzer", config)
 
         for name in sum_types:
-            eff_plot = EfficiencyPlot("L1" + name, "offline" + name)
-            res_plot = ResolutionPlot("energy", "L1" + name, "offline" + name)
-            twoD_plot = OnlineVsOffline("L1" + name, "offline" + name)
+            eff_plot = EfficiencyPlot("L1", "offline_" + name)
+            res_plot = ResolutionPlot("energy", "L1", "offline_" + name)
+            twoD_plot = OnlineVsOffline("L1", "offline_" + name)
             self.register_plotter(eff_plot)
             self.register_plotter(res_plot)
             self.register_plotter(twoD_plot)
@@ -75,8 +75,8 @@ class Analyzer(BaseAnalyzer):
             setattr(self, name + "_res", res_plot)
             setattr(self, name + "_2D", twoD_plot)
 
-            eff_plot_HR = EfficiencyPlot("L1" + name, "offline" + name + "_HiRange")
-            twoD_plot_HR = OnlineVsOffline("L1" + name, "offline" + name + "_HiRange")
+            eff_plot_HR = EfficiencyPlot("L1", "offline_" + name + "_HiRange")
+            twoD_plot_HR = OnlineVsOffline("L1", "offline_" + name + "_HiRange")
             self.register_plotter(eff_plot_HR)
             self.register_plotter(twoD_plot_HR)
             setattr(self, name + "_eff_HR", eff_plot_HR)
@@ -84,17 +84,17 @@ class Analyzer(BaseAnalyzer):
 
         for angle in sum_types[2:]:
             name = angle + "_phi"
-            res_plot = ResolutionPlot("phi", "L1" + name, "offline" + name)
-            twoD_plot = OnlineVsOffline("L1" + name, "offline" + name)
+            res_plot = ResolutionPlot("phi", "L1", "offline_" + name)
+            twoD_plot = OnlineVsOffline("L1", "offline_" + name)
             self.register_plotter(res_plot)
             self.register_plotter(twoD_plot)
             setattr(self, name + "_res", res_plot)
             setattr(self, name + "_2D", twoD_plot)
 
         for name in jet_types:
-            eff_plot = EfficiencyPlot("L1" + name, "offline" + name)
-            res_plot = ResolutionPlot("energy", "L1" + name, "offline" + name)
-            twoD_plot = OnlineVsOffline("L1" + name, "offline" + name)
+            eff_plot = EfficiencyPlot("L1", "offline_" + name)
+            res_plot = ResolutionPlot("energy", "L1", "offline_" + name)
+            twoD_plot = OnlineVsOffline("L1", "offline_" + name)
             self.register_plotter(eff_plot)
             self.register_plotter(res_plot)
             self.register_plotter(twoD_plot)
@@ -102,8 +102,8 @@ class Analyzer(BaseAnalyzer):
             setattr(self, name + "_res", res_plot)
             setattr(self, name + "_2D", twoD_plot)
 
-            eff_plot_HR = EfficiencyPlot("L1" + name, "offline" + name + "_HiRange")
-            twoD_plot_HR = OnlineVsOffline("L1" + name, "offline" + name + "_HiRange")
+            eff_plot_HR = EfficiencyPlot("L1", "offline_" + name + "_HiRange")
+            twoD_plot_HR = OnlineVsOffline("L1", "offline_" + name + "_HiRange")
             self.register_plotter(eff_plot_HR)
             self.register_plotter(twoD_plot_HR)
             setattr(self, name + "_eff_HR", eff_plot_HR)
@@ -112,9 +112,9 @@ class Analyzer(BaseAnalyzer):
         self.res_vs_eta_CentralJets = ResolutionVsXPlot("energy", "onlineJet", "offlineJet", "offlineJet_eta")
         self.register_plotter(self.res_vs_eta_CentralJets)
 
-    def prepare_for_events(self, reader):
+    def prepare_for_events(self, reader, puBins=[0,10,20,30,40,999]):
         # TODO: Get these from a common place, and / or the config file
-        puBins = range(0, 50, 10) + [999]
+        #puBins = range(0, 50, 10) + [999]
         puBins_HR = [0, 999]
         tmpbins0 = range(0, 100, 5)
         tmpbins1 = range(100, 400, 10)
