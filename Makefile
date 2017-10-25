@@ -12,7 +12,7 @@ clean-external:
 	@rm -fr external
 
 clean-so:
-	@if [ -d external ]; then find external -name "*.so" -exec rm {} \; ;fi;
+	@[ -d external ] && find external -name "*.so" -exec rm {} \;
 	@find legacy -name "*.so" -exec rm {} \;
 
 clean-pyc:
@@ -38,20 +38,20 @@ create-data-dir:
 setup-data-dir: create-data-dir data/L1Ntuple_test_1.root data/L1Ntuple_test_2.root data/L1Ntuple_test_3.root
 
 data/L1Ntuple_test_1.root:
-	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/L1Menu2016/Stage2/Collision2016-wRECO-l1t-integration-v86p4/SingleMuon/crab_Collision2016-wRECO-l1t-integration-v86p4__281693_SingleMuon/161005_194247/0000/L1Ntuple_979.root data/L1Ntuple_test_1.root
+	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/bundocka/test_0.root ./data/L1Ntuple_test_1.root || true
 
 data/L1Ntuple_test_2.root:
-	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/L1Menu2016/Stage2/Collision2016-wRECO-l1t-integration-v86p4/SingleMuon/crab_Collision2016-wRECO-l1t-integration-v86p4__281693_SingleMuon/161005_194247/0000/L1Ntuple_980.root data/L1Ntuple_test_2.root
+	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/bundocka/test_1.root ./data/L1Ntuple_test_2.root || true
 
 data/L1Ntuple_test_3.root:
-	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/L1Menu2016/Stage2/Collision2016-wRECO-l1t-integration-v86p4/SingleMuon/crab_Collision2016-wRECO-l1t-integration-v86p4__281693_SingleMuon/161005_194247/0000/L1Ntuple_981.root data/L1Ntuple_test_3.root
+	@xrdcp root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/bundocka/test_2.root ./data/L1Ntuple_test_3.root || true
 
 
 # tests
 pep8:
 	@pep8 --exclude=.git,external examples cmsl1t
 
-flake8:
+flake8: 
 	@flake8 $(shell file -p bin/* |awk -F: '/python.*text/{print $$1}') cmsl1t test --ignore=F401 --max-line-length=120
 
 # benchmarks
@@ -81,8 +81,6 @@ test-code-full:
 	@$(NOSETESTS) -v -s test
 
 changelog:
-	@echo "If you have not done it, please run"
-	@echo "export CHANGELOG_GITHUB_TOKEN=<from https://github.com/settings/tokens>"
 	@github_changelog_generator -u cms-l1t-offline -p cms-l1t-analysis --base docs/initial_changelog.md
 
 docs-html:
