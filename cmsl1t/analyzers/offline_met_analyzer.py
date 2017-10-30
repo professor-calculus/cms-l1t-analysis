@@ -13,14 +13,15 @@ import numpy as np
 
 
 sum_types = [
-    "HTT", "HTT_Emu", "MET_HF", "MET", "MET_PF", "MET_PF_NoMu", "MET_PF_HF",
-    "MET_PF_NoMu_HF", "MET_HF_Emu", "MET_Emu", "MET_PF_Emu", "MET_PF_NoMu_Emu",
-    "MET_PF_HF_Emu", "MET_PF_NoMu_HF_Emu",
+    "HTT", "MHT", "MET_HF", "MET", "MET_PF", "MET_PF_NoMu", "MET_PF_HF",
+    "MET_PF_NoMu_HF",
 ]
+sum_types += [t + '_Emu' for t in sum_types]
 jet_types = [
     "jetET_B", "jetET_E", "jetET_BE", "jetET_HF",
-    "jetET_B_Emu", "jetET_E_Emu", "jetET_BE_Emu", "jetET_HF_Emu",
 ]
+jet_types += [t + '_Emu' for t in jet_types]
+
 Sums = namedtuple("Sums", sum_types)
 
 # Eta ranges so we can put |\eta| < val as the legend header on the
@@ -202,24 +203,26 @@ class Analyzer(BaseAnalyzer):
             prefix = '_Emu'
         for cfg in cfgs:
             eff_plot = getattr(self, cfg.name + prefix + "_eff" + suffix)
-            res_plot = getattr(self, cfg.name + prefix + "_res" + suffix)
+
             twoD_plot = getattr(self, cfg.name + prefix + "_2D" + suffix)
+            thresholds = THRESHOLDS.get(cfg.name)
             params = [
-                cfg.on_title, cfg.off_title + " (GeV)", puBins,
+                cfg.on_title, cfg.off_title + " (GeV)", puBins, thresholds,
                 50, cfg.min, cfg.max,
             ]
             if high_range:
                 params = [
-                    cfg.on_title, cfg.off_title + " (GeV)", puBins,
+                    cfg.on_title, cfg.off_title + " (GeV)", puBins, thresholds,
                     HIGH_RANGE_BINS.size - 1, HIGH_RANGE_BINS,
                 ]
 
             eff_plot.build(*params, legend_title=ETA_RANGES.get(cfg.name, ""))
+            params.remove(thresholds)
             twoD_plot.build(*params)
 
             if high_range:
                 continue
-
+            res_plot = getattr(self, cfg.name + prefix + "_res" + suffix)
             res_plot.build(cfg.on_title, cfg.off_title,
                            puBins, 50, -10, 10)
 
