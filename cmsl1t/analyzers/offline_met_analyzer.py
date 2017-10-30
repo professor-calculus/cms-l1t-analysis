@@ -1,7 +1,3 @@
-"""
-Make plots for offline met studies
-"""
-
 from BaseAnalyzer import BaseAnalyzer
 from cmsl1t.plotting.efficiency import EfficiencyPlot
 from cmsl1t.collections import EfficiencyCollection
@@ -51,7 +47,10 @@ THRESHOLDS = dict(
     jetET_B=[35, 60, 90, 140, 180],
 )
 
-HIGH_RANGE_MAX = 2000
+HIGH_RANGE_BINS = list(range(0, 100, 5)) + list(range(100, 400, 10))
+HIGH_RANGE_BINS += list(range(400, 800, 50)) + list(range(800, 1000, 200))
+HIGH_RANGE_BINS += list(range(1000, 2100, 500))
+HIGH_RANGE_BINS = np.asarray(HIGH_RANGE_BINS, 'd')
 
 for i in ['HF', 'PF', 'PF_NoMu', 'PF_HF', 'PF_NoMu_HF']:
     THRESHOLDS['MET_' + i] = THRESHOLDS['MET']
@@ -159,18 +158,6 @@ class Analyzer(BaseAnalyzer):
         puBins = self.puBins
         puBins_HR = [0, 999]
 
-        tmpbins0 = range(0, 100, 5)
-        tmpbins1 = range(100, 400, 10)
-        tmpbins2 = range(400, 800, 50)
-        tmpbins3 = range(800, 1000, 200)
-        tmpbins4 = range(1000, 2100, 500)
-        tmpbins0.extend(tmpbins1)
-        tmpbins0.extend(tmpbins2)
-        tmpbins0.extend(tmpbins3)
-        tmpbins0.extend(tmpbins4)
-        # The 'd' arg is vital here, else it will claim axis length zero...
-        xbins = np.asarray(tmpbins0, 'd')
-
         Config = namedtuple(
             "Config",
             "name off_title on_title min max",
@@ -192,10 +179,10 @@ class Analyzer(BaseAnalyzer):
             ),
 
         ]
-        self._plots_from_cfgs(cfgs)
-        self._plots_from_cfgs(cfgs, emulator=True)
-        self._plots_from_cfgs(cfgs, high_range=True)
-        self._plots_from_cfgs(cfgs, emulator=True, high_range=True)
+        self._plots_from_cfgs(cfgs, puBins)
+        self._plots_from_cfgs(cfgs, puBins, emulator=True)
+        self._plots_from_cfgs(cfgs, puBins_HR, high_range=True)
+        self._plots_from_cfgs(cfgs, puBins_HR, emulator=True, high_range=True)
 
         self.res_vs_eta_CentralJets.build(
             "Online Jet energy (GeV)",
@@ -206,7 +193,7 @@ class Analyzer(BaseAnalyzer):
         )
         return True
 
-    def _plots_from_cfgs(self, cfgs, emulator=False, high_range=False):
+    def _plots_from_cfgs(self, cfgs, puBins, emulator=False, high_range=False):
         suffix = ""
         prefix = ""
         if high_range:
@@ -217,30 +204,22 @@ class Analyzer(BaseAnalyzer):
             eff_plot = getattr(self, cfg.name + prefix + "_eff" + suffix)
             res_plot = getattr(self, cfg.name + prefix + "_res" + suffix)
             twoD_plot = getattr(self, cfg.name + prefix + "_2D" + suffix)
-            cfg_max = cfg.max
+            params = [
+                cfg.on_title, cfg.off_title + " (GeV)", puBins,
+                50, cfg.min, cfg.max,
+            ]
             if high_range:
-                cfg_max = HIGH_RANGE_MAX
+                params = [
+                    cfg.on_title, cfg.off_title + " (GeV)", puBins,
+                    HIGH_RANGE_BINS.size - 1, HIGH_RANGE_BINS,
+                ]
 
-            eff_plot.build(
-                cfg.on_title,
-                cfg.off_title + " (GeV)",
-                puBins,
-                THRESHOLDS.get(cfg.name),
-                50,
-                cfg.min,
-                cfg_max,
-                legend_title=ETA_RANGES.get(cfg.name, ""))
-            twoD_plot.build(
-                cfg.on_title,
-                cfg.off_title + " (GeV)",
-                puBins,
-                50,
-                cfg.min,
-                cfg_max,
-            )
+            eff_plot.build(*params, legend_title=ETA_RANGES.get(cfg.name, ""))
+            twoD_plot.build(*params)
 
             if high_range:
                 continue
+
             res_plot.build(cfg.on_title, cfg.off_title,
                            puBins, 50, -10, 10)
 
@@ -284,7 +263,7 @@ class Analyzer(BaseAnalyzer):
 
         goodJets = event.goodJets()
 
-        for recoJet in event.goodJets():
+        for recoJet in goodJets:
             l1Jet = event.getMatchedL1Jet(recoJet, l1Type='EMU')
             if not l1Jet:
                 continue
@@ -307,7 +286,7 @@ class Analyzer(BaseAnalyzer):
             fillRegions = ['E', 'BE']
         else:
             fillRegions = ['HF']
-        for region in [fillRegions:
+        for region in fillRegions:
             for suffix in ['_eff', '_res', '_2D', '_eff_HR', '_2D_HR']:
                 name = 'jetET_{0}_Emu{1}'.format(region, suffix)
                 getattr(self, name).fill(
@@ -318,7 +297,7 @@ class Analyzer(BaseAnalyzer):
         if not l1Jet:
             return True
 
-        for region in [fillRegions:
+        for region in fillRegions:
             for suffix in ['_eff', '_res', '_2D', '_eff_HR', '_2D_HR']:
                 name = 'jetET_{0}{1}'.format(region, suffix)
                 getattr(self, name).fill(
