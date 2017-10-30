@@ -19,7 +19,7 @@ class BaseAnalyzer(object):
         if not os.path.exists(self.plots_folder):
             os.makedirs(self.plots_folder)
         self.all_plots = []
-        self.puBins = config.get('analysis', 'pu_bins', [0, 999])
+        self.puBins = config.try_get('analysis', 'pu_bins', [0, 999])
 
     def prepare_for_events(self, reader):
         """
