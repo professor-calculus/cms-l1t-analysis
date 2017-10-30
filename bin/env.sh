@@ -44,7 +44,7 @@ then
   # this gives you voms-proxy-*, xrdcp and other grid tools
   source /cvmfs/grid.cern.ch/etc/profile.d/setup-cvmfs-ui.sh
   # ROOT 6, voms-proxy-init and other things
-  source /cvmfs/sft.cern.ch/lcg/views/LCG_latest/x86_64-slc6-gcc62-opt/setup.sh
+  source /cvmfs/sft.cern.ch/lcg/views/LCG_87/x86_64-slc6-gcc62-opt/setup.sh
   # to fix java for the hadoop commands:
   unset JAVA_HOME
   pip install --user -r requirements.txt
@@ -80,5 +80,7 @@ PYTHONPATH="${USER_SITE_PACKAGES}:$PYTHONPATH"
 
 git submodule init
 git submodule update
+
+ulimit -c 0
 
 echo "Environment for ${PROJECT_NAME} is ready"
