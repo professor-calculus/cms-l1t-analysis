@@ -20,8 +20,7 @@ class OnlineVsOffline(BasePlotter):
         self.offline_name = offline_name
 
     def create_histograms(
-            self, online_title, offline_title, pileup_bins, n_bins, low,
-        high=400.,
+        self, online_title, offline_title, pileup_bins, n_bins, low, high=400.,
     ):
         """ This is not in an init function so that we can by-pass this in the
         case where we reload things from disk """
