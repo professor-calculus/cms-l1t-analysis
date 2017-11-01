@@ -6,9 +6,11 @@ logger = logging.getLogger(__name__)
 
 
 class BaseAnalyzer(object):
+    DEFAULT_OUTPUT_FORMAT = 'pdf'
     """
     A Base class to be used by the various analyzers
     """
+
     def __init__(self, name, config, **kwargs):
         self.name = name
         self.output_folder = config.get('output', 'folder')
@@ -120,7 +122,11 @@ class BaseAnalyzer(object):
         """
         Register a plotter with this analyzer, and set up it's outputs
         """
-        file_format = self.config.try_get('output', 'plot_format', "png")
+        file_format = self.config.try_get(
+            'output',
+            'plot_format',
+            BaseAnalyzer.DEFAULT_OUTPUT_FORMAT
+        )
         plotter.set_plot_output_cfg(self.plots_folder, file_format)
         self.all_plots.append(plotter)
 
