@@ -58,7 +58,7 @@ class ResolutionVsXPlot(BasePlotter):
         self.filename_format = name
 
     def fill(self, pileup, versus, offline, online):
-        difference = self.resolution_method(online, offline) + 1.
+        difference = self.resolution_method(online, offline)
         self.plots[pileup].fill(versus, difference)
 
     def draw(self, with_fits=True):
