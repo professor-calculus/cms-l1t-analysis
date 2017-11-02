@@ -8,32 +8,65 @@ from cmsl1t.io import to_root
 
 from rootpy.plotting import Legend, HistStack
 from rootpy.context import preserve_current_style
+import numpy as np
 
 
 class OnlineVsOffline(BasePlotter):
+
     def __init__(self, online_name, offline_name):
         name = ["online_vs_offline", online_name, offline_name]
         super(OnlineVsOffline, self).__init__("__".join(name))
         self.online_name = online_name
         self.offline_name = offline_name
 
-    def create_histograms(self,
-                          online_title, offline_title,
-                          pileup_bins, n_bins, low, high):
+    def create_histograms(
+        self, online_title, offline_title, pileup_bins, n_bins, low, high=400.,
+    ):
         """ This is not in an init function so that we can by-pass this in the
         case where we reload things from disk """
         self.online_title = online_title
         self.offline_title = offline_title
-        self.pileup_bins = bn.Sorted(pileup_bins, "pileup",
-                                     use_everything_bin=True)
+        self.pileup_bins = bn.Sorted(
+            pileup_bins, "pileup",
+            use_everything_bin=True,
+        )
 
-        name = ["onlineVsOffline", self.online_name, self.offline_name, "pu_{pileup}"]
-        name = "__".join(name)
-        title = " ".join([self.online_name, "vs.", self.offline_name, "in PU bin: {pileup}"])
+        nameTokens = [
+            "onlineVsOffline", self.online_name,
+            self.offline_name, "pu_{pileup}",
+        ]
+        name = "__".join(nameTokens)
+        title = " ".join(
+            [
+                self.online_name,
+                "vs.",
+                self.offline_name,
+                "in PU bin: {pileup}",
+            ]
+        )
         title = ";".join([title, self.offline_title, self.online_title])
-        self.plots = HistogramCollection([self.pileup_bins],
-                                         "Hist2D", n_bins, low, high, n_bins, low, high,
-                                         name=name, title=title)
+        if isinstance(low, np.ndarray):
+            self.plots = HistogramCollection(
+                [self.pileup_bins],
+                "Hist2D",
+                low,
+                low,
+                name=name,
+                title=title,
+            )
+        else:
+            self.plots = HistogramCollection(
+                [self.pileup_bins],
+                "Hist2D",
+                n_bins,
+                low,
+                high,
+                n_bins,
+                low,
+                high,
+                name=name,
+                title=title,
+            )
         self.filename_format = name
 
     def fill(self, pileup, offline, online):

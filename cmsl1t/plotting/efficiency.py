@@ -5,7 +5,7 @@ from cmsl1t.hist.factory import HistFactory
 import cmsl1t.hist.binning as bn
 from cmsl1t.utils.draw import draw, label_canvas
 from cmsl1t.utils.fit_efficiency import fit_efficiency
-
+import numpy as np
 
 from rootpy.plotting import Legend, HistStack, Efficiency
 from rootpy.context import preserve_current_style
@@ -24,16 +24,16 @@ setattr(Efficiency, "__iadd__", my_iadd)
 
 
 class EfficiencyPlot(BasePlotter):
+
     def __init__(self, online_name, offline_name):
         name = ["efficiency", online_name, offline_name]
         super(EfficiencyPlot, self).__init__("__".join(name))
         self.online_name = online_name
         self.offline_name = offline_name
 
-    def create_histograms(self,
-                          online_title, offline_title,
-                          pileup_bins, thresholds,
-                          n_bins, low, high):
+    def create_histograms(
+            self, online_title, offline_title, pileup_bins, thresholds,
+            n_bins, low, high=400, legend_title=""):
         """ This is not in an init function so that we can by-pass this in the
         case where we reload things from disk """
         self.online_title = online_title
@@ -41,6 +41,7 @@ class EfficiencyPlot(BasePlotter):
         self.pileup_bins = bn.Sorted(pileup_bins, "pileup",
                                      use_everything_bin=True)
         self.thresholds = bn.GreaterThan(thresholds, "threshold")
+        self.legend_title = legend_title
 
         name = ["efficiency", self.online_name, self.offline_name]
         name += ["thresh_{threshold}", "pu_{pileup}"]
@@ -52,12 +53,22 @@ class EfficiencyPlot(BasePlotter):
         def make_efficiency(labels):
             this_name = "efficiency" + name.format(**labels)
             this_title = title.format(**labels)
-            eff = asrootpy(ROOT.TEfficiency(this_name, this_title,
-                                            n_bins, low, high))
+            '''Checking type of 'low' to see whether it's int (x-range minimum)
+                    or array (bin edges) for constructing TEfficiency'''
+            if isinstance(low, np.ndarray):
+                eff = asrootpy(
+                    ROOT.TEfficiency(this_name, this_title, n_bins, low)
+                )
+            else:
+                eff = asrootpy(
+                    ROOT.TEfficiency(this_name, this_title, n_bins, low, high)
+                )
             eff.drawstyle = "EP"
             return eff
-        self.efficiencies = HistogramCollection([self.pileup_bins, self.thresholds],
-                                                make_efficiency)
+        self.efficiencies = HistogramCollection(
+            [self.pileup_bins, self.thresholds],
+            make_efficiency
+        )
 
     def fill(self, pileup, online, offline):
         efficiencies = {(pu, thresh): eff
@@ -78,20 +89,30 @@ class EfficiencyPlot(BasePlotter):
             self.__fit_efficiencies()
 
         # Overlay the "all" pile-up bin for each threshold
-        all_pileup_effs = self.efficiencies.get_bin_contents([bn.Base.everything])
+        all_pileup_effs = self.efficiencies.get_bin_contents(
+            [bn.Base.everything])
         hists = []
         labels = []
         fits = []
+        label_template = '{online_title} > {threshold} (GeV)'
         for threshold in all_pileup_effs.iter_all():
             if not isinstance(threshold, int):
                 continue
             hist = all_pileup_effs.get_bin_contents(threshold)
             hist.drawstyle = "EP"
             hists.append(hist)
-            labels.append("> " + str(self.thresholds.bins[threshold]))
+
+            label = label_template.format(
+                online_title=self.online_title,
+                threshold=self.thresholds.bins[threshold],
+            )
+            labels.append(label)
             if with_fits:
-                fits.append(self.fits.get_bin_contents([bn.Base.everything, threshold]))
-        self.__make_overlay("all", "all", hists, fits, labels, self.online_title)
+                fits.append(self.fits.get_bin_contents(
+                    [bn.Base.everything, threshold]))
+        self.__make_overlay(
+            "all", "all", hists, fits, labels, self.online_title,
+        )
 
         # Overlay individual pile-up bins for each threshold
         for threshold in self.thresholds:
@@ -105,9 +126,11 @@ class EfficiencyPlot(BasePlotter):
                 hist.drawstyle = "EP"
                 hists.append(hist)
                 if with_fits:
-                    fits.append(self.fits.get_bin_contents([pileup, threshold]))
+                    fits.append(self.fits.get_bin_contents(
+                        [pileup, threshold]))
                 labels.append(str(self.pileup_bins.bins[pileup]))
-            self.__make_overlay(pileup, threshold, hists, fits, labels, "PU bin")
+            self.__make_overlay(pileup, threshold, hists,
+                                fits, labels, "PU bin")
 
         # Produce the fit summary plot
         if with_fits:
@@ -117,8 +140,10 @@ class EfficiencyPlot(BasePlotter):
         def make_fit(labels):
             pileup_bin = labels["pileup"]
             threshold_bin = labels["threshold"]
-            efficiency = self.efficiencies.get_bin_contents([pileup_bin, threshold_bin])
-            params = fit_efficiency(efficiency, self.thresholds.get_bin_center(threshold_bin))
+            efficiency = self.efficiencies.get_bin_contents(
+                [pileup_bin, threshold_bin])
+            params = fit_efficiency(
+                efficiency, self.thresholds.get_bin_center(threshold_bin))
             return params
 
         # Actually make the efficiencies
@@ -139,10 +164,18 @@ class EfficiencyPlot(BasePlotter):
             label_canvas()
 
             # Add a legend
-            legend = Legend(len(hists), header=header,
-                            topmargin=0.35, entryheight=0.035)
+            legend = Legend(
+                len(hists),
+                header=self.legend_title,
+                topmargin=0.35,
+                rightmargin=0.3,
+                leftmargin=0.7,
+                textsize=0.035,
+                entryheight=0.035,
+            )
             for hist, label in zip(hists, labels):
                 legend.AddEntry(hist, label)
+            legend.SetBorderSize(0)
             legend.Draw()
 
             # Save canvas to file
