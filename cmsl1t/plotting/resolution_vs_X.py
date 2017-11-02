@@ -24,9 +24,8 @@ class ResolutionVsXPlot(BasePlotter):
         self.resolution_method = get_resolution_function(resolution_type)
 
     def create_histograms(
-        self, online_title, offline_title, versus_title, pileup_bins,
-        res_n_bins, res_low, res_high, vs_n_bins, vs_low, vs_high,
-    ):
+            self, online_title, offline_title, versus_title, pileup_bins,
+            res_n_bins, res_low, res_high, vs_n_bins, vs_low, vs_high):
         """ This is not in an init function so that we can by-pass this in the
         case where we reload things from disk """
         self.online_title = online_title

@@ -32,16 +32,8 @@ class EfficiencyPlot(BasePlotter):
         self.offline_name = offline_name
 
     def create_histograms(
-            self,
-            online_title,
-            offline_title,
-            pileup_bins,
-            thresholds,
-            n_bins,
-            low,
-            high=400,
-            legend_title="",
-    ):
+            self, online_title, offline_title, pileup_bins, thresholds,
+            n_bins, low, high=400, legend_title=""):
         """ This is not in an init function so that we can by-pass this in the
         case where we reload things from disk """
         self.online_title = online_title
@@ -65,22 +57,12 @@ class EfficiencyPlot(BasePlotter):
                     or array (bin edges) for constructing TEfficiency'''
             if isinstance(low, np.ndarray):
                 eff = asrootpy(
-                    ROOT.TEfficiency(
-                        this_name,
-                        this_title,
-                        n_bins,
-                        low,
-                    )
+                    ROOT.TEfficiency(this_name, this_title, n_bins, low)
                 )
             else:
                 eff = asrootpy(
-                    ROOT.TEfficiency(
-                        this_name,
-                        this_title,
-                        n_bins,
-                        low,
-                        high
-                    ))
+                    ROOT.TEfficiency(this_name, this_title, n_bins, low, high)
+                )
             eff.drawstyle = "EP"
             return eff
         self.efficiencies = HistogramCollection(
