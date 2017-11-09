@@ -1,0 +1,16 @@
+name: cms
+channels:
+- conda-forge
+- http://conda.anaconda.org/NLeSC
+- defaults
+dependencies:
+  - NLeSC::root=6.04=py2.7_gcc4.8.2
+  - NLeSC::root-numpy=4.4.0=root6.04_py2.7
+  - NLeSC::rootpy=master=py2.7
+  - nose
+  - numpy
+  - matplotlib
+  - pandas
+  - pytables
+  - python=2.7
+  - sphinx
