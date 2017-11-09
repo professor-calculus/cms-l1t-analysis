@@ -123,8 +123,10 @@ class Analyzer(BaseAnalyzer):
             setattr(self, name + "_eff_HR", eff_plot_HR)
             setattr(self, name + "_2D_HR", twoD_plot_HR)
 
-        for angle in sum_types[2:]:
+        for angle in sum_types:
             name = angle + "_phi"
+            if 'HTT' in angle:
+                continue
             res_plot = ResolutionPlot("phi", "L1", "offline_" + name)
             twoD_plot = OnlineVsOffline("L1", "offline_" + name)
             self.register_plotter(res_plot)
@@ -178,6 +180,22 @@ class Analyzer(BaseAnalyzer):
                 "MET_PF_NoMu_HF", "Offline PF MET with HF without Muons",
                 "L1 MET", 0, 400,
             ),
+            Config(
+                "jetET_B", "Offline Jet ET in Barrel Region",
+                "L1 Jet ET", 0, 400,
+            ),
+            Config(
+                "jetET_E", "Offline Jet ET in Endcap Region",
+                "L1 Jet ET", 0, 400,
+            ),
+            Config(
+                "jetET_BE", "Offline Jet ET in Central Region",
+                "L1 Jet ET", 0, 400,
+            ),
+            Config(
+                "jetET_HF", "Offline Jet ET in HF Region",
+                "L1 Jet ET", 0, 400,
+            ),
 
         ]
         self._plots_from_cfgs(cfgs, puBins)
@@ -226,10 +244,10 @@ class Analyzer(BaseAnalyzer):
             res_plot.build(cfg.on_title, cfg.off_title,
                            puBins, 50, -10, 10)
 
-            if not hasattr(self, cfg.name + "_phi_res"):
+            if not hasattr(self, cfg.name + prefix + "_phi_res"):
                 continue
-            res_plot = getattr(self, cfg.name + "_phi_res")
-            twoD_plot = getattr(self, cfg.name + "_phi_2D")
+            res_plot = getattr(self, cfg.name + prefix + "_phi_res")
+            twoD_plot = getattr(self, cfg.name + prefix + "_phi_2D")
             twoD_plot.build(
                 cfg.on_title + " Phi (rad)",
                 cfg.off_title + " Phi (rad)",
