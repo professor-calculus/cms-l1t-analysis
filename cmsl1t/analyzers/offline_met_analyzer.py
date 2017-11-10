@@ -326,3 +326,21 @@ class Analyzer(BaseAnalyzer):
                 )
 
         return True
+
+    def make_plots(self):
+        """
+        Custom version, does what the normal one does but also overlays whatever you like.
+        """
+        for plot in self.all_plots:
+            plot.draw()
+        getattr(self, 'HTT_eff').overlay_with_emu(getattr(self, 'HTT_Emu_eff'))
+        getattr(self, 'MET_eff').overlay_with_emu(getattr(self, 'MET_Emu_eff'))
+        getattr(self, 'MET_HF_eff').overlay_with_emu(getattr(self, 'MET_HF_Emu_eff'))
+        getattr(self, 'MET_PF_eff').overlay_with_emu(getattr(self, 'MET_PF_Emu_eff'))
+        getattr(self, 'MET_PF_NoMu_eff').overlay_with_emu(getattr(self, 'MET_PF_NoMu_Emu_eff'))
+        getattr(self, 'jetET_B_eff').overlay_with_emu(getattr(self, 'jetET_B_Emu_eff'))
+        getattr(self, 'jetET_E_eff').overlay_with_emu(getattr(self, 'jetET_E_Emu_eff'))
+        getattr(self, 'jetET_BE_eff').overlay_with_emu(getattr(self, 'jetET_BE_Emu_eff'))
+        getattr(self, 'jetET_HF_eff').overlay_with_emu(getattr(self, 'jetET_HF_Emu_eff'))
+
+        return True
