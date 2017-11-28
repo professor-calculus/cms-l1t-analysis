@@ -26,13 +26,38 @@ analysis:
   do_fit: True
   pu_type: 0PU12,13PU19,20PU
   pu_bins: [0,13,20,999]
+  thresholds:
+    HTT: [160, 220, 280, 340, 400]
+    HTT_Emu: [160, 218, 273, 333, 333]
+    MHT: [40, 60, 80, 100, 120]
+    MHT_Emu: [40, 60, 80, 100, 120]
+    MET_HF: [40, 60, 80, 100, 120]
+    MET_HF_Emu: [40, 60, 80, 99, 105]
+    MET: [40, 60, 80, 100, 120]
+    MET_Emu: [40, 60, 80, 99, 111]
+    MET_PF: [40, 60, 80, 100, 120]
+    MET_PF_Emu: [40, 60, 80, 99, 111]
+    MET_PF_NoMu: [40, 60, 80, 100, 120]
+    MET_PF_NoMu_Emu: [40, 60, 80, 99, 111]
+    MET_PF_HF: [40, 60, 80, 100, 120]
+    MET_PF_HF_Emu: [40, 60, 80, 99, 105]
+    MET_PF_NoMu_HF: [40, 60, 80, 100, 120]
+    MET_PF_NoMu_HF_Emu: [40, 60, 80, 99, 105]
+    singlel1JetEt: [35, 60, 90, 140, 180]
+    singlel1JetEt_Emu: [21, 44, 68, 103, 120]
+    doublel1JetEt: [35, 60, 90, 140, 180]
+    doublel1JetEt_Emu: [22, 45, 71, 106, 121]
+    triplel1JetEt: [35, 60, 90, 140, 180]
+    triplel1JetEt_Emu: [22, 47, 74, 108, 122]
+    quadl1JetEt: [35, 60, 90, 140, 180]
+    quadl1JetEt_Emu: [21, 48, 75, 109, 122]
   analyzers:
-     - cmsl1t.analyzers.offline_met_analyzer
+     - cmsl1t.analyzers.HW_Emu_constant_rate_turnons
   modifiers: []
   progress_bar:
     report_every: 1000
 
 output:
   template:
-     - output/offline_met_studies
+     - output/constant_rate_turnons
      - "{date}_Fill-{run_number}_{sample_name}_{trigger_name}"

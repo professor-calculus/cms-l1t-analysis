@@ -63,7 +63,7 @@ class EfficiencyPlot(BasePlotter):
                 eff = asrootpy(
                     ROOT.TEfficiency(this_name, this_title, n_bins, low, high)
                 )
-            eff.drawstyle = "EP"
+            eff.drawstyle = "HIST"
             return eff
         self.efficiencies = HistogramCollection(
             [self.pileup_bins, self.thresholds],
@@ -99,7 +99,7 @@ class EfficiencyPlot(BasePlotter):
             if not isinstance(threshold, int):
                 continue
             hist = all_pileup_effs.get_bin_contents(threshold)
-            hist.drawstyle = "EP"
+            hist.drawstyle = "P"
             hists.append(hist)
 
             label = label_template.format(
@@ -123,7 +123,7 @@ class EfficiencyPlot(BasePlotter):
                 if not isinstance(pileup, int):
                     continue
                 hist = self.efficiencies.get_bin_contents([pileup, threshold])
-                hist.drawstyle = "EP"
+                hist.drawstyle = "P"
                 hists.append(hist)
                 if with_fits:
                     fits.append(self.fits.get_bin_contents(
@@ -150,11 +150,14 @@ class EfficiencyPlot(BasePlotter):
         labels = []
         fits = []
         label_template = '{online_title} > {threshold} (GeV)'
+
+        ROOT.gStyle.SetErrorX(0.)
+
         for threshold in all_pileup_effs.iter_all():
             if not isinstance(threshold, int):
                 continue
             hist = all_pileup_effs.get_bin_contents(threshold)
-            hist.drawstyle = "EP"
+            hist.drawstyle = "P"
             hists.append(hist)
 
             label = label_template.format(
@@ -170,7 +173,7 @@ class EfficiencyPlot(BasePlotter):
             if not isinstance(threshold, int):
                 continue
             hist = emu_pileup_effs.get_bin_contents(threshold)
-            hist.drawstyle = "EP"
+            hist.drawstyle = "P"
             hist.markerstyle = 3
             hists.append(hist)
 
@@ -244,8 +247,8 @@ class EfficiencyPlot(BasePlotter):
                 topmargin=0.35,
                 rightmargin=0.3,
                 leftmargin=0.7,
-                textsize=0.02,
-                entryheight=0.02,
+                textsize=0.015,
+                entryheight=0.015,
             )
             for hist, label in zip(hists, labels):
                 legend.AddEntry(hist, label)

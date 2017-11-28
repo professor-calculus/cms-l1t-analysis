@@ -84,6 +84,10 @@ def __clean(hists):
     for hist in hists:
         if isinstance(hist, Efficiency):
             new = asrootpy(hist.CreateGraph("e0"))
+            np = new.GetN()
+            for i in range(1, new.GetN() + 1):
+                new.SetPointEXhigh(i,0.)
+                new.SetPointEXlow(i,0.)
             new.decorate(hist)
             hist = new
             hist.SetMarkerSize(0.5)
