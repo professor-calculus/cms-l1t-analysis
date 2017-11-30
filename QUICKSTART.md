@@ -96,10 +96,11 @@ Lines in the yaml give the paths for the NTuples, starting with 'root://' and en
 Further down the yaml file you can specify relative/absolute paths for the output.
 
 You'll notice in the analyser section we have something like
+```
 thresholds:
   HTT: [val1, val2, ...]
   etc...
-
+```
 Change these to the thresholds you want for HW quantities.
 
 Once you're ready, run as so:
@@ -120,11 +121,12 @@ For example, you could do:
 Then one can combine the output with the command which will be given to you at this stage.
 
 Finally, the output of the code contains something like:
+```
 thresholds:
   HTT: [val1, val2, ...]
   HTT_Emu: [val1_, val2_, ...]
   etc...
-
+```
 Copy this, being careful to keep the formatting...
 
 Now we take a look at config/HW_Emu_constant_rate_turnons.yaml:
