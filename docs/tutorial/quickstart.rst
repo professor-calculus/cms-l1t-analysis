@@ -102,3 +102,73 @@ Once this submits the jobs it will tell you how to combine them together later :
 .. code-block:: bash
 
   cmsl1t_dirty_batch -c config/offline_met_studies.yaml -f <ntuple_root_files_per_job>
+
+
+HW vs Emu at Constant Rate:
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The code now has facility to calculate for a given HW L1 threshold the threshold at which the Emulated quantity gives the same rate.
+
+Then, we may plot the turnons etc for HW and Emu at their respective rates together, using the new analysers.
+
+To run this, first we want the config file `configs/HW_Emu_jet_rates.yaml`.
+
+Lines in the yaml give the paths for the NTuples, starting with 'root://' and ending with '/L1NTuple_*.root' -- You should edit these to point to the ZeroBias NTuples you're running on.
+
+Further down the yaml file you can specify relative/absolute paths for the output.
+
+You'll notice in the analyser section we have something like
+thresholds:
+  HTT: [val1, val2, ...]
+  etc...
+
+Change these to the thresholds you want for HW quantities.
+
+Once you're ready, run as so:
+
+.. code-block:: bash
+
+  cmsl1t -c config/HW_Emu_jet_rates.yaml -n <no_of_entries>
+
+
+Or, for large running you can run on lxbatch with the NTuple list broken up into many jobs using the command cmsl1t_dirty_batch. Files per job specifiable with -f <number>.
+Try to keep max ~1000 jobs else combining later is a nightmare, but also if <number> is greater than baout 4 you might struggle for walltime per job.
+
+For example, you could do:
+
+.. code-block:: bash
+
+  cmsl1t_dirty_batch -c config/HW_Emu_jet_rates.yaml -f 4
+
+Then one can combine the output with the command which will be given to you at this stage.
+
+Finally, the output of the code contains something like:
+thresholds:
+  HTT: [val1, val2, ...]
+  HTT_Emu: [val1_, val2_, ...]
+  etc...
+
+Copy this, being careful to keep the formatting...
+
+Now we take a look at config/HW_Emu_constant_rate_turnons.yaml:
+
+There are similar lines in here. Set the input ntuples to the SingleMu you wish to run on.
+
+Now again in the analyser section we have the thresholds listed in the same format, but now with emulated quantities too.
+
+Replace this with the stuff you just copied -- this format is interpreted as a python dictionary, so whitespace matters. thresholds: should be indented 2 spaces wrt lines above,
+and HTT etc indented 2 spaces wrt thresholds.
+
+Finally, we may run this like we did the previous step:
+
+.. code-block:: bash
+
+  cmsl1t_dirty_batch -c config/HW_Emu_constant_rate_turnons.yaml -f 4
+
+Or of course
+
+.. code-block:: bash
+
+  cmsl1t -c config/HW_Emu_jet_rates.yaml -n <number_of_events>
+
+if one wants a quick test job.
