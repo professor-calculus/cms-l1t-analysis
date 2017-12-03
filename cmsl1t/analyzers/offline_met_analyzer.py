@@ -242,7 +242,7 @@ class Analyzer(BaseAnalyzer):
                 continue
             res_plot = getattr(self, cfg.name + prefix + "_res" + suffix)
             res_plot.build(cfg.on_title, cfg.off_title,
-                           puBins, 50, -10, 10)
+                           puBins, 50, -10, 10, legend_title=ETA_RANGES.get(cfg.name, ""))
 
             if not hasattr(self, cfg.name + prefix + "_phi_res"):
                 continue
@@ -262,6 +262,7 @@ class Analyzer(BaseAnalyzer):
                 50,
                 -2,
                 2,
+                legend_title=ETA_RANGES.get(cfg.name, ""),
             )
 
     def fill_histograms(self, entry, event):
@@ -342,5 +343,15 @@ class Analyzer(BaseAnalyzer):
         getattr(self, 'jetET_E_eff').overlay_with_emu(getattr(self, 'jetET_E_Emu_eff'))
         getattr(self, 'jetET_BE_eff').overlay_with_emu(getattr(self, 'jetET_BE_Emu_eff'))
         getattr(self, 'jetET_HF_eff').overlay_with_emu(getattr(self, 'jetET_HF_Emu_eff'))
+
+        getattr(self, 'HTT_res').overlay_with_emu(getattr(self, 'HTT_Emu_res'))
+        getattr(self, 'MET_res').overlay_with_emu(getattr(self, 'MET_Emu_res'))
+        getattr(self, 'MET_HF_res').overlay_with_emu(getattr(self, 'MET_HF_Emu_res'))
+        getattr(self, 'MET_PF_res').overlay_with_emu(getattr(self, 'MET_PF_Emu_res'))
+        getattr(self, 'MET_PF_NoMu_res').overlay_with_emu(getattr(self, 'MET_PF_NoMu_Emu_res'))
+        getattr(self, 'jetET_B_res').overlay_with_emu(getattr(self, 'jetET_B_Emu_res'))
+        getattr(self, 'jetET_E_res').overlay_with_emu(getattr(self, 'jetET_E_Emu_res'))
+        getattr(self, 'jetET_BE_res').overlay_with_emu(getattr(self, 'jetET_BE_Emu_res'))
+        getattr(self, 'jetET_HF_res').overlay_with_emu(getattr(self, 'jetET_HF_Emu_res'))
 
         return True

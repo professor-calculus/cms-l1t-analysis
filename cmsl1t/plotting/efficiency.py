@@ -59,10 +59,12 @@ class EfficiencyPlot(BasePlotter):
                 eff = asrootpy(
                     ROOT.TEfficiency(this_name, this_title, n_bins, low)
                 )
+                self.x_max = 1700
             else:
                 eff = asrootpy(
                     ROOT.TEfficiency(this_name, this_title, n_bins, low, high)
                 )
+                self.x_max = high
             eff.drawstyle = "HIST"
             return eff
         self.efficiencies = HistogramCollection(
@@ -230,6 +232,7 @@ class EfficiencyPlot(BasePlotter):
     def __make_overlay(self, pileup, threshold, hists, fits, labels, header):
         with preserve_current_style():
             # Draw each efficiency (with fit)
+
             canvas = draw(hists, draw_args={"xtitle": self.offline_title,
                                             "ytitle": "Efficiency"})
             if len(fits) > 0:
@@ -254,6 +257,20 @@ class EfficiencyPlot(BasePlotter):
                 legend.AddEntry(hist, label)
             legend.SetBorderSize(0)
             legend.Draw()
+
+            xmax = self.x_max
+
+            for val in [0.25, 0.5, 0.75, 1.]:
+                line = ROOT.TLine(0., val, xmax, val)
+                line.SetLineStyle("dashed")
+                line.SetLineColor(15)
+                line.Draw()
+
+            for val in range(150, xmax, 150):
+                line = ROOT.TLine(val, 0., val, 1.)
+                line.SetLineStyle("dashed")
+                line.SetLineColor(15)
+                line.Draw()
 
             # Save canvas to file
             name = self.filename_format.format(pileup=pileup,
