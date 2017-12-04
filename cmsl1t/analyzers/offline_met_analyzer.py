@@ -242,7 +242,7 @@ class Analyzer(BaseAnalyzer):
                 continue
             res_plot = getattr(self, cfg.name + prefix + "_res" + suffix)
             res_plot.build(cfg.on_title, cfg.off_title,
-                           puBins, 50, -10, 10, legend_title=ETA_RANGES.get(cfg.name, ""))
+                           puBins, 100, -5, 5, legend_title=ETA_RANGES.get(cfg.name, ""))
 
             if not hasattr(self, cfg.name + prefix + "_phi_res"):
                 continue
@@ -251,7 +251,7 @@ class Analyzer(BaseAnalyzer):
             twoD_plot.build(
                 cfg.on_title + " Phi (rad)",
                 cfg.off_title + " Phi (rad)",
-                puBins, 50,
+                puBins, 100,
                 -pi,
                 2 * pi,
             )
@@ -259,9 +259,9 @@ class Analyzer(BaseAnalyzer):
                 cfg.on_title + " Phi",
                 cfg.off_title + " Phi",
                 puBins,
-                50,
-                -2,
-                2,
+                100,
+                -2 * pi,
+                2 * pi,
                 legend_title=ETA_RANGES.get(cfg.name, ""),
             )
 

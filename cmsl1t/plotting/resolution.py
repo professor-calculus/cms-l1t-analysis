@@ -8,6 +8,7 @@ from cmsl1t.recalc.resolution import get_resolution_function
 
 from rootpy.context import preserve_current_style
 from rootpy.plotting import Legend
+from rootpy import ROOT
 
 
 class ResolutionPlot(BasePlotter):
@@ -50,10 +51,10 @@ class ResolutionPlot(BasePlotter):
             if pile_up == bn.Base.everything:
                 hist.linestyle = "dashed"
                 hist.drawstyle = "hist"
-                label = "Everything"
+                label = "All PU"
             elif isinstance(pile_up, int):
                 hist.drawstyle = "hist"
-                label = "PU ~ {:.0f}".format(self.pileup_bins.get_bin_center(pile_up))
+                label = "{:.0f} \\leq PU < {:.0f}".format(self.pileup_bins.get_bin_lower(pile_up), self.pileup_bins.get_bin_upper(pile_up))
             else:
                 continue
             hist.SetMarkerSize(0.5)
@@ -125,6 +126,13 @@ class ResolutionPlot(BasePlotter):
                 legend.AddEntry(hist, label)
             legend.SetBorderSize(0)
             legend.Draw()
+
+            ymax = 1.2 * hists[-1].GetMaximum()
+
+            line = ROOT.TLine(0., 0., 0., ymax)
+            line.SetLineStyle("dashed")
+            line.SetLineColor(15)
+            line.Draw()
 
             # Save canvas to file
             name = self.filename_format.format(pileup="all")
