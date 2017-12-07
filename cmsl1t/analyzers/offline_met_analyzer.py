@@ -69,7 +69,7 @@ def ExtractSums(event):
         MET_PF_NoMu=Met(event.sums.pfMetNoMu, event.sums.pfMetNoMuPhi),
         MET_PF_HF=Met(event.sums.met, event.sums.metPhi),
         MET_PF_NoMu_HF=Met(event.sums.pfMetNoMu, event.sums.pfMetNoMuPhi),
-        HTT_Emu=Sum(event.sums.Ht),
+        HTT_Emu=Sum(event.sums.caloHt),
         MHT_Emu=Met(event.sums.mHt, event.sums.mHtPhi),
         MET_HF_Emu=Met(event.sums.caloMet, event.sums.caloMetPhi),
         MET_Emu=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE),
@@ -226,7 +226,7 @@ class Analyzer(BaseAnalyzer):
             thresholds = THRESHOLDS.get(cfg.name)
             params = [
                 cfg.on_title, cfg.off_title + " (GeV)", puBins, thresholds,
-                50, cfg.min, cfg.max,
+                200, cfg.min, cfg.max,
             ]
             if high_range:
                 params = [
@@ -289,9 +289,9 @@ class Analyzer(BaseAnalyzer):
             l1Jet = event.getMatchedL1Jet(recoJet, l1Type='EMU')
             if not l1Jet:
                 continue
-            if recoJet.etCorr > 30.:
+            if recoJet.caloEtCorr > 30.:
                 self.res_vs_eta_CentralJets.fill(
-                    pileup, recoJet.eta, recoJet.etCorr, l1Jet.et)
+                    pileup, recoJet.caloEta, recoJet.caloEtCorr, l1Jet.et)
 
         leadingRecoJet = event.getLeadingRecoJet()
         if not leadingRecoJet:
@@ -302,9 +302,9 @@ class Analyzer(BaseAnalyzer):
             return True
 
         fillRegions = []
-        if abs(leadingRecoJet.eta) < 1.479:
+        if abs(leadingRecoJet.caloEta) < 1.479:
             fillRegions = ['B', 'BE']
-        elif abs(leadingRecoJet.eta) < 3.0:
+        elif abs(leadingRecoJet.caloEta) < 3.0:
             fillRegions = ['E', 'BE']
         else:
             fillRegions = ['HF']
@@ -312,7 +312,7 @@ class Analyzer(BaseAnalyzer):
             for suffix in ['_eff', '_res', '_2D', '_eff_HR', '_2D_HR']:
                 name = 'jetET_{0}_Emu{1}'.format(region, suffix)
                 getattr(self, name).fill(
-                    pileup, leadingRecoJet.etCorr, l1EmuJet.et,
+                    pileup, leadingRecoJet.caloEtCorr, l1EmuJet.et,
                 )
 
         l1Jet = event.getMatchedL1Jet(leadingRecoJet, l1Type='HW')

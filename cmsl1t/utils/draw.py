@@ -3,7 +3,7 @@ from rootpy.plotting.hist import _HistBase, Efficiency
 from rootpy.plotting.graph import _GraphBase
 from rootpy.plotting import Style, Canvas
 from rootpy.context import preserve_current_style
-from rootpy.ROOT import gStyle, TLatex
+from rootpy.ROOT import gStyle, TLatex, TStyle
 from rootpy import asrootpy
 import rootpy.ROOT as ROOT
 from exceptions import RuntimeError
@@ -84,13 +84,14 @@ def __clean(hists):
     for hist in hists:
         if isinstance(hist, Efficiency):
             new = asrootpy(hist.CreateGraph("e0"))
-            np = new.GetN()
-            for i in range(1, new.GetN() + 1):
-                new.SetPointEXhigh(i,0.)
-                new.SetPointEXlow(i,0.)
+            #for i in range(1, new.GetN() + 1):
+                #new.SetPointEXhigh(i,0.)
+                #new.SetPointEXlow(i,0.)
             new.decorate(hist)
             hist = new
             hist.SetMarkerSize(0.5)
+            hist.SetLineWidth(1)
+            gStyle.SetLineScalePS(1)
         cleaned_hists.append(hist)
 
     axis_hist = cleaned_hists[0]

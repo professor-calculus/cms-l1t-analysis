@@ -88,7 +88,7 @@ class Event(object):
 
         if "jetReco" in tree_names:
             self._jets = []
-            for i in range(self._jetReco.Jet.nJets):
+            for i in range(self._jetReco.Jet.nCaloJets):
                 self._jets.append(Jet(self._jetReco.Jet, i))
 
     def _readUpgradeSums(self):
@@ -154,7 +154,7 @@ class Event(object):
         '''
         goodJets = filter(jetFilter, self._jets)
         sorted_jets = sorted(
-            goodJets, key=lambda jet: jet.etCorr, reverse=True)
+            goodJets, key=lambda jet: jet.caloEtCorr, reverse=True)
         return sorted_jets
 
     def getLeadingRecoJet(self, jetFilter=defaultJetFilter):
@@ -162,7 +162,7 @@ class Event(object):
         if not goodJets:
             return None
         leadingRecoJet = goodJets[0]
-        if leadingRecoJet.etCorr > 10.0:
+        if leadingRecoJet.caloEtCorr > 10.0:
             return leadingRecoJet
         return None
 
@@ -220,7 +220,7 @@ class Jet(object):
         # this could be simplified with a list of attributes
         read_attributes = [
             'etCorr', 'muMult', 'eta', 'phi', 'nhef', 'pef', 'mef', 'chMult',
-            'elMult', 'nhMult', 'phMult', 'chef', 'eef'
+            'elMult', 'nhMult', 'phMult', 'chef', 'eef', 'caloEtCorr', 'caloEta'
         ]
         for attr in read_attributes:
             setattr(self, attr, getattr(jets, attr)[index])

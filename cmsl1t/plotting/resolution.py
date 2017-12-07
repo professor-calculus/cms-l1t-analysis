@@ -132,7 +132,7 @@ class ResolutionPlot(BasePlotter):
             line = ROOT.TLine(0., 0., 0., ymax)
             line.SetLineStyle("dashed")
             line.SetLineColor(15)
-            line.Draw()
+            #line.Draw()
 
             # Save canvas to file
             name = self.filename_format.format(pileup="all")

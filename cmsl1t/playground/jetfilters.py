@@ -5,8 +5,8 @@ def jetFilterNoHF(jet):
     '''
         also a lot of potential for simplification
     '''
-    isForwardJet = geo.is_in_region('HF', jet.eta)
-    innerJet = abs(jet.eta) <= 2.4
+    isForwardJet = geo.is_in_region('HF', jet.caloEta)
+    innerJet = abs(jet.caloEta) <= 2.4
     reject_if = [
         jet.muMult != 0,
         isForwardJet,
@@ -24,4 +24,4 @@ def jetFilterNoHF(jet):
 
 
 def defaultJetFilter(jet):
-    return (abs(jet.eta) > 3.0 or jetFilterNoHF(jet)) and jet.etCorr > 30.
+    return (abs(jet.caloEta) > 3.0 or jetFilterNoHF(jet)) and jet.caloEtCorr > 30.
