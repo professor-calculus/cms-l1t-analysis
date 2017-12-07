@@ -61,7 +61,7 @@ for i in ['E', 'BE', 'HF']:
 
 def ExtractSums(event):
     offline = dict(
-        HTT=Sum(event.sums.Ht),
+        HTT=Sum(event.sums.caloHt),
         MHT=Met(event.sums.mHt, event.sums.mHtPhi),
         MET_HF=Met(event.sums.caloMet, event.sums.caloMetPhi),
         MET=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE),
@@ -323,7 +323,7 @@ class Analyzer(BaseAnalyzer):
             for suffix in ['_eff', '_res', '_2D', '_eff_HR', '_2D_HR']:
                 name = 'jetET_{0}{1}'.format(region, suffix)
                 getattr(self, name).fill(
-                    pileup, leadingRecoJet.etCorr, l1Jet.et,
+                    pileup, leadingRecoJet.caloEtCorr, l1Jet.et,
                 )
 
         return True

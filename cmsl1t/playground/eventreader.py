@@ -178,8 +178,8 @@ class Event(object):
         minDeltaR = 0.3
         closestJet = None
         for l1Jet in l1Jets:
-            dEta = recoJet.eta - l1Jet.eta
-            dPhi = recoJet.phi - l1Jet.phi
+            dEta = recoJet.caloEta - l1Jet.eta
+            dPhi = recoJet.caloPhi - l1Jet.phi
             dR = math.sqrt(dEta**2 + dPhi**2)
             if dR < minDeltaR:
                 minDeltaR = dR
@@ -220,7 +220,7 @@ class Jet(object):
         # this could be simplified with a list of attributes
         read_attributes = [
             'etCorr', 'muMult', 'eta', 'phi', 'nhef', 'pef', 'mef', 'chMult',
-            'elMult', 'nhMult', 'phMult', 'chef', 'eef', 'caloEtCorr', 'caloEta'
+            'elMult', 'nhMult', 'phMult', 'chef', 'eef', 'caloEtCorr', 'caloEta', 'caloPhi'
         ]
         for attr in read_attributes:
             setattr(self, attr, getattr(jets, attr)[index])
