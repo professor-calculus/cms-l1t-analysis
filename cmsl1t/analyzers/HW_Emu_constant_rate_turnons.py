@@ -49,7 +49,7 @@ HIGH_RANGE_BINS = np.asarray(HIGH_RANGE_BINS, 'd')
 
 def ExtractSums(event):
     offline = dict(
-        HTT=Sum(event.sums.Ht),
+        HTT=Sum(event.sums.caloHt),
         MHT=Met(event.sums.mHt, event.sums.mHtPhi),
         MET_HF=Met(event.sums.caloMet, event.sums.caloMetPhi),
         MET=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE),
@@ -57,7 +57,7 @@ def ExtractSums(event):
         MET_PF_NoMu=Met(event.sums.pfMetNoMu, event.sums.pfMetNoMuPhi),
         MET_PF_HF=Met(event.sums.met, event.sums.metPhi),
         MET_PF_NoMu_HF=Met(event.sums.pfMetNoMu, event.sums.pfMetNoMuPhi),
-        HTT_Emu=Sum(event.sums.Ht),
+        HTT_Emu=Sum(event.sums.caloHt),
         MHT_Emu=Met(event.sums.mHt, event.sums.mHtPhi),
         MET_HF_Emu=Met(event.sums.caloMet, event.sums.caloMetPhi),
         MET_Emu=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE),
@@ -276,7 +276,7 @@ class Analyzer(BaseAnalyzer):
                 getattr(self, name + "_phi_res").fill(pileup, off.phi, on.phi)
                 getattr(self, name + "_phi_2D").fill(pileup, off.phi, on.phi)
 
-        goodJets = event.goodJets()
+        goodJets = event.goodJets(jetFilter=None)
 
         for recoJet in goodJets:
             l1Jet = event.getMatchedL1Jet(recoJet, l1Type='EMU')
@@ -286,7 +286,7 @@ class Analyzer(BaseAnalyzer):
                 self.res_vs_eta_CentralJets.fill(
                     pileup, recoJet.eta, recoJet.etCorr, l1Jet.et)
 
-        leadingRecoJet = event.getLeadingRecoJet()
+        leadingRecoJet = event.getLeadingRecoCaloJet()
         if not leadingRecoJet:
             return True
 

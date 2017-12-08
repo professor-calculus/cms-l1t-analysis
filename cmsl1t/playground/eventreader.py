@@ -88,8 +88,11 @@ class Event(object):
 
         if "jetReco" in tree_names:
             self._jets = []
-            for i in range(self._jetReco.Jet.nCaloJets):
+            for i in range(self._jetReco.Jet.nJets):
                 self._jets.append(Jet(self._jetReco.Jet, i))
+            self._caloJets = []
+            for i in range(self._jetReco.Jet.nCaloJets):
+                self._caloJets.append(Jet(self._jetReco.Jet, i))
 
     def _readUpgradeSums(self):
         self._readSums(self._upgrade, prefix='L1')
@@ -152,9 +155,11 @@ class Event(object):
         '''
             filters and ET orders the jet collection
         '''
-        goodJets = filter(jetFilter, self._jets)
+        goodJets = self._jets
+        if jetFilter:
+            goodJets = filter(jetFilter, self._jets)
         sorted_jets = sorted(
-            goodJets, key=lambda jet: jet.caloEtCorr, reverse=True)
+            goodJets, key=lambda jet: jet.etCorr, reverse=True)
         return sorted_jets
 
     def getLeadingRecoJet(self, jetFilter=defaultJetFilter):
@@ -162,9 +167,13 @@ class Event(object):
         if not goodJets:
             return None
         leadingRecoJet = goodJets[0]
-        if leadingRecoJet.caloEtCorr > 10.0:
+        if leadingRecoJet.etCorr > 10.0:
             return leadingRecoJet
         return None
+
+    def getLeadingRecoCaloJet(self):
+        leadingRecoCaloJet = self.getLeadingRecoJet(jetFilter=None)
+        return leadingRecoCaloJet
 
     def getMatchedL1Jet(self, recoJet, l1Type='HW'):
         l1Jets = None
@@ -178,8 +187,8 @@ class Event(object):
         minDeltaR = 0.3
         closestJet = None
         for l1Jet in l1Jets:
-            dEta = recoJet.caloEta - l1Jet.eta
-            dPhi = recoJet.caloPhi - l1Jet.phi
+            dEta = recoJet.eta - l1Jet.eta
+            dPhi = recoJet.phi - l1Jet.phi
             dR = math.sqrt(dEta**2 + dPhi**2)
             if dR < minDeltaR:
                 minDeltaR = dR
@@ -220,7 +229,7 @@ class Jet(object):
         # this could be simplified with a list of attributes
         read_attributes = [
             'etCorr', 'muMult', 'eta', 'phi', 'nhef', 'pef', 'mef', 'chMult',
-            'elMult', 'nhMult', 'phMult', 'chef', 'eef', 'caloEtCorr', 'caloEta', 'caloPhi'
+            'elMult', 'nhMult', 'phMult', 'chef', 'eef'
         ]
         for attr in read_attributes:
             setattr(self, attr, getattr(jets, attr)[index])
@@ -234,6 +243,24 @@ class Jet(object):
     @property
     def allMult(self):
         return self.sumMult + self.nhMult + self.phMult
+
+
+class CaloJet(object):
+    '''
+        Create a simple python wrapper for
+        L1Analysis::L1AnalysisRecoJetDataFormat
+    '''
+
+    def __init__(self, jets, index):
+        # this could be simplified with a list of attributes
+        read_attributes = dict(
+            et = 'caloEt',
+            etCorr = 'caloEtCorr',
+            eta = 'caloEta',
+            phi = 'caloPhi',
+        )
+        for outattr, attr in read_attributes.items():
+            setattr(self, outattr, getattr(jets, attr)[index])
 
 
 class L1Jet(object):
