@@ -58,6 +58,7 @@ class ResolutionPlot(BasePlotter):
             else:
                 continue
             hist.SetMarkerSize(0.5)
+            hist.SetLineWidth(2)
             hists.append(hist)
             labels.append(label)
             # if with_fits:
@@ -65,6 +66,9 @@ class ResolutionPlot(BasePlotter):
         self.__make_overlay(hists, fits, labels, "Number of events")
 
         normed_hists = [hist / hist.integral() if hist.integral() != 0 else hist.Clone() for hist in hists]
+        for hist in normed_hists:
+            if hist.integral != 0:
+                hist.GetYaxis().SetRangeUser(-0.1, 1.1)
         self.__make_overlay(normed_hists, fits, labels, "Fraction of events", "__shapes")
 
 
@@ -79,7 +83,7 @@ class ResolutionPlot(BasePlotter):
                 label = "HW, all PU"
             else:
                 continue
-            hist.SetLineWidth(3)
+            hist.SetLineWidth(2)
             hists.append(hist)
             labels.append(label)
 
@@ -90,7 +94,7 @@ class ResolutionPlot(BasePlotter):
                 label = "Emu, all PU"
             else:
                 continue
-            hist.SetLineWidth(3)
+            hist.SetLineWidth(2)
             hists.append(hist)
             labels.append(label)
 
