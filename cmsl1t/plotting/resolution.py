@@ -55,6 +55,7 @@ class ResolutionPlot(BasePlotter):
             else:
                 continue
             hist.SetMarkerSize(0.5)
+            hist.SetLineWidth(2)
             hists.append(hist)
             labels.append(label)
             # if with_fits:
@@ -62,7 +63,42 @@ class ResolutionPlot(BasePlotter):
         self.__make_overlay(hists, fits, labels, "Number of events")
 
         normed_hists = [hist / hist.integral() if hist.integral() != 0 else hist.Clone() for hist in hists]
+        for hist in normed_hists:
+            if hist.integral != 0:
+                hist.GetYaxis().SetRangeUser(-0.1, 1.1)
         self.__make_overlay(normed_hists, fits, labels, "Fraction of events", "__shapes")
+
+
+    def overlay_with_emu(self, emu_plotter, with_fits=False):
+        hists = []
+        labels = []
+        fits = []
+        for (pile_up, ), hist in self.plots.flat_items_all():
+            if pile_up == bn.Base.everything:
+                hist.SetLineStyle(1)
+                hist.drawstyle = "hist"
+                label = "HW, all PU"
+            else:
+                continue
+            hist.SetLineWidth(2)
+            hists.append(hist)
+            labels.append(label)
+
+        for (pile_up, ), hist in emu_plotter.plots.flat_items_all():
+            if pile_up == bn.Base.everything:
+                hist.SetLineStyle(1)
+                hist.drawstyle = "hist"
+                label = "Emu, all PU"
+            else:
+                continue
+            hist.SetLineWidth(2)
+            hists.append(hist)
+            labels.append(label)
+
+        self.__make_overlay(hists, fits, labels, "Number of events", "__Overlay_Emu")
+
+        normed_hists = [hist / hist.integral() if hist.integral() != 0 else hist.Clone() for hist in hists]
+        self.__make_overlay(normed_hists, fits, labels, "Fraction of events", "__shapes__Overlay_Emu")
 
     def __make_overlay(self, hists, fits, labels, ytitle, suffix=""):
         with preserve_current_style():

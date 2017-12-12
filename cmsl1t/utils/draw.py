@@ -87,6 +87,10 @@ def __clean(hists):
             new.decorate(hist)
             hist = new
             hist.SetMarkerSize(0.5)
+            hist.SetLineWidth(1)
+            gStyle.SetLineScalePS(1)
+        else:
+            gStyle.SetLineScalePS(3)
         cleaned_hists.append(hist)
 
     axis_hist = cleaned_hists[0]
