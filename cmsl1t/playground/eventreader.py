@@ -5,6 +5,7 @@ import os
 import math
 
 from jetfilters import defaultJetFilter
+from metfilters import pfMetFilter
 from cmsl1t.playground.cache import CachedIndexedTree
 import ROOT
 from collections import namedtuple
@@ -90,6 +91,9 @@ class Event(object):
             self._jets = []
             for i in range(self._jetReco.Jet.nJets):
                 self._jets.append(Jet(self._jetReco.Jet, i))
+            self._caloJets = []
+            for i in range(self._jetReco.Jet.nCaloJets):
+                self._caloJets.append(CaloJet(self._jetReco.Jet, i))
 
     def _readUpgradeSums(self):
         self._readSums(self._upgrade, prefix='L1')
@@ -123,8 +127,7 @@ class Event(object):
         print('>>>> nHCALTP (emu)', self._emuCaloTowers.CaloTP.nHCALTP)
         print('>>>> nJets', self._jetReco.Jet.nJets)
         print('>>>> met', self._jetReco.Sums.met)
-        print('>>>> hbheNoiseFilter',
-              self._metFilterReco.MetFilters.hbheNoiseFilter)
+        print('>>>> metFilter', pfMetFilter(self))
         print('>>>> nMuons', self._muonReco.Muon.nMuons)
         print('>>>> nVtx', self._recoTree.Vertex.nVtx)
         print('>>>> nJets (upgrade)', self._upgrade.nJets)
@@ -201,9 +204,6 @@ class Event(object):
     @property
     def sums(self):
         return self._jetReco.Sums
-
-    def passesMETFilter(self):
-        return self._metFilterReco.MetFilters.hbheNoiseFilter
 
     @property
     def l1Sums(self):
