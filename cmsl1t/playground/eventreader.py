@@ -4,7 +4,7 @@ import six
 import os
 import math
 
-from jetfilters import defaultJetFilter
+from cmsl1t.playground.jetfilters import pfJetFilter
 from metfilters import pfMetFilter
 from cmsl1t.playground.cache import CachedIndexedTree
 import ROOT
@@ -151,7 +151,7 @@ class Event(object):
         # for m in members:
         #     print('>' * 6, m[0], ':', m[1])
 
-    def goodJets(self, jetFilter=defaultJetFilter):
+    def goodJets(self, jetFilter=pfJetFilter):
         '''
             filters and ET orders the jet collection
         '''
@@ -160,7 +160,7 @@ class Event(object):
             goodJets, key=lambda jet: jet.etCorr, reverse=True)
         return sorted_jets
 
-    def getLeadingRecoJet(self, jetFilter=defaultJetFilter):
+    def getLeadingRecoJet(self, jetFilter=pfJetFilter):
         goodJets = self.goodJets(jetFilter)
         if not goodJets:
             return None
@@ -176,7 +176,7 @@ class Event(object):
         if l1Type == 'EMU':
             l1Jets = self._l1EmuJets
 
-        if not l1Jets or not recoJet:
+        if not recoJet:
             return None
         minDeltaR = 0.3
         closestJet = None
@@ -225,15 +225,22 @@ class Jet(object):
         for attr in read_attributes:
             setattr(self, attr, getattr(jets, attr)[index])
 
-    @property
-    def sumMult(self):
-        return self.chMult + self.chMult + self.elMult
-        # not
-        # return self.chMult + self.muMult + self.elMult ?
+class CaloJet(object):
+    '''
+        Create a simple python wrapper for
+        L1Analysis::L1AnalysisRecoJetDataFormat
+    '''
 
-    @property
-    def allMult(self):
-        return self.sumMult + self.nhMult + self.phMult
+    def __init__(self, jets, index):
+        # this could be simplified with a list of attributes
+        read_attributes = dict(
+            et = 'caloEt',
+            etCorr = 'caloEtCorr',
+            eta = 'caloEta',
+            phi = 'caloPhi',
+        )
+        for outattr, attr in read_attributes.items():
+            setattr(self, outattr, getattr(jets, attr)[index])
 
 
 class L1Jet(object):

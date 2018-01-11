@@ -5,6 +5,7 @@ from cmsl1t.plotting.onlineVsOffline import OnlineVsOffline
 from cmsl1t.plotting.resolution import ResolutionPlot
 from cmsl1t.plotting.resolution_vs_X import ResolutionVsXPlot
 from cmsl1t.playground.metfilters import pfMetFilter
+from cmsl1t.playground.jetfilters import pfJetFilter
 import cmsl1t.recalc.met as recalc
 from cmsl1t.playground.eventreader import Met, Sum
 from math import pi
@@ -281,7 +282,7 @@ class Analyzer(BaseAnalyzer):
                 getattr(self, name + "_phi_res").fill(pileup, off.phi, on.phi)
                 getattr(self, name + "_phi_2D").fill(pileup, off.phi, on.phi)
 
-        goodJets = event.goodJets()
+        goodJets = event.goodJets(jetFilter=pfJetFilter)
 
         for recoJet in goodJets:
             l1Jet = event.getMatchedL1Jet(recoJet, l1Type='EMU')
@@ -296,8 +297,10 @@ class Analyzer(BaseAnalyzer):
             return True
 
         l1EmuJet = event.getMatchedL1Jet(leadingRecoJet, l1Type='EMU')
-        if not l1EmuJet:
-            return True
+        if l1EmuJet:
+            l1EmuJetEt = l1EmuJet.et
+        else:
+            l1EmuJetEt = 0.
 
         fillRegions = []
         if abs(leadingRecoJet.eta) < 1.479:
@@ -310,18 +313,20 @@ class Analyzer(BaseAnalyzer):
             for suffix in ['_eff', '_res', '_2D', '_eff_HR', '_2D_HR']:
                 name = 'jetET_{0}_Emu{1}'.format(region, suffix)
                 getattr(self, name).fill(
-                    pileup, leadingRecoJet.etCorr, l1EmuJet.et,
+                    pileup, leadingRecoJet.etCorr, l1EmuJetEt,
                 )
 
         l1Jet = event.getMatchedL1Jet(leadingRecoJet, l1Type='HW')
-        if not l1Jet:
-            return True
+        if l1Jet:
+            l1JetEt = l1Jet.et
+        else:
+            l1JetEt = 0.
 
         for region in fillRegions:
             for suffix in ['_eff', '_res', '_2D', '_eff_HR', '_2D_HR']:
                 name = 'jetET_{0}{1}'.format(region, suffix)
                 getattr(self, name).fill(
-                    pileup, leadingRecoJet.etCorr, l1Jet.et,
+                    pileup, leadingRecoJet.etCorr, l1JetEt,
                 )
 
         return True
