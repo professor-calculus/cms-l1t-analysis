@@ -170,8 +170,8 @@ class EfficiencyPlot(BasePlotter):
             if not isinstance(threshold, int):
                 continue
             hist = emu_pileup_effs.get_bin_contents(threshold)
-            hist.drawstyle = "EP"
-            hist.markerstyle = 3
+            hist.drawstyle = "P"
+            hist.markerstyle = 4
             hists.append(hist)
 
             label = label_template.format(

@@ -335,8 +335,38 @@ class Analyzer(BaseAnalyzer):
         """
         Custom version, does what the normal one does but also overlays whatever you like.
         """
-        for plot in self.all_plots:
-            plot.draw()
+        #for plot in self.all_plots:
+        #    plot.draw()
+
+        getattr(self, 'HTT_eff').draw()
+        getattr(self, 'MET_eff').draw()
+        getattr(self, 'MET_HF_eff').draw()
+        getattr(self, 'MET_PF_NoMu_HF_eff').draw()
+        getattr(self, 'jetET_BE_eff').draw()
+        getattr(self, 'jetET_HF_eff').draw()
+
+        getattr(self, 'HTT_Emu_eff').draw()
+        getattr(self, 'MET_Emu_eff').draw()
+        getattr(self, 'MET_HF_Emu_eff').draw()
+        getattr(self, 'MET_PF_NoMu_HF_Emu_eff').draw()
+        getattr(self, 'jetET_BE_Emu_eff').draw()
+        getattr(self, 'jetET_HF_Emu_eff').draw()
+
+        getattr(self, 'HTT_eff_HiRange').draw()
+        getattr(self, 'MET_eff_HiRange').draw()
+        getattr(self, 'MET_HF_eff_HiRange').draw()
+        getattr(self, 'MET_PF_NoMu_HF_eff_HiRange').draw()
+        getattr(self, 'jetET_BE_eff_HiRange').draw()
+        getattr(self, 'jetET_HF_eff_HiRange').draw()
+
+        getattr(self, 'HTT_Emu_eff_HiRange').draw()
+        getattr(self, 'MET_Emu_eff_HiRange').draw()
+        getattr(self, 'MET_HF_Emu_eff_HiRange').draw()
+        getattr(self, 'MET_PF_NoMu_HF_Emu_eff_HiRange').draw()
+        getattr(self, 'jetET_BE_Emu_eff_HiRange').draw()
+        getattr(self, 'jetET_HF_Emu_eff_HiRange').draw()
+
+
         getattr(self, 'HTT_eff').overlay_with_emu(getattr(self, 'HTT_Emu_eff'))
         getattr(self, 'MET_eff').overlay_with_emu(getattr(self, 'MET_Emu_eff'))
         getattr(self, 'MET_HF_eff').overlay_with_emu(getattr(self, 'MET_HF_Emu_eff'))
