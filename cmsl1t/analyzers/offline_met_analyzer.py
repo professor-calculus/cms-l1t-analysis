@@ -50,9 +50,10 @@ THRESHOLDS = dict(
     jetET_B=[35, 60, 90, 140, 180],
 )
 
-HIGH_RANGE_BINS = list(range(0, 100, 5)) + list(range(100, 400, 10))
-HIGH_RANGE_BINS += list(range(400, 800, 50)) + list(range(800, 1000, 200))
-HIGH_RANGE_BINS += list(range(1000, 2100, 500))
+HIGH_RANGE_BINS = list(range(0, 100, 5)) + list(range(100, 300, 10))
+HIGH_RANGE_BINS += list(range(300, 600, 20)) + list(range(600, 1000, 50))
+HIGH_RANGE_BINS += list(range(1000, 1500, 200))
+HIGH_RANGE_BINS += list(range(1500, 2100, 500))
 HIGH_RANGE_BINS = np.asarray(HIGH_RANGE_BINS, 'd')
 
 for i in ['HF', 'PF', 'PF_NoMu', 'PF_HF', 'PF_NoMu_HF']:
@@ -192,11 +193,11 @@ class Analyzer(BaseAnalyzer):
             ),
             Config(
                 "jetET_BE", "Offline Jet ET in Central Region",
-                "L1 Jet ET", 0, 400,
+                "L1 Jet ET", 10, 400,
             ),
             Config(
                 "jetET_HF", "Offline Jet ET in HF Region",
-                "L1 Jet ET", 0, 400,
+                "L1 Jet ET", 10, 400,
             ),
 
         ]
