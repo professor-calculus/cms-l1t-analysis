@@ -54,7 +54,13 @@ HIGH_RANGE_BINS = list(range(0, 100, 5)) + list(range(100, 300, 10))
 HIGH_RANGE_BINS += list(range(300, 600, 20)) + list(range(600, 1000, 50))
 HIGH_RANGE_BINS += list(range(1000, 1500, 200))
 HIGH_RANGE_BINS += list(range(1500, 2100, 500))
+HIGH_RANGE_BINS_HT = list(range(30, 100, 5)) + list(range(100, 300, 10))
+HIGH_RANGE_BINS_HT += list(range(300, 600, 20)) + list(range(600, 1000, 50))
+HIGH_RANGE_BINS_HT += list(range(1000, 1500, 200))
+HIGH_RANGE_BINS_HT += list(range(1500, 2100, 500))
+
 HIGH_RANGE_BINS = np.asarray(HIGH_RANGE_BINS, 'd')
+HIGH_RANGE_BINS_HT = np.asarray(HIGH_RANGE_BINS_HT, 'd')
 
 for i in ['HF', 'PF', 'PF_NoMu', 'PF_HF', 'PF_NoMu_HF']:
     THRESHOLDS['MET_' + i] = THRESHOLDS['MET']
@@ -232,10 +238,16 @@ class Analyzer(BaseAnalyzer):
                 50, cfg.min, cfg.max,
             ]
             if high_range:
-                params = [
-                    cfg.on_title, cfg.off_title + " (GeV)", puBins, thresholds,
-                    HIGH_RANGE_BINS.size - 1, HIGH_RANGE_BINS,
-                ]
+                if "HT" in cfg.name:
+                    params = [
+                        cfg.on_title, cfg.off_title + " (GeV)", puBins, thresholds,
+                        HIGH_RANGE_BINS_HT.size - 1, HIGH_RANGE_BINS_HT
+                        ]
+                else:
+                    params = [
+                        cfg.on_title, cfg.off_title + " (GeV)", puBins, thresholds,
+                        HIGH_RANGE_BINS.size - 1, HIGH_RANGE_BINS
+                        ]
 
             eff_plot.build(*params, legend_title=ETA_RANGES.get(cfg.name, ""))
             params.remove(thresholds)
@@ -273,7 +285,7 @@ class Analyzer(BaseAnalyzer):
         pileup = event.nVertex
 
         for name in sum_types:
-            if 'MET' in name and not pfMetFilter(event):
+            if 'MET_PF' in name and not pfMetFilter(event):
                 continue
             on = online[name]
             off = offline[name]
