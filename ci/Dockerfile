@@ -7,14 +7,18 @@ RUN mkdir -p /cvmfs/grid.cern.ch && mkdir -p /cvmfs/sft.cern.ch && \
     echo "grid.cern.ch /cvmfs/grid.cern.ch cvmfs defaults 0 0" >> /etc/fstab && \
     echo "sft.cern.ch /cvmfs/sft.cern.ch cvmfs defaults 0 0" >> /etc/fstab
 
-RUN yum install -y -q wget git
-#RUN yum install -y -q glibc gcc && yum clean all
+RUN yum update -y -q --exclude=cvmfs* \
+ && yum install -y -q wget git \
+ &&  rm -fr /var/cache
+
+ENV CODE_PATH /analysis
 RUN useradd cmsl1t
-RUN mkdir /analysis && chown -R cmsl1t /analysis
-WORKDIR /analysis
+RUN mkdir ${CODE_PATH} && chown -R cmsl1t ${CODE_PATH}
+
+ADD ci/test.sh /ci/test.sh
+WORKDIR ${CODE_PATH}
 #USER cmsl1t
 
-# need to execute env.sh and ntp setup in CMD
-# as CVMFS needs 'privileged' rights,
-# but cannot do that when building the container
-CMD ["/bin/bash", "-c", "source bin/env.sh;export PATH=~/.local/bin:$PATH;make test"]
+ENTRYPOINT /usr/bin/cubied && \
+  echo "Starting CMSL1T container" && \
+  tail -f /dev/null
