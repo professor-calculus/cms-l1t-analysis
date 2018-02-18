@@ -105,7 +105,7 @@ class Analyzer(BaseAnalyzer):
         self._lastLumi = -1
         self._processLumi = True
         self._doEmu = config.try_get('analysis', 'do_emu', False)
-        self._sumTypes, self._jetTypes = types(self._doEmu) 
+        self._sumTypes, self._jetTypes = types(self._doEmu)
 
         for name in self._sumTypes:
             eff_plot = EfficiencyPlot("L1", "offline_" + name)
@@ -236,7 +236,7 @@ class Analyzer(BaseAnalyzer):
 
             params = [
                 cfg.on_title, cfg.off_title + " (GeV)", puBins, thresholds,
-                160, cfg.min, cfg.max,
+                100, cfg.min, cfg.max,
             ]
             if high_range:
                 params = [
@@ -335,7 +335,7 @@ class Analyzer(BaseAnalyzer):
 
         leadingPFJet = event.getLeadingRecoJet(jetFilter=pfJetFilter, doCalo=False)
         leadingCaloJet = event.getLeadingRecoJet(jetFilter=None, doCalo=True)
-        
+
         if leadingPFJet:
 
             pfFillRegions = []
@@ -374,7 +374,7 @@ class Analyzer(BaseAnalyzer):
                     getattr(self, name).fill(
                         pileup, leadingPFJet.etCorr, pfL1JetEt,
                     )
-                
+
         if leadingCaloJet:
 
             caloFillRegions = []
