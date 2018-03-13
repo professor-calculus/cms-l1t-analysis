@@ -59,6 +59,7 @@ class EfficiencyPlot(BasePlotter):
                 eff = asrootpy(
                     ROOT.TEfficiency(this_name, this_title, n_bins, low)
                 )
+                self.x_max = 2000
             else:
                 eff = asrootpy(
                     ROOT.TEfficiency(this_name, this_title, n_bins, low, high)
@@ -70,7 +71,7 @@ class EfficiencyPlot(BasePlotter):
             make_efficiency
         )
 
-    def fill(self, pileup, online, offline):
+    def fill(self, pileup, offline, online):
         efficiencies = {(pu, thresh): eff
                         for (pu,), thresholds in self.efficiencies[pileup].items()
                         for thresh, eff in thresholds.items()}
@@ -136,6 +137,80 @@ class EfficiencyPlot(BasePlotter):
         if with_fits:
             self.__summarize_fits()
 
+    def overlay_with_emu(self, emu_plotter, with_fits=True):
+        # Fit the efficiencies if requested
+        if with_fits:
+            self.__fit_efficiencies()
+
+        # Overlay the "all" pile-up bin for each threshold
+        all_pileup_effs = self.efficiencies.get_bin_contents(
+            [bn.Base.everything])
+        emu_pileup_effs = emu_plotter.efficiencies.get_bin_contents(
+            [bn.Base.everything])
+        hists = []
+        labels = []
+        fits = []
+        label_template = '{online_title} > {threshold} (GeV)'
+        for threshold in all_pileup_effs.iter_all():
+            if not isinstance(threshold, int):
+                continue
+            hist = all_pileup_effs.get_bin_contents(threshold)
+            hist.drawstyle = "EP"
+            hists.append(hist)
+
+            label = label_template.format(
+                online_title=self.online_title,
+                threshold=self.thresholds.bins[threshold],
+            )
+            labels.append(label)
+            if with_fits:
+                fits.append(self.fits.get_bin_contents(
+                    [bn.Base.everything, threshold]))
+
+        for threshold in emu_pileup_effs.iter_all():
+            if not isinstance(threshold, int):
+                continue
+            hist = emu_pileup_effs.get_bin_contents(threshold)
+            hist.drawstyle = "P"
+            hist.markerstyle = 4
+            hists.append(hist)
+
+            label = label_template.format(
+                online_title=emu_plotter.online_title + ' Emu',
+                threshold=emu_plotter.thresholds.bins[threshold],
+            )
+            labels.append(label)
+            if with_fits:
+                fits.append(emu_plotter.fits.get_bin_contents(
+                    [bn.Base.everything, threshold]))
+
+        self.__make_overlay(
+            "all", "all_overlay_with_Emu", hists, fits, labels, self.online_title,
+        )
+
+        '''
+        # Overlay individual pile-up bins for each threshold
+        for threshold in self.thresholds:
+            hists = []
+            labels = []
+            fits = []
+            for pileup in self.pileup_bins:
+                if not isinstance(pileup, int):
+                    continue
+                hist = self.efficiencies.get_bin_contents([pileup, threshold])
+                hist.drawstyle = "EP"
+                hists.append(hist)
+                if with_fits:
+                    fits.append(self.fits.get_bin_contents(
+                        [pileup, threshold]))
+                labels.append(str(self.pileup_bins.bins[pileup]))
+            self.__make_overlay(pileup, threshold, hists,
+                                fits, labels, "PU bin")
+        '''
+        # Produce the fit summary plot
+        if with_fits:
+            self.__summarize_fits()
+
     def __fit_efficiencies(self):
         def make_fit(labels):
             pileup_bin = labels["pileup"]
@@ -170,13 +245,27 @@ class EfficiencyPlot(BasePlotter):
                 topmargin=0.35,
                 rightmargin=0.3,
                 leftmargin=0.7,
-                textsize=0.035,
-                entryheight=0.035,
+                textsize=0.02,
+                entryheight=0.02,
             )
             for hist, label in zip(hists, labels):
                 legend.AddEntry(hist, label)
             legend.SetBorderSize(0)
             legend.Draw()
+
+            xmax = self.x_max
+
+            for val in [0.25, 0.5, 0.75, 1.]:
+                line = ROOT.TLine(0., val, xmax, val)
+                line.SetLineStyle("dashed")
+                line.SetLineColor(15)
+                line.Draw()
+
+            for val in range(200, xmax, 200):
+                line = ROOT.TLine(val, 0., val, 1.)
+                line.SetLineStyle("dashed")
+                line.SetLineColor(15)
+                line.Draw()
 
             # Save canvas to file
             name = self.filename_format.format(pileup=pileup,
