@@ -42,6 +42,27 @@ ALL_TREE = {
 }
 
 
+def get_trees(load_emu_trees, load_reco_trees):
+    trees = {
+        #    "caloTowers": 'l1CaloTowerTree/L1CaloTowerTree',
+        "upgrade": 'l1UpgradeTree/L1UpgradeTree',
+        "event": "l1EventTree/L1EventTree"
+    }
+    if load_emu_trees:
+        trees.update({
+            "jetReco": 'l1JetRecoTree/JetRecoTree',
+            "metFilterReco": 'l1MetFilterRecoTree/MetFilterRecoTree',
+            # "muonReco": 'l1MuonRecoTree/Muon2RecoTree',
+            "recoTree": 'l1RecoTree/RecoTree',
+        })
+    if load_reco_trees:
+        trees.update({
+            "emuCaloTowers": 'l1CaloTowerEmuTree/L1CaloTowerTree',
+            "emuUpgrade": 'l1UpgradeEmuTree/L1UpgradeTree',
+        })
+    return trees
+
+
 class Event(object):
 
     energySumTypes = {
@@ -261,7 +282,8 @@ class EventReader(object):
         http://rootpy-log.readthedocs.io/en/latest/_modules/rootpy/tree/chain.html
     '''
 
-    def __init__(self, files, events=-1):
+    def __init__(self, files, events=-1,
+                 load_emu_trees=False, load_reco_trees=True):
         from cmsl1t.utils.root_glob import glob
         input_files = []
         for f in files:
@@ -272,7 +294,8 @@ class EventReader(object):
         # this is not efficient
         self._trees = []
         self._names = []
-        for name, path in ALL_TREE.iteritems():
+        allTrees = get_trees(load_emu_trees, load_reco_trees)
+        for name, path in allTrees.iteritems():
             try:
                 chain = TreeChain(path, input_files, cache=True, events=events)
             except RuntimeError:
