@@ -83,6 +83,12 @@ class Event(object):
             setattr(self, "_" + name, tree)
         self._l1Sums = {}
 
+        if 'event' in tree_names:
+            self._run = self._event.Event.run
+            self._lumi = self._event.Event.lumi
+        else:
+            self._run, self._lumi = 0, 0
+
         if "caloTowers" in tree_names:
             self._caloTowers = CachedIndexedTree(
                 self._caloTowers.L1CaloTower, 'nTower')
@@ -174,21 +180,25 @@ class Event(object):
         # for m in members:
         #     print('>' * 6, m[0], ':', m[1])
 
-    def goodJets(self, jetFilter=pfJetFilter):
+    def goodJets(self, jetFilter=pfJetFilter, doCalo=False):
         '''
             filters and ET orders the jet collection
         '''
-        goodJets = filter(jetFilter, self._jets)
+        goodJets = None
+        if doCalo:
+            goodJets = filter(jetFilter, self._caloJets)
+        else:
+            goodJets = filter(jetFilter, self._jets)
         sorted_jets = sorted(
             goodJets, key=lambda jet: jet.etCorr, reverse=True)
         return sorted_jets
 
-    def getLeadingRecoJet(self, jetFilter=pfJetFilter):
-        goodJets = self.goodJets(jetFilter)
+    def getLeadingRecoJet(self, jetFilter=pfJetFilter, doCalo=False):
+        goodJets = self.goodJets(jetFilter, doCalo)
         if not goodJets:
             return None
         leadingRecoJet = goodJets[0]
-        if leadingRecoJet.etCorr > 10.0:
+        if leadingRecoJet.etCorr > 20.0:
             return leadingRecoJet
         return None
 
@@ -201,7 +211,7 @@ class Event(object):
 
         if not recoJet:
             return None
-        minDeltaR = 0.3
+        minDeltaR = 0.4
         closestJet = None
         for l1Jet in l1Jets:
             dEta = recoJet.eta - l1Jet.eta
