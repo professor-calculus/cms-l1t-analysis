@@ -1,4 +1,4 @@
-from __future__ import print_function
+from __future__ import print_function, division
 from cmsl1t.plotting.base import BasePlotter
 from cmsl1t.hist.hist_collection import HistogramCollection
 from cmsl1t.hist.factory import HistFactory
@@ -28,9 +28,11 @@ class ResolutionPlot(BasePlotter):
         self.pileup_bins = bn.Sorted(pileup_bins, "pileup",
                                      use_everything_bin=True)
 
-        name = ["resolution", self.online_name, self.offline_name, "pu_{pileup}"]
+        name = ["resolution", self.online_name,
+                self.offline_name, "pu_{pileup}"]
         name = "__".join(name)
-        title = " ".join([self.online_name, "vs.", self.offline_name, "in PU bin: {pileup}"])
+        title = " ".join(
+            [self.online_name, "vs.", self.offline_name, "in PU bin: {pileup}"])
         title = ";".join([title, self.offline_title, self.online_title])
         self.plots = HistogramCollection([self.pileup_bins],
                                          "Hist1D", n_bins, low, high,
@@ -51,7 +53,8 @@ class ResolutionPlot(BasePlotter):
                 label = "Everything"
             elif isinstance(pile_up, int):
                 hist.drawstyle = "EP"
-                label = "~ {:.0f}".format(self.pileup_bins.get_bin_center(pile_up))
+                label = "~ {:.0f}".format(
+                    self.pileup_bins.get_bin_center(pile_up))
             else:
                 continue
             hist.SetMarkerSize(0.5)
@@ -62,12 +65,14 @@ class ResolutionPlot(BasePlotter):
             #     fits.append(self.fits.get_bin_contents([pile_up]))
         self.__make_overlay(hists, fits, labels, "Number of events")
 
-        normed_hists = [hist / hist.integral() if hist.integral() != 0 else hist.Clone() for hist in hists]
+        integral = hist.integral()
+        normed_hists = [hist / integral if integral !=
+                        0 else hist.Clone() for hist in hists]
         for hist in normed_hists:
             if hist.integral != 0:
                 hist.GetYaxis().SetRangeUser(-0.1, 1.1)
-        self.__make_overlay(normed_hists, fits, labels, "Fraction of events", "__shapes")
-
+        self.__make_overlay(normed_hists, fits, labels,
+                            "Fraction of events", "__shapes")
 
     def overlay_with_emu(self, emu_plotter, with_fits=False):
         hists = []
@@ -95,16 +100,22 @@ class ResolutionPlot(BasePlotter):
             hists.append(hist)
             labels.append(label)
 
-        self.__make_overlay(hists, fits, labels, "Number of events", "__Overlay_Emu")
+        self.__make_overlay(hists, fits, labels,
+                            "Number of events", "__Overlay_Emu")
 
-        normed_hists = [hist / hist.integral() if hist.integral() != 0 else hist.Clone() for hist in hists]
-        self.__make_overlay(normed_hists, fits, labels, "Fraction of events", "__shapes__Overlay_Emu")
+        integral = hist.integral()
+        normed_hists = [hist / integral if integral !=
+                        0 else hist.Clone() for hist in hists]
+        self.__make_overlay(normed_hists, fits, labels,
+                            "Fraction of events", "__shapes__Overlay_Emu")
 
     def __make_overlay(self, hists, fits, labels, ytitle, suffix=""):
         with preserve_current_style():
             # Draw each resolution (with fit)
-            xtitle = self.resolution_method.label.format(on=self.online_title, off=self.offline_title)
-            canvas = draw(hists, draw_args={"xtitle": xtitle, "ytitle": ytitle})
+            xtitle = self.resolution_method.label.format(
+                on=self.online_title, off=self.offline_title)
+            canvas = draw(hists, draw_args={
+                          "xtitle": xtitle, "ytitle": ytitle})
             if fits:
                 for fit, hist in zip(fits, hists):
                     fit["asymmetric"].linecolor = hist.GetLineColor()

@@ -79,14 +79,14 @@ class Event(object):
             self._upgrade = self._upgrade.L1Upgrade
             self._l1Jets = [L1Jet(self._upgrade, i)
                             for i in range(self._upgrade.nJets)
-                            if self._upgrade.jetBx[i]==0]
+                            if self._upgrade.jetBx[i] == 0]
             self._readUpgradeSums()
 
         if "emuUpgrade" in tree_names:
             self._emuUpgrade = self._emuUpgrade.L1Upgrade
             self._l1EmuJets = [L1Jet(self._emuUpgrade, i)
                                for i in range(self._emuUpgrade.nJets)
-                               if self._emuUpgrade.jetBx[i]==0]
+                               if self._emuUpgrade.jetBx[i] == 0]
             self._readEmuUpgradeSums()
 
         if "jetReco" in tree_names:
@@ -221,11 +221,12 @@ class Jet(object):
     def __init__(self, jets, index):
         # this could be simplified with a list of attributes
         read_attributes = [
-            'etCorr', 'muMult', 'eta', 'phi', 'nhef', 'pef', 'mef', 'chMult', 'elMult', 
+            'etCorr', 'muMult', 'eta', 'phi', 'nhef', 'pef', 'mef', 'chMult', 'elMult',
             'nhMult', 'phMult', 'chef', 'eef', 'nemef', 'cMult', 'nMult', 'cemef'
         ]
         for attr in read_attributes:
             setattr(self, attr, getattr(jets, attr)[index])
+
 
 class CaloJet(object):
     '''
@@ -236,10 +237,10 @@ class CaloJet(object):
     def __init__(self, jets, index):
         # this could be simplified with a list of attributes
         read_attributes = dict(
-            et = 'caloEt',
-            etCorr = 'caloEtCorr',
-            eta = 'caloEta',
-            phi = 'caloPhi',
+            et='caloEt',
+            etCorr='caloEtCorr',
+            eta='caloEta',
+            phi='caloPhi',
         )
         for outattr, attr in read_attributes.items():
             setattr(self, outattr, getattr(jets, attr)[index])

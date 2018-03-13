@@ -240,14 +240,16 @@ class Analyzer(BaseAnalyzer):
             if high_range:
                 if "HT" in cfg.name:
                     params = [
-                        cfg.on_title, cfg.off_title + " (GeV)", puBins, thresholds,
+                        cfg.on_title, cfg.off_title +
+                        " (GeV)", puBins, thresholds,
                         HIGH_RANGE_BINS_HT.size - 1, HIGH_RANGE_BINS_HT
-                        ]
+                    ]
                 else:
                     params = [
-                        cfg.on_title, cfg.off_title + " (GeV)", puBins, thresholds,
+                        cfg.on_title, cfg.off_title +
+                        " (GeV)", puBins, thresholds,
                         HIGH_RANGE_BINS.size - 1, HIGH_RANGE_BINS
-                        ]
+                    ]
 
             eff_plot.build(*params, legend_title=ETA_RANGES.get(cfg.name, ""))
             params.remove(thresholds)
@@ -348,7 +350,7 @@ class Analyzer(BaseAnalyzer):
         """
         Custom version, does what the normal one does but also overlays whatever you like.
         """
-        #for plot in self.all_plots:
+        # for plot in self.all_plots:
         #    plot.draw()
 
         getattr(self, 'HTT_eff').draw()
@@ -379,15 +381,21 @@ class Analyzer(BaseAnalyzer):
         getattr(self, 'jetET_BE_Emu_eff_HR').draw()
         getattr(self, 'jetET_HF_Emu_eff_HR').draw()
 
-
         getattr(self, 'HTT_eff').overlay_with_emu(getattr(self, 'HTT_Emu_eff'))
         getattr(self, 'MET_eff').overlay_with_emu(getattr(self, 'MET_Emu_eff'))
-        getattr(self, 'MET_HF_eff').overlay_with_emu(getattr(self, 'MET_HF_Emu_eff'))
-        getattr(self, 'MET_PF_eff').overlay_with_emu(getattr(self, 'MET_PF_Emu_eff'))
-        getattr(self, 'MET_PF_NoMu_eff').overlay_with_emu(getattr(self, 'MET_PF_NoMu_Emu_eff'))
-        getattr(self, 'jetET_B_eff').overlay_with_emu(getattr(self, 'jetET_B_Emu_eff'))
-        getattr(self, 'jetET_E_eff').overlay_with_emu(getattr(self, 'jetET_E_Emu_eff'))
-        getattr(self, 'jetET_BE_eff').overlay_with_emu(getattr(self, 'jetET_BE_Emu_eff'))
-        getattr(self, 'jetET_HF_eff').overlay_with_emu(getattr(self, 'jetET_HF_Emu_eff'))
+        getattr(self, 'MET_HF_eff').overlay_with_emu(
+            getattr(self, 'MET_HF_Emu_eff'))
+        getattr(self, 'MET_PF_eff').overlay_with_emu(
+            getattr(self, 'MET_PF_Emu_eff'))
+        getattr(self, 'MET_PF_NoMu_eff').overlay_with_emu(
+            getattr(self, 'MET_PF_NoMu_Emu_eff'))
+        getattr(self, 'jetET_B_eff').overlay_with_emu(
+            getattr(self, 'jetET_B_Emu_eff'))
+        getattr(self, 'jetET_E_eff').overlay_with_emu(
+            getattr(self, 'jetET_E_Emu_eff'))
+        getattr(self, 'jetET_BE_eff').overlay_with_emu(
+            getattr(self, 'jetET_BE_Emu_eff'))
+        getattr(self, 'jetET_HF_eff').overlay_with_emu(
+            getattr(self, 'jetET_HF_Emu_eff'))
 
         return True

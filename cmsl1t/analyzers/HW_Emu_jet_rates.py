@@ -26,6 +26,7 @@ jet_types += [u + '_Emu' for u in jet_types]
 
 object_types = sum_types + jet_types
 
+
 def ExtractSums(event):
     online = dict(
         HTT=event.l1Sums["L1Htt"],
@@ -47,6 +48,7 @@ def ExtractSums(event):
     )
     return online
 
+
 class Analyzer(BaseAnalyzer):
 
     def __init__(self, config, **kwargs):
@@ -59,7 +61,7 @@ class Analyzer(BaseAnalyzer):
             setattr(self, name + "_rates", rates_plot)
 
     def prepare_for_events(self, reader):
-        bins = np.arange(0.0, 400.0, 1.0)
+        # bins = np.arange(0.0, 400.0, 1.0)
         puBins = self.puBins
 
         for name in object_types:
@@ -74,7 +76,7 @@ class Analyzer(BaseAnalyzer):
         '''
 
         return True
-    
+
     '''
     def reload_histograms(self, input_file):
         # Something like this needs to be implemented still
@@ -83,7 +85,7 @@ class Analyzer(BaseAnalyzer):
     '''
 
     def fill_histograms(self, entry, event):
-        
+
         # Get pileup if ntuples have reco trees in them.
         # If not, set PU to 1 so that it fills the (only) pu bin.
 
@@ -92,13 +94,13 @@ class Analyzer(BaseAnalyzer):
         except AttributeError:
             pileup = 1.
 
-        #Sums:
+        # Sums:
         online = ExtractSums(event)
         for name in sum_types:
             on = online[name]
             getattr(self, name + "_rates").fill(pileup, on.et)
 
-        #Jets:
+        # Jets:
         l1JetEts = [jet.et for jet in event._l1Jets]
         nJets = len(l1JetEts)
         if nJets > 0:
@@ -106,14 +108,12 @@ class Analyzer(BaseAnalyzer):
         else:
             maxL1JetEt = 0.
 
-
         l1EmuJetEts = [jet.et for jet in event._l1EmuJets]
         nEmuJets = len(l1EmuJetEts)
         if nEmuJets > 0:
             maxL1EmuJetEt = max(l1EmuJetEts)
         else:
             maxL1EmuJetEt = 0.
-
 
         if nJets == 0:
             getattr(self, 'singlel1JetEt_rates').fill(pileup, 0.)
@@ -135,11 +135,14 @@ class Analyzer(BaseAnalyzer):
             getattr(self, 'triplel1JetEt_Emu_rates').fill(pileup, 0.)
             getattr(self, 'quadl1JetEt_Emu_rates').fill(pileup, 0.)
         if nEmuJets >= 1:
-            getattr(self, 'singlel1JetEt_Emu_rates').fill(pileup, maxL1EmuJetEt)
+            getattr(self, 'singlel1JetEt_Emu_rates').fill(
+                pileup, maxL1EmuJetEt)
         if nEmuJets >= 2:
-            getattr(self, 'doublel1JetEt_Emu_rates').fill(pileup, maxL1EmuJetEt)
+            getattr(self, 'doublel1JetEt_Emu_rates').fill(
+                pileup, maxL1EmuJetEt)
         if nEmuJets >= 3:
-            getattr(self, 'triplel1JetEt_Emu_rates').fill(pileup, maxL1EmuJetEt)
+            getattr(self, 'triplel1JetEt_Emu_rates').fill(
+                pileup, maxL1EmuJetEt)
         if nEmuJets >= 4:
             getattr(self, 'quadl1JetEt_Emu_rates').fill(pileup, maxL1EmuJetEt)
 
@@ -152,15 +155,16 @@ class Analyzer(BaseAnalyzer):
         # Get EMU thresholds for each HW threshold.
 
         THRESHOLDS = self.thresholds
-        if THRESHOLDS == None:
-            print('Error: Please specify thresholds in the config .yaml in dictionary format')
+        if THRESHOLDS is None:
+            print(
+                'Error: Please specify thresholds in the config .yaml in dictionary format')
 
         for i in ['HF', 'PF', 'PF_NoMu', 'PF_HF', 'PF_NoMu_HF']:
-            if THRESHOLDS['MET_' + i] == None:
+            if THRESHOLDS['MET_' + i] is None:
                 THRESHOLDS['MET_' + i] = THRESHOLDS['MET']
 
         for j in ['doublel1JetEt', 'triplel1JetEt', 'quadl1JetEt']:
-            if THRESHOLDS[j] == None:
+            if THRESHOLDS[j] is None:
                 THRESHOLDS[j] = THRESHOLDS['singlel1JetEt']
 
         # calculate cumulative histograms
@@ -168,11 +172,11 @@ class Analyzer(BaseAnalyzer):
             hist = plot.plots.get_bin_contents([bn.Base.everything])
             bin1 = hist.get_bin_content(1)
             if bin1 != 0.:
-                hist.Scale(40000000./bin1)
+                hist.Scale(40000000. / bin1)
             h = get_cumulative_hist(hist)
             bin1cumul = h.get_bin_content(1)
             if bin1cumul != 0.:
-                h.Scale(40000000./bin1cumul)
+                h.Scale(40000000. / bin1cumul)
             setattr(self, plot.online_name, h)
             plot.draw()
 
@@ -183,10 +187,10 @@ class Analyzer(BaseAnalyzer):
             h_emu = getattr(self, histo_name + "_Emu")
             bin1 = h.get_bin_content(1)
             if bin1 != 0.:
-                h.Scale(40000000./bin1)
+                h.Scale(40000000. / bin1)
             bin1_emu = h_emu.get_bin_content(1)
             if bin1_emu != 0.:
-                h_emu.Scale(40000000./bin1_emu)
+                h_emu.Scale(40000000. / bin1_emu)
             thresholds = THRESHOLDS.get(histo_name)
             emu_thresholds = []
             for thresh in thresholds:
@@ -199,8 +203,8 @@ class Analyzer(BaseAnalyzer):
                     else:
                         rate_delta.append(abs(hw_rate - emu_rate))
                 emu_thresholds.append(rate_delta.index(min(rate_delta)))
-            outputline = ('    {0}: {1}'.format(histo_name, thresholds) + '\n'
-                          + '    {0}: {1}'.format(histo_name + '_Emu', emu_thresholds))
+            outputline = ('    {0}: {1}'.format(histo_name, thresholds) +
+                          '\n' + '    {0}: {1}'.format(histo_name + '_Emu', emu_thresholds))
             print(outputline)
 
         '''

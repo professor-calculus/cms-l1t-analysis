@@ -53,6 +53,7 @@ HIGH_RANGE_BINS_HT += list(range(1500, 2100, 500))
 HIGH_RANGE_BINS = np.asarray(HIGH_RANGE_BINS, 'd')
 HIGH_RANGE_BINS_HT = np.asarray(HIGH_RANGE_BINS_HT, 'd')
 
+
 def ExtractSums(event):
     offline = dict(
         HTT=Sum(event.sums.Ht),
@@ -187,7 +188,7 @@ class Analyzer(BaseAnalyzer):
                 "L1 Jet ET", 10, 400,
             ),
             Config(
-                "quadl1JetEt",   "Offline Leading Jet ET (L1 Quad Jet)",
+                "quadl1JetEt", "Offline Leading Jet ET (L1 Quad Jet)",
                 "L1 Jet ET", 10, 400,
             ),
 
@@ -210,7 +211,7 @@ class Analyzer(BaseAnalyzer):
 
         THRESHOLDS = self.thresholds
         for i in ['HF', 'PF', 'PF_NoMu', 'PF_HF', 'PF_NoMu_HF']:
-            if THRESHOLDS['MET_' + i] == None:
+            if THRESHOLDS['MET_' + i] is None:
                 THRESHOLDS['MET_' + i] = THRESHOLDS['MET']
 
         suffix = ""
@@ -231,14 +232,16 @@ class Analyzer(BaseAnalyzer):
             if high_range:
                 if "HT" in cfg.name:
                     params = [
-                        cfg.on_title, cfg.off_title + " (GeV)", puBins, thresholds,
+                        cfg.on_title, cfg.off_title +
+                        " (GeV)", puBins, thresholds,
                         HIGH_RANGE_BINS_HT.size - 1, HIGH_RANGE_BINS_HT
-                        ]
+                    ]
                 else:
                     params = [
-                        cfg.on_title, cfg.off_title + " (GeV)", puBins, thresholds,
+                        cfg.on_title, cfg.off_title +
+                        " (GeV)", puBins, thresholds,
                         HIGH_RANGE_BINS.size - 1, HIGH_RANGE_BINS
-                        ]
+                    ]
 
             eff_plot.build(*params, legend_title=ETA_RANGES.get(cfg.name, ""))
             params.remove(thresholds)
@@ -360,11 +363,17 @@ class Analyzer(BaseAnalyzer):
             plot.draw()
         getattr(self, 'HTT_eff').overlay_with_emu(getattr(self, 'HTT_Emu_eff'))
         getattr(self, 'MET_eff').overlay_with_emu(getattr(self, 'MET_Emu_eff'))
-        getattr(self, 'MET_HF_eff').overlay_with_emu(getattr(self, 'MET_HF_Emu_eff'))
-        getattr(self, 'MET_PF_NoMu_HF_eff').overlay_with_emu(getattr(self, 'MET_PF_NoMu_HF_Emu_eff'))
-        getattr(self, 'singlel1JetEt_eff').overlay_with_emu(getattr(self, 'singlel1JetEt_Emu_eff'))
-        getattr(self, 'doublel1JetEt_eff').overlay_with_emu(getattr(self, 'doublel1JetEt_Emu_eff'))
-        getattr(self, 'triplel1JetEt_eff').overlay_with_emu(getattr(self, 'triplel1JetEt_Emu_eff'))
-        getattr(self, 'quadl1JetEt_eff').overlay_with_emu(getattr(self, 'quadl1JetEt_Emu_eff'))
+        getattr(self, 'MET_HF_eff').overlay_with_emu(
+            getattr(self, 'MET_HF_Emu_eff'))
+        getattr(self, 'MET_PF_NoMu_HF_eff').overlay_with_emu(
+            getattr(self, 'MET_PF_NoMu_HF_Emu_eff'))
+        getattr(self, 'singlel1JetEt_eff').overlay_with_emu(
+            getattr(self, 'singlel1JetEt_Emu_eff'))
+        getattr(self, 'doublel1JetEt_eff').overlay_with_emu(
+            getattr(self, 'doublel1JetEt_Emu_eff'))
+        getattr(self, 'triplel1JetEt_eff').overlay_with_emu(
+            getattr(self, 'triplel1JetEt_Emu_eff'))
+        getattr(self, 'quadl1JetEt_eff').overlay_with_emu(
+            getattr(self, 'quadl1JetEt_Emu_eff'))
 
         return True
