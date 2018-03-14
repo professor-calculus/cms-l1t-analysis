@@ -3,7 +3,7 @@ from rootpy.plotting.hist import _HistBase, Efficiency
 from rootpy.plotting.graph import _GraphBase
 from rootpy.plotting import Style, Canvas
 from rootpy.context import preserve_current_style
-from rootpy.ROOT import gStyle, TLatex
+from rootpy.ROOT import gStyle, TLatex, TStyle
 from rootpy import asrootpy
 import rootpy.ROOT as ROOT
 from exceptions import RuntimeError
@@ -182,10 +182,10 @@ def label_canvas(sample_title=None, run=None, isData=False):
     cms = "#bf{CMS} #it{Preliminary}"
     if sample_title:
         cms += sample_title
-    latex.DrawLatex(0.15, 0.92, cms)
+    latex.DrawLatex(0.17, 0.92, cms)
 
-    run_summary = "(13 TeV)"
+    run_summary = "13 TeV"
     if run:
         run_summary += run
     latex.SetTextAlign(31)
-    latex.DrawLatex(0.92, 0.92, run_summary)
+    latex.DrawLatex(0.9, 0.92, run_summary)
