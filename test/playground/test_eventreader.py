@@ -1,5 +1,5 @@
 import unittest
-from cmsl1t.playground.EventReader import get_trees
+from cmsl1t.playground.eventreader import get_trees
 
 
 class TestEventReader(unittest.TestCase):

@@ -12,22 +12,37 @@ def test_binning_base():
     assert_true(len(b.values) == (n_bins + 3))
 
 
-@raises(NotImplementedError)
+@raises(AttributeError)
 def test_find_all_bins():
     b = binning.Base(10, 'test')
     b.find_all_bins('overflow')
 
 
-@raises(NotImplementedError)
+# @raises(AttributeError)
 def test_get_bin_upper():
     b = binning.Base(10, 'test')
-    b.get_bin_upper('overflow')
+    assert_equal(b.get_bin_upper('overflow'), 'overflow')
+    assert_equal(b.get_bin_upper('underflow'), 'underflow')
+    assert_equal(b.get_bin_upper('everything'), 'everything')
 
 
-@raises(NotImplementedError)
+@raises(AttributeError)
+def test_get_bin_upper_invalid():
+    b = binning.Base(10, 'test')
+    b.get_bin_upper(0)
+
+
 def test_get_bin_lower():
     b = binning.Base(10, 'test')
-    b.get_bin_lower('overflow')
+    assert_equal(b.get_bin_lower('overflow'), 'overflow')
+    assert_equal(b.get_bin_lower('underflow'), 'underflow')
+    assert_equal(b.get_bin_lower('everything'), 'everything')
+
+
+@raises(AttributeError)
+def test_get_bin_lower_invalid():
+    b = binning.Base(10, 'test')
+    b.get_bin_lower(0)
 
 
 def test_sorted():

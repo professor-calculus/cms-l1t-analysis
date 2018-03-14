@@ -50,15 +50,15 @@ def get_trees(load_emu_trees, load_reco_trees):
     }
     if load_emu_trees:
         trees.update({
+        "emuCaloTowers": 'l1CaloTowerEmuTree/L1CaloTowerTree',
+        "emuUpgrade": 'l1UpgradeEmuTree/L1UpgradeTree',
+        })
+    if load_reco_trees:
+        trees.update({
             "jetReco": 'l1JetRecoTree/JetRecoTree',
             "metFilterReco": 'l1MetFilterRecoTree/MetFilterRecoTree',
             # "muonReco": 'l1MuonRecoTree/Muon2RecoTree',
             "recoTree": 'l1RecoTree/RecoTree',
-        })
-    if load_reco_trees:
-        trees.update({
-            "emuCaloTowers": 'l1CaloTowerEmuTree/L1CaloTowerTree',
-            "emuUpgrade": 'l1UpgradeEmuTree/L1UpgradeTree',
         })
     return trees
 
