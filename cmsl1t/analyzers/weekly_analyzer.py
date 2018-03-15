@@ -8,7 +8,7 @@ from cmsl1t.plotting.onlineVsOffline import OnlineVsOffline
 from cmsl1t.plotting.resolution import ResolutionPlot
 from cmsl1t.plotting.resolution_vs_X import ResolutionVsXPlot
 import cmsl1t.recalc.met as recalc
-from cmsl1t.playground.eventreader import Met, Sum
+from cmsl1t.energySums import EnergySum, Met
 from math import pi
 import pprint
 from collections import namedtuple
@@ -19,7 +19,7 @@ Sums = namedtuple("Sums", sum_types)
 
 
 def ExtractSums(event):
-    offline = dict(HTT=Sum(event.sums.Ht),
+    offline = dict(HTT=EnergySum(event.sums.Ht),
                    MHT=Met(event.sums.mHt, event.sums.mHtPhi),
                    MET_HF=Met(event.sums.caloMet, event.sums.caloMetPhi),
                    MET_noHF=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE)

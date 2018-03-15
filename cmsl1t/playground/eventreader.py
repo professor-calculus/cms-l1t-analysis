@@ -9,8 +9,8 @@ from cmsl1t.playground.jetfilters import pfJetFilter
 from metfilters import pfMetFilter
 from cmsl1t.playground.cache import CachedIndexedTree
 from cmsl1t.utils import load_ROOT_library
+from cmsl1t.energySums import EnergySum, Mex, Mey, Met
 from rootpy import ROOT
-from collections import namedtuple
 from exceptions import RuntimeError
 import logging
 logger = logging.getLogger(__name__)
@@ -48,15 +48,10 @@ def get_trees(load_emu_trees, load_reco_trees):
 def _energySumTypes():
     load_ROOT_library('L1TAnalysisDataformats.so')
     sumTypes = ROOT.l1t.EtSum
-    # some quick classes
-    Sum = namedtuple('Sum', ['et'])
-    Met = namedtuple('Met', ['et', 'phi'])
-    Mex = namedtuple('Mex', ['ex'])
-    Mey = namedtuple('Mey', ['ey'])
     energySumLookup = {
-        sumTypes.kTotalEt: {'name': 'Ett', 'type': Sum},
-        sumTypes.kTotalEtHF: {'name': 'EttHF', 'type': Sum},
-        sumTypes.kTotalHt: {'name': 'Htt', 'type': Sum},
+        sumTypes.kTotalEt: {'name': 'Ett', 'type': EnergySum},
+        sumTypes.kTotalEtHF: {'name': 'EttHF', 'type': EnergySum},
+        sumTypes.kTotalHt: {'name': 'Htt', 'type': EnergySum},
         sumTypes.kTotalHtHF: {'name': 'HttHF', 'type': Met},
         sumTypes.kMissingEt: {'name': 'Met', 'type': Met},
         sumTypes.kMissingEtHF: {'name': 'MetHF', 'type': Met},

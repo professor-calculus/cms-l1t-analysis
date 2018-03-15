@@ -4,6 +4,7 @@ from rootpy import ROOT, ROOTError
 
 logger = logging.getLogger(__name__)
 
+
 def load_ROOT_library(library, lib_path='build'):
     PROJECT_ROOT = os.environ.get('PROJECT_ROOT', os.getcwd())
     if library in ROOT.gSystem.GetLibraries():
