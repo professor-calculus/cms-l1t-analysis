@@ -22,6 +22,7 @@ ROOT.gROOT.ProcessLine('.include {0}'.format(EXTERNAL_PATH))
 ALL_TREE = {
     "caloTowers": 'l1CaloTowerTree/L1CaloTowerTree',
     "emuCaloTowers": 'l1CaloTowerEmuTree/L1CaloTowerTree',
+    "event": 'l1EventTree/L1EventTree',
     "jetReco": 'l1JetRecoTree/JetRecoTree',
     "metFilterReco": 'l1MetFilterRecoTree/MetFilterRecoTree',
     "muonReco": 'l1MuonRecoTree/Muon2RecoTree',
@@ -32,23 +33,14 @@ ALL_TREE = {
 
 
 def get_trees(load_emu_trees, load_reco_trees):
-    trees = {
-        #    "caloTowers": 'l1CaloTowerTree/L1CaloTowerTree',
-        "upgrade": 'l1UpgradeTree/L1UpgradeTree',
-        "event": "l1EventTree/L1EventTree"
-    }
+    selected_trees = ['event', 'upgrade']
     if load_emu_trees:
-        trees.update({
-            "emuCaloTowers": 'l1CaloTowerEmuTree/L1CaloTowerTree',
-            "emuUpgrade": 'l1UpgradeEmuTree/L1UpgradeTree',
-        })
+        selected_trees.extend(['emuCaloTowers', 'emuUpgrade'])
     if load_reco_trees:
-        trees.update({
-            "jetReco": 'l1JetRecoTree/JetRecoTree',
-            "metFilterReco": 'l1MetFilterRecoTree/MetFilterRecoTree',
-            # "muonReco": 'l1MuonRecoTree/Muon2RecoTree',
-            "recoTree": 'l1RecoTree/RecoTree',
-        })
+        selected_trees.extend(['jetReco', 'metFilterReco', 'recoTree'])
+    trees = {}
+    for name in selected_trees:
+        trees[name] = ALL_TREE[name]
     return trees
 
 
