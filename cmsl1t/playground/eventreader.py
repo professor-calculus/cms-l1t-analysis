@@ -7,7 +7,8 @@ import math
 from cmsl1t.playground.jetfilters import pfJetFilter
 from metfilters import pfMetFilter
 from cmsl1t.playground.cache import CachedIndexedTree
-import ROOT
+from cmsl1t.utils import load_ROOT_library
+from rootpy import ROOT
 from collections import namedtuple
 from exceptions import RuntimeError
 import logging
@@ -17,10 +18,8 @@ PROJECT_ROOT = os.environ.get('PROJECT_ROOT', os.getcwd())
 EXTERNAL_PATH = os.path.join(PROJECT_ROOT, 'external')
 ROOT.gROOT.ProcessLine('.include {0}'.format(EXTERNAL_PATH))
 
-if 'L1TAnalysisDataformats.so' not in ROOT.gSystem.GetLibraries():
-    path_to_lib = os.path.join(
-        PROJECT_ROOT, 'build', 'L1TAnalysisDataformats.so')
-    ROOT.gSystem.Load(path_to_lib)
+load_ROOT_library('L1TAnalysisDataformats.so')
+# TODO: This should not be on global level
 sumTypes = ROOT.l1t.EtSum
 
 # some quick classes
@@ -50,8 +49,8 @@ def get_trees(load_emu_trees, load_reco_trees):
     }
     if load_emu_trees:
         trees.update({
-        "emuCaloTowers": 'l1CaloTowerEmuTree/L1CaloTowerTree',
-        "emuUpgrade": 'l1UpgradeEmuTree/L1UpgradeTree',
+            "emuCaloTowers": 'l1CaloTowerEmuTree/L1CaloTowerTree',
+            "emuUpgrade": 'l1UpgradeEmuTree/L1UpgradeTree',
         })
     if load_reco_trees:
         trees.update({
@@ -304,6 +303,7 @@ class EventReader(object):
         # this is not efficient
         self._trees = []
         self._names = []
+        load_ROOT_library('L1TAnalysisDataformats.so')
         allTrees = get_trees(load_emu_trees, load_reco_trees)
         for name, path in allTrees.iteritems():
             try:
