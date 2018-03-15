@@ -4,6 +4,7 @@ import six
 import os
 import math
 
+from boltons.cacheutils import cached
 from cmsl1t.playground.jetfilters import pfJetFilter
 from metfilters import pfMetFilter
 from cmsl1t.playground.cache import CachedIndexedTree
@@ -17,17 +18,6 @@ logger = logging.getLogger(__name__)
 PROJECT_ROOT = os.environ.get('PROJECT_ROOT', os.getcwd())
 EXTERNAL_PATH = os.path.join(PROJECT_ROOT, 'external')
 ROOT.gROOT.ProcessLine('.include {0}'.format(EXTERNAL_PATH))
-
-load_ROOT_library('L1TAnalysisDataformats.so')
-# TODO: This should not be on global level
-sumTypes = ROOT.l1t.EtSum
-
-# some quick classes
-
-Sum = namedtuple('Sum', ['et'])
-Met = namedtuple('Met', ['et', 'phi'])
-Mex = namedtuple('Mex', ['ex'])
-Mey = namedtuple('Mey', ['ey'])
 
 ALL_TREE = {
     "caloTowers": 'l1CaloTowerTree/L1CaloTowerTree',
@@ -62,9 +52,16 @@ def get_trees(load_emu_trees, load_reco_trees):
     return trees
 
 
-class Event(object):
-
-    energySumTypes = {
+@cached
+def _energySumTypes():
+    load_ROOT_library('L1TAnalysisDataformats.so')
+    sumTypes = ROOT.l1t.EtSum
+    # some quick classes
+    Sum = namedtuple('Sum', ['et'])
+    Met = namedtuple('Met', ['et', 'phi'])
+    Mex = namedtuple('Mex', ['ex'])
+    Mey = namedtuple('Mey', ['ey'])
+    energySumLookup = {
         sumTypes.kTotalEt: {'name': 'Ett', 'type': Sum},
         sumTypes.kTotalEtHF: {'name': 'EttHF', 'type': Sum},
         sumTypes.kTotalHt: {'name': 'Htt', 'type': Sum},
@@ -75,6 +72,10 @@ class Event(object):
         sumTypes.kTotalEtx: {'name': 'Mex', 'type': Mex},
         sumTypes.kTotalEty: {'name': 'Mey', 'type': Mey},
     }
+    return energySumLookup
+
+
+class Event(object):
 
     def __init__(self, tree_names, trees):
         self._trees = trees
@@ -139,9 +140,10 @@ class Event(object):
             sumType = tree.sumType[i]
             et = tree.sumEt[i]
             phi = tree.sumPhi[i]
-            if sumType in Event.energySumTypes:
-                name = Event.energySumTypes[sumType]['name']
-                obj = Event.energySumTypes[sumType]['type']
+            energySumTypes = _energySumTypes()
+            if sumType in energySumTypes:
+                name = energySumTypes[sumType]['name']
+                obj = energySumTypes[sumType]['type']
                 if obj == Met:
                     sums[prefix + name] = obj(et, phi)
                 else:
