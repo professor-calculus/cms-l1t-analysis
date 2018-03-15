@@ -1,6 +1,7 @@
 """
 Study the MET distibutions and various PUS schemes
 """
+from __future__ import division
 import numpy as np
 import six
 import ROOT
@@ -9,44 +10,30 @@ from cmsl1t.analyzers.BaseAnalyzer import BaseAnalyzer
 from cmsl1t.collections import HistogramsByPileUpCollection
 from cmsl1t.utils.draw import draw, label_canvas
 from cmsl1t.plotting.rates import RatesPlot
+from cmsl1t.filters import LuminosityFilter
 import cmsl1t.hist.binning as bn
 from cmsl1t.utils.hist import cumulative_hist, normalise_to_collision_rate
 
 
-sum_types = [
-    "HTT", "MHT", "MET_HF", "MET", "MET_PF", "MET_PF_NoMu", "MET_PF_HF",
-    "MET_PF_NoMu_HF",
-]
+def types():
+    sum_types = ["HT", "METBE", "METHF"]
+    jet_types = ["JetET"]
+    sum_types += [t + '_Emu' for t in sum_types]
+    jet_types += [t + '_Emu' for t in jet_types]
 
-jet_types = ["singlel1JetEt", "doublel1JetEt", "triplel1JetEt", "quadl1JetEt"]
-
-HW_types = sum_types + jet_types
-
-sum_types += [t + '_Emu' for t in sum_types]
-jet_types += [u + '_Emu' for u in jet_types]
-
-object_types = sum_types + jet_types
+    return sum_types, jet_types
 
 
-def ExtractSums(event):
+def extractSums(event):
     online = dict(
-        HTT=event.l1Sums["L1Htt"],
-        MHT=event.l1Sums["L1Mht"],
-        MET_HF=event.l1Sums["L1MetHF"],
-        MET=event.l1Sums["L1Met"],
-        MET_PF=event.l1Sums["L1Met"],
-        MET_PF_NoMu=event.l1Sums["L1Met"],
-        MET_PF_HF=event.l1Sums["L1MetHF"],
-        MET_PF_NoMu_HF=event.l1Sums["L1MetHF"],
-        HTT_Emu=event.l1Sums["L1EmuHtt"],
-        MHT_Emu=event.l1Sums["L1EmuMht"],
-        MET_HF_Emu=event.l1Sums["L1EmuMetHF"],
-        MET_Emu=event.l1Sums["L1EmuMet"],
-        MET_PF_Emu=event.l1Sums["L1EmuMet"],
-        MET_PF_NoMu_Emu=event.l1Sums["L1EmuMet"],
-        MET_PF_HF_Emu=event.l1Sums["L1EmuMetHF"],
-        MET_PF_NoMu_HF_Emu=event.l1Sums["L1EmuMetHF"]
+        HT=event.l1Sums["L1Htt"],
+        METBE=event.l1Sums["L1Met"],
+        METHF=event.l1Sums["L1MetHF"],
+        HT_Emu=event.l1Sums["L1EmuHtt"],
+        METBE_Emu=event.l1Sums["L1EmuMet"],
+        METHF_Emu=event.l1Sums["L1EmuMetHF"],
     )
+
     return online
 
 
@@ -56,7 +43,16 @@ class Analyzer(BaseAnalyzer):
         super(Analyzer, self).__init__("HW_Emu_jet_rates", config)
         self.triggerName = self.config.get('input', 'trigger')['name']
 
-        for name in object_types:
+        self._lumiFilter = None
+        self._lumiJson = config.try_get('input', 'lumi_json', '')
+        if self._lumiJson:
+            self._lumiFilter = LuminosityFilter(self._lumiJson)
+
+        self._lastLumi = -1
+        self._processLumi = True
+        self._sumTypes, self._jetTypes = types()
+
+        for name in self._sumTypes + self._jetTypes:
             rates_plot = RatesPlot(name)
             self.register_plotter(rates_plot)
             setattr(self, name + "_rates", rates_plot)
@@ -65,7 +61,7 @@ class Analyzer(BaseAnalyzer):
         # bins = np.arange(0.0, 400.0, 1.0)
         puBins = self.puBins
 
-        for name in object_types:
+        for name in self._sumTypes + self._jetTypes:
             rates_plot = getattr(self, name + "_rates")
             rates_plot.build(name, puBins, 400, 0, 400)
 
@@ -86,7 +82,8 @@ class Analyzer(BaseAnalyzer):
     '''
 
     def fill_histograms(self, entry, event):
-
+        if not self._filterByRunAndLumi(event._run, event._lumi):
+            return True
         # Get pileup if ntuples have reco trees in them.
         # If not, set PU to 1 so that it fills the (only) pu bin.
 
@@ -96,8 +93,8 @@ class Analyzer(BaseAnalyzer):
             pileup = 1.
 
         # Sums:
-        online = ExtractSums(event)
-        for name in sum_types:
+        online = extractSums(event)
+        for name in self._sumTypes:
             on = online[name]
             getattr(self, name + "_rates").fill(pileup, on.et)
 
@@ -116,38 +113,24 @@ class Analyzer(BaseAnalyzer):
         else:
             maxL1EmuJetEt = 0.
 
-        if nJets == 0:
-            getattr(self, 'singlel1JetEt_rates').fill(pileup, 0.)
-            getattr(self, 'doublel1JetEt_rates').fill(pileup, 0.)
-            getattr(self, 'triplel1JetEt_rates').fill(pileup, 0.)
-            getattr(self, 'quadl1JetEt_rates').fill(pileup, 0.)
-        if nJets >= 1:
-            getattr(self, 'singlel1JetEt_rates').fill(pileup, maxL1JetEt)
-        if nJets >= 2:
-            getattr(self, 'doublel1JetEt_rates').fill(pileup, maxL1JetEt)
-        if nJets >= 3:
-            getattr(self, 'triplel1JetEt_rates').fill(pileup, maxL1JetEt)
-        if nJets >= 4:
-            getattr(self, 'quadl1JetEt_rates').fill(pileup, maxL1JetEt)
-
-        if nEmuJets == 0:
-            getattr(self, 'singlel1JetEt_Emu_rates').fill(pileup, 0.)
-            getattr(self, 'doublel1JetEt_Emu_rates').fill(pileup, 0.)
-            getattr(self, 'triplel1JetEt_Emu_rates').fill(pileup, 0.)
-            getattr(self, 'quadl1JetEt_Emu_rates').fill(pileup, 0.)
-        if nEmuJets >= 1:
-            getattr(self, 'singlel1JetEt_Emu_rates').fill(
-                pileup, maxL1EmuJetEt)
-        if nEmuJets >= 2:
-            getattr(self, 'doublel1JetEt_Emu_rates').fill(
-                pileup, maxL1EmuJetEt)
-        if nEmuJets >= 3:
-            getattr(self, 'triplel1JetEt_Emu_rates').fill(
-                pileup, maxL1EmuJetEt)
-        if nEmuJets >= 4:
-            getattr(self, 'quadl1JetEt_Emu_rates').fill(pileup, maxL1EmuJetEt)
+        for name in self._jetTypes:
+            if 'Emu' in name:
+                getattr(self, name + '_rates').fill(pileup, maxL1EmuJetEt)
+            else:
+                getattr(self, name + '_rates').fill(pileup, maxL1JetEt)
 
         return True
+
+    def _filterByRunAndLumi(self, run, lumi):
+        if self._lumiFilter is None:
+            return True
+        if lumi == self._lastLumi and self._processLumi:
+            return True
+
+        self._lastLumi = lumi
+        self._processLumi = self._lumiFilter(run, lumi)
+
+        return self._processLumi
 
     def make_plots(self):
         # TODO: implement this in BaseAnalyzer
@@ -155,18 +138,9 @@ class Analyzer(BaseAnalyzer):
 
         # Get EMU thresholds for each HW threshold.
 
-        THRESHOLDS = self.thresholds
-        if THRESHOLDS is None:
+        if self.thresholds is None:
             print(
                 'Error: Please specify thresholds in the config .yaml in dictionary format')
-
-        for i in ['HF', 'PF', 'PF_NoMu', 'PF_HF', 'PF_NoMu_HF']:
-            if THRESHOLDS['MET_' + i] is None:
-                THRESHOLDS['MET_' + i] = THRESHOLDS['MET']
-
-        for j in ['doublel1JetEt', 'triplel1JetEt', 'quadl1JetEt']:
-            if THRESHOLDS[j] is None:
-                THRESHOLDS[j] = THRESHOLDS['singlel1JetEt']
 
         # calculate cumulative histograms
         for plot in self.all_plots:
@@ -178,7 +152,9 @@ class Analyzer(BaseAnalyzer):
 
         print('  thresholds:')
 
-        for histo_name in HW_types:
+        for histo_name in self._sumTypes + self._jetTypes:
+            if "_Emu" in histo_name:
+                continue
             h = getattr(self, histo_name)
             h_emu = getattr(self, histo_name + "_Emu")
             bin1 = h.get_bin_content(1)
@@ -187,7 +163,7 @@ class Analyzer(BaseAnalyzer):
             bin1_emu = h_emu.get_bin_content(1)
             if bin1_emu != 0.:
                 h_emu.Scale(40000000. / bin1_emu)
-            thresholds = THRESHOLDS.get(histo_name)
+            thresholds = self.thresholds.get(histo_name)
             emu_thresholds = []
             for thresh in thresholds:
                 rate_delta = []
