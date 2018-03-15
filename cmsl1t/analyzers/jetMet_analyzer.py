@@ -8,7 +8,7 @@ from cmsl1t.playground.jetfilters import pfJetFilter
 from cmsl1t.playground.metfilters import pfMetFilter
 from cmsl1t.playground.lumifilters import lumiFilter
 import cmsl1t.recalc.met as recalc
-from cmsl1t.playground.eventreader import Met, Sum
+from cmsl1t.energySums import EnergySum, Met
 from math import pi
 import pprint
 from collections import namedtuple
@@ -68,8 +68,8 @@ HIGH_RANGE_BINS_FWD = np.asarray(HIGH_RANGE_BINS_FWD, 'd')
 
 def extractSums(event, doEmu):
     offline = dict(
-        caloHT=Sum(event.sums.caloHt),
-        pfHT=Sum(event.sums.Ht),
+        caloHT=EnergySum(event.sums.caloHt),
+        pfHT=EnergySum(event.sums.Ht),
         caloMETBE=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE),
         caloMETHF=Met(event.sums.caloMet, event.sums.caloMetPhi),
         pfMET_NoMu=Met(event.sums.pfMetNoMu, event.sums.pfMetNoMuPhi),
@@ -84,8 +84,8 @@ def extractSums(event, doEmu):
 
     if doEmu:
         offline.update(dict(
-            caloHT_Emu=Sum(event.sums.caloHt),
-            pfHT_Emu=Sum(event.sums.Ht),
+            caloHT_Emu=EnergySum(event.sums.caloHt),
+            pfHT_Emu=EnergySum(event.sums.Ht),
             caloMETBE_Emu=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE),
             caloMETHF_Emu=Met(event.sums.caloMet, event.sums.caloMetPhi),
             pfMET_NoMu_Emu=Met(event.sums.pfMetNoMu, event.sums.pfMetNoMuPhi),

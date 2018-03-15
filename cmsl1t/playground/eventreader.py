@@ -4,11 +4,13 @@ import six
 import os
 import math
 
+from boltons.cacheutils import cached
 from cmsl1t.playground.jetfilters import pfJetFilter
 from metfilters import pfMetFilter
 from cmsl1t.playground.cache import CachedIndexedTree
-import ROOT
-from collections import namedtuple
+from cmsl1t.utils import load_ROOT_library
+from cmsl1t.energySums import EnergySum, Mex, Mey, Met
+from rootpy import ROOT
 from exceptions import RuntimeError
 import logging
 logger = logging.getLogger(__name__)
@@ -17,22 +19,10 @@ PROJECT_ROOT = os.environ.get('PROJECT_ROOT', os.getcwd())
 EXTERNAL_PATH = os.path.join(PROJECT_ROOT, 'external')
 ROOT.gROOT.ProcessLine('.include {0}'.format(EXTERNAL_PATH))
 
-if 'L1TAnalysisDataformats.so' not in ROOT.gSystem.GetLibraries():
-    path_to_lib = os.path.join(
-        PROJECT_ROOT, 'build', 'L1TAnalysisDataformats.so')
-    ROOT.gSystem.Load(path_to_lib)
-sumTypes = ROOT.l1t.EtSum
-
-# some quick classes
-
-Sum = namedtuple('Sum', ['et'])
-Met = namedtuple('Met', ['et', 'phi'])
-Mex = namedtuple('Mex', ['ex'])
-Mey = namedtuple('Mey', ['ey'])
-
 ALL_TREE = {
     "caloTowers": 'l1CaloTowerTree/L1CaloTowerTree',
     "emuCaloTowers": 'l1CaloTowerEmuTree/L1CaloTowerTree',
+    "event": 'l1EventTree/L1EventTree',
     "jetReco": 'l1JetRecoTree/JetRecoTree',
     "metFilterReco": 'l1MetFilterRecoTree/MetFilterRecoTree',
     "muonReco": 'l1MuonRecoTree/Muon2RecoTree',
@@ -42,12 +32,26 @@ ALL_TREE = {
 }
 
 
-class Event(object):
+def get_trees(load_emu_trees, load_reco_trees):
+    selected_trees = ['event', 'upgrade']
+    if load_emu_trees:
+        selected_trees.extend(['emuCaloTowers', 'emuUpgrade'])
+    if load_reco_trees:
+        selected_trees.extend(['jetReco', 'metFilterReco', 'recoTree'])
+    trees = {}
+    for name in selected_trees:
+        trees[name] = ALL_TREE[name]
+    return trees
 
-    energySumTypes = {
-        sumTypes.kTotalEt: {'name': 'Ett', 'type': Sum},
-        sumTypes.kTotalEtHF: {'name': 'EttHF', 'type': Sum},
-        sumTypes.kTotalHt: {'name': 'Htt', 'type': Sum},
+
+@cached
+def _energySumTypes():
+    load_ROOT_library('L1TAnalysisDataformats.so')
+    sumTypes = ROOT.l1t.EtSum
+    energySumLookup = {
+        sumTypes.kTotalEt: {'name': 'Ett', 'type': EnergySum},
+        sumTypes.kTotalEtHF: {'name': 'EttHF', 'type': EnergySum},
+        sumTypes.kTotalHt: {'name': 'Htt', 'type': EnergySum},
         sumTypes.kTotalHtHF: {'name': 'HttHF', 'type': Met},
         sumTypes.kMissingEt: {'name': 'Met', 'type': Met},
         sumTypes.kMissingEtHF: {'name': 'MetHF', 'type': Met},
@@ -55,12 +59,22 @@ class Event(object):
         sumTypes.kTotalEtx: {'name': 'Mex', 'type': Mex},
         sumTypes.kTotalEty: {'name': 'Mey', 'type': Mey},
     }
+    return energySumLookup
+
+
+class Event(object):
 
     def __init__(self, tree_names, trees):
         self._trees = trees
         for name, tree in zip(tree_names, trees):
             setattr(self, "_" + name, tree)
         self._l1Sums = {}
+
+        if 'event' in tree_names:
+            self._run = self._event.Event.run
+            self._lumi = self._event.Event.lumi
+        else:
+            self._run, self._lumi = 0, 0
 
         if "caloTowers" in tree_names:
             self._caloTowers = CachedIndexedTree(
@@ -113,9 +127,10 @@ class Event(object):
             sumType = tree.sumType[i]
             et = tree.sumEt[i]
             phi = tree.sumPhi[i]
-            if sumType in Event.energySumTypes:
-                name = Event.energySumTypes[sumType]['name']
-                obj = Event.energySumTypes[sumType]['type']
+            energySumTypes = _energySumTypes()
+            if sumType in energySumTypes:
+                name = energySumTypes[sumType]['name']
+                obj = energySumTypes[sumType]['type']
                 if obj == Met:
                     sums[prefix + name] = obj(et, phi)
                 else:
@@ -153,21 +168,25 @@ class Event(object):
         # for m in members:
         #     print('>' * 6, m[0], ':', m[1])
 
-    def goodJets(self, jetFilter=pfJetFilter):
+    def goodJets(self, jetFilter=pfJetFilter, doCalo=False):
         '''
             filters and ET orders the jet collection
         '''
-        goodJets = filter(jetFilter, self._jets)
+        goodJets = None
+        if doCalo:
+            goodJets = filter(jetFilter, self._caloJets)
+        else:
+            goodJets = filter(jetFilter, self._jets)
         sorted_jets = sorted(
             goodJets, key=lambda jet: jet.etCorr, reverse=True)
         return sorted_jets
 
-    def getLeadingRecoJet(self, jetFilter=pfJetFilter):
-        goodJets = self.goodJets(jetFilter)
+    def getLeadingRecoJet(self, jetFilter=pfJetFilter, doCalo=False):
+        goodJets = self.goodJets(jetFilter, doCalo)
         if not goodJets:
             return None
         leadingRecoJet = goodJets[0]
-        if leadingRecoJet.etCorr > 10.0:
+        if leadingRecoJet.etCorr > 20.0:
             return leadingRecoJet
         return None
 
@@ -180,7 +199,7 @@ class Event(object):
 
         if not recoJet:
             return None
-        minDeltaR = 0.3
+        minDeltaR = 0.4
         closestJet = None
         for l1Jet in l1Jets:
             dEta = recoJet.eta - l1Jet.eta
@@ -261,7 +280,8 @@ class EventReader(object):
         http://rootpy-log.readthedocs.io/en/latest/_modules/rootpy/tree/chain.html
     '''
 
-    def __init__(self, files, events=-1):
+    def __init__(self, files, events=-1,
+                 load_emu_trees=False, load_reco_trees=True):
         from cmsl1t.utils.root_glob import glob
         input_files = []
         for f in files:
@@ -272,7 +292,9 @@ class EventReader(object):
         # this is not efficient
         self._trees = []
         self._names = []
-        for name, path in ALL_TREE.iteritems():
+        load_ROOT_library('L1TAnalysisDataformats.so')
+        allTrees = get_trees(load_emu_trees, load_reco_trees)
+        for name, path in allTrees.iteritems():
             try:
                 chain = TreeChain(path, input_files, cache=True, events=events)
             except RuntimeError:

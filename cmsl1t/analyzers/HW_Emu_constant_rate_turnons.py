@@ -7,7 +7,7 @@ from cmsl1t.plotting.resolution_vs_X import ResolutionVsXPlot
 from cmsl1t.playground.jetfilters import pfJetFilter
 from cmsl1t.playground.metfilters import pfMetFilter
 import cmsl1t.recalc.met as recalc
-from cmsl1t.playground.eventreader import Met, Sum
+from cmsl1t.energySums import EnergySum, Met
 from math import pi
 import pprint
 from collections import namedtuple
@@ -56,7 +56,7 @@ HIGH_RANGE_BINS_HT = np.asarray(HIGH_RANGE_BINS_HT, 'd')
 
 def ExtractSums(event):
     offline = dict(
-        HTT=Sum(event.sums.Ht),
+        HTT=EnergySum(event.sums.Ht),
         MHT=Met(event.sums.mHt, event.sums.mHtPhi),
         MET_HF=Met(event.sums.caloMet, event.sums.caloMetPhi),
         MET=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE),
@@ -64,7 +64,7 @@ def ExtractSums(event):
         MET_PF_NoMu=Met(event.sums.pfMetNoMu, event.sums.pfMetNoMuPhi),
         MET_PF_HF=Met(event.sums.met, event.sums.metPhi),
         MET_PF_NoMu_HF=Met(event.sums.pfMetNoMu, event.sums.pfMetNoMuPhi),
-        HTT_Emu=Sum(event.sums.Ht),
+        HTT_Emu=EnergySum(event.sums.Ht),
         MHT_Emu=Met(event.sums.mHt, event.sums.mHtPhi),
         MET_HF_Emu=Met(event.sums.caloMet, event.sums.caloMetPhi),
         MET_Emu=Met(event.sums.caloMetBE, event.sums.caloMetPhiBE),

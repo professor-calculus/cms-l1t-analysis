@@ -62,6 +62,16 @@ class Base():
             raise KeyError(bin_index)
         return contents
 
+    def get_bin_upper(self, bin_index):
+        if bin_index in [self.overflow, self.underflow, self.everything]:
+            return bin_index
+        return self._bin_upper_edge(bin_index)
+
+    def get_bin_lower(self, bin_index):
+        if bin_index in [self.overflow, self.underflow, self.everything]:
+            return bin_index
+        return self._bin_lower_edge(bin_index)
+
     def find_all_bins(self, key):
         """
         Find all bins containing this key
@@ -124,7 +134,24 @@ class Sorted(Base):
         try:
             return (self.bins[bin_index + 1] + self.bins[bin_index]) * 0.5
         except IndexError as e:
-            logger.error("Cannot get bin center for index " + str(bin_index))
+            logger.error(
+                "Cannot get bin center for index {0}".format(bin_index))
+            raise e
+
+    def _bin_upper_edge(self, bin_index):
+        try:
+            return (self.bins[bin_index + 1])
+        except IndexError as e:
+            logger.error(
+                "Cannot get bin upper edge for index {0}".format(bin_index))
+            raise e
+
+    def _bin_lower_edge(self, bin_index):
+        try:
+            return (self.bins[bin_index])
+        except IndexError as e:
+            logger.error(
+                "Cannot get bin lower edge for index {0}".format(bin_index))
             raise e
 
 
@@ -134,6 +161,7 @@ class GreaterThan(Base):
     For a given key the returned bin must be defined by a lower-edge that is
     less than the key
     """
+
     def __init__(self, bins, label, use_everything_bin=False):
         Base.__init__(self, len(bins), label,
                       use_everything_bin=use_everything_bin)
@@ -158,6 +186,7 @@ class Overlapped(Base):
     A bin contains a given key if the bins lower-edge is less than the key, and
     its upper-edge is greater
     """
+
     def __init__(self, bins, label, use_everything_bin=False):
         Base.__init__(self, len(bins), label,
                       use_everything_bin=use_everything_bin)

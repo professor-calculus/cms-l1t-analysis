@@ -11,3 +11,4 @@ pyaml
 rootpy
 dill
 mock
+boltons
