@@ -283,7 +283,7 @@ class Analyzer(BaseAnalyzer):
                 getattr(self, name + "_phi_res").fill(pileup, off.phi, on.phi)
                 getattr(self, name + "_phi_2D").fill(pileup, off.phi, on.phi)
 
-        goodJets = event.goodJets(jetFilter=None)
+        goodJets = event.goodCaloJets(jetFilter=None)
 
         for recoJet in goodJets:
             l1Jet = event.getMatchedL1Jet(recoJet, l1Type='EMU')

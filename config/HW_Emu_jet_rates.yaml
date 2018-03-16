@@ -10,7 +10,10 @@ input:
       # -   root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/wRECO-l1t-v96p27/SingleMuon/crab_wRECO-l1t-v96p27__Run*/*/0001/L1Ntuple_*root
       # Zero Bias
       # -  root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/ZeroBias/Fill6*/Collision2017-noRECO-l1t-integration-96p27_NoPUS/ZeroBias/crab_Collision2017-noRECO-l1t-integration-96p27_NoPUS__ZeroBias_Run2017C/*/0000/L1Ntuple_*root
-       -  root://eoscms.cern.ch//eos/cms//store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/ZeroBias/Collision2017-noRECO-l1t-integration-96p20/ZeroBias/crab_Collision2017-noRECO-l1t-integration-96p20__ZeroBias_Run2017C/170726_094745/0000/L1Ntuple_10*.root
+      # - root://eoscms.cern.ch//eos/cms//store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/ZeroBias/Collision2017-noRECO-l1t-integration-96p20/ZeroBias/crab_Collision2017-noRECO-l1t-integration-96p20__ZeroBias_Run2017C/170726_094745/0000/L1Ntuple_10*.root
+      # -  root://eoscms.cern.ch//eos/cms//store/group/dpg_trigger/comm_trigger/L1Trigger/bundocka/ZeroBias/zbLUT/180313_160352/0000/L1Ntuple_*.root
+       - root://eoscms.cern.ch//eos/cms/store/group/dpg_trigger/comm_trigger/L1Trigger/safarzad/2017/ZeroBias/HighPU/noRECO-l1t-v96p27_NoPUS/ZeroBias8b4e1/crab_noRECO-l1t-v96p27_NoPUS__8b4e1/170915_101410/0000/L1Ntuple*.root
+      #  -  data/L1Ntuple_test_1.root
   sample:
     name: Data
     title: 2017 Data

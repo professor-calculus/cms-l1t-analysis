@@ -146,8 +146,6 @@ class Analyzer(BaseAnalyzer):
         return True
 
     def make_plots(self):
-        # TODO: implement this in BaseAnalyzer
-        # make_plots -> make_plots(plot_func)
 
         # Get EMU thresholds for each HW threshold.
 
@@ -170,15 +168,18 @@ class Analyzer(BaseAnalyzer):
             if bin1 != 0.:
                 hist.Scale(40000000./bin1)
             h = get_cumulative_hist(hist)
-            bin1cumul = h.get_bin_content(1)
-            if bin1cumul != 0.:
-                h.Scale(40000000./bin1cumul)
             setattr(self, plot.online_name, h)
             plot.draw()
 
         print('  thresholds:')
 
         for histo_name in HW_types:
+            # Overlay HW with emulated
+            getattr(self, histo_name + '_rates').overlay_with_emu(getattr(self, histo_name + '_Emu_rates'))
+
+        for histo_name in HW_types:
+            # This is where we calculate the threshold for SingleMu which gives the same rate
+            # (i.e. this next bit is not needed if you're just plotting rates)
             h = getattr(self, histo_name)
             h_emu = getattr(self, histo_name + "_Emu")
             bin1 = h.get_bin_content(1)
@@ -247,4 +248,4 @@ def plot(hist, name, output_folder):
     hist.set_y_title('Rate (Hz)')
     hist.set_x_title(name)
     hist.Draw()
-    c.SaveAs(os.path.join(output_folder, file_name + '.pdf'))
+    c.SaveAs(os.path.join(output_folder, file_name + '_old.pdf'))

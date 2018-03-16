@@ -162,6 +162,17 @@ class Event(object):
             goodJets, key=lambda jet: jet.etCorr, reverse=True)
         return sorted_jets
 
+    def goodCaloJets(self, jetFilter=None):
+        '''
+            filters and ET orders the calo jet collection
+        '''
+        goodJets = self._caloJets
+        if jetFilter:
+            goodJets = filter(jetFilter, self._caloJets)
+        sorted_jets = sorted(
+            goodJets, key=lambda jet: jet.etCorr, reverse=True)
+        return sorted_jets
+
     def getLeadingRecoJet(self, jetFilter=defaultJetFilter):
         goodJets = self.goodJets(jetFilter)
         if not goodJets:
@@ -171,9 +182,14 @@ class Event(object):
             return leadingRecoJet
         return None
 
-    def getLeadingRecoCaloJet(self):
-        leadingRecoCaloJet = self.getLeadingRecoJet(jetFilter=None)
-        return leadingRecoCaloJet
+    def getLeadingRecoCaloJet(self, jetFilter=None):
+        goodJets = self.goodCaloJets(jetFilter)
+        if not goodJets:
+            return None
+        leadingRecoJet = goodJets[0]
+        if leadingRecoJet.etCorr > 10.0:
+            return leadingRecoJet
+        return None
 
     def getMatchedL1Jet(self, recoJet, l1Type='HW'):
         l1Jets = None
