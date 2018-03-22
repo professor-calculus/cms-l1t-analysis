@@ -104,7 +104,7 @@ class EfficiencyPlot(BasePlotter):
             if not isinstance(threshold, int):
                 continue
             hist = all_pileup_effs.get_bin_contents(threshold)
-            hist.drawstyle = "P"
+            hist.drawstyle = EfficiencyPlot.drawstyle
             hists.append(hist)
 
             label = label_template.format(

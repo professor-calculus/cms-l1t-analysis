@@ -20,9 +20,10 @@ def get_cumulative_hist(hist):
 
     # now scale
     bin1 = h.get_bin_content(1)
+    collision_rate = 4.0e7
     if bin1 != 0:
         h.GetSumw2()
-        h.Scale(4.0e7 / bin1)
+        h.Scale(collision_rate / bin1)
     return h
 
 
@@ -31,6 +32,7 @@ def _reverse(a):
 
 
 class RatesPlot(BasePlotter):
+
     def __init__(self, online_name):
         name = ["rates", online_name]
         super(RatesPlot, self).__init__("__".join(name))

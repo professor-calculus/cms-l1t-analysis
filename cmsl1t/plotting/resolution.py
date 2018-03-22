@@ -72,13 +72,13 @@ class ResolutionPlot(BasePlotter):
             hist.SetLineWidth(1)
             hists.append(hist)
             labels.append(label)
-            if with_fits:
-                fits.append(self.fits.get_bin_contents([pile_up]))
+            # if with_fits:
+            #     fits.append(self.fits.get_bin_contents([pile_up]))
         self.__make_overlay(hists, fits, labels, "Number of events")
 
         normed_hists = [hist.Clone() for hist in hists]
         for hist in normed_hists:
-            if hist.integral != 0:
+            if hist.integral() != 0:
                 hist = hist / hist.integral()
                 hist.GetYaxis().SetRangeUser(-0.1, 1.1)
         self.__make_overlay(normed_hists, fits, labels, "a.u.", "__shapes")
@@ -116,7 +116,7 @@ class ResolutionPlot(BasePlotter):
 
         normed_hists = [hist.Clone() for hist in hists]
         for hist in normed_hists:
-            if hist.integral != 0:
+            if hist.integral() != 0:
                 hist = hist / hist.integral()
                 hist.GetYaxis().SetRangeUser(-0.1, 1.1)
         self.__make_overlay(normed_hists, fits, labels,
@@ -158,7 +158,7 @@ class ResolutionPlot(BasePlotter):
             legend.SetBorderSize(0)
             legend.Draw()
 
-            ymax = 1.2 * hists[-1].GetMaximum()
+            ymax = 1.2 * max([hist.GetMaximum() for hist in hists])
             line = ROOT.TLine(0., 0., 0., ymax)
             line.SetLineColor(15)
 
