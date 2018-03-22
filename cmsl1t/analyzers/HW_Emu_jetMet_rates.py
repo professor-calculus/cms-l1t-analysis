@@ -3,12 +3,9 @@ Study the MET distibutions and various PUS schemes
 """
 from __future__ import division
 import numpy as np
-import six
 import ROOT
 import os
 from cmsl1t.analyzers.BaseAnalyzer import BaseAnalyzer
-from cmsl1t.collections import HistogramsByPileUpCollection
-from cmsl1t.utils.draw import draw, label_canvas
 from cmsl1t.plotting.rates import RatesPlot
 from cmsl1t.filters import LuminosityFilter
 import cmsl1t.hist.binning as bn
@@ -48,7 +45,7 @@ class Analyzer(BaseAnalyzer):
         if self._lumiJson:
             self._lumiFilter = LuminosityFilter(self._lumiJson)
 
-        self._lastLumi = -1
+        self._lastRunAndLumi = (-1, -1)
         self._processLumi = True
         self._sumTypes, self._jetTypes = types()
 
@@ -82,7 +79,7 @@ class Analyzer(BaseAnalyzer):
     '''
 
     def fill_histograms(self, entry, event):
-        if not self._filterByRunAndLumi(event._run, event._lumi):
+        if not self._passesLumiFilter(event._run, event._lumi):
             return True
         # Get pileup if ntuples have reco trees in them.
         # If not, set PU to 1 so that it fills the (only) pu bin.
@@ -121,13 +118,13 @@ class Analyzer(BaseAnalyzer):
 
         return True
 
-    def _filterByRunAndLumi(self, run, lumi):
+    def _passesLumiFilter(self, run, lumi):
         if self._lumiFilter is None:
             return True
-        if lumi == self._lastLumi and self._processLumi:
-            return True
+        if (run, lumi) == self._lastRunAndLumi:
+            return self._processLumi
 
-        self._lastLumi = lumi
+        self._lastRunAndLumi = (run, lumi)
         self._processLumi = self._lumiFilter(run, lumi)
 
         return self._processLumi
