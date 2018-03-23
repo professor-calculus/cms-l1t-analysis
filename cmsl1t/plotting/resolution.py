@@ -5,6 +5,7 @@ from cmsl1t.hist.factory import HistFactory
 import cmsl1t.hist.binning as bn
 from cmsl1t.utils.draw import draw, label_canvas
 from cmsl1t.recalc.resolution import get_resolution_function
+from cmsl1t.utils.hist import normalise_to_unit_area
 
 from rootpy.context import preserve_current_style
 from rootpy.plotting import Legend
@@ -76,11 +77,9 @@ class ResolutionPlot(BasePlotter):
             #     fits.append(self.fits.get_bin_contents([pile_up]))
         self.__make_overlay(hists, fits, labels, "Number of events")
 
-        normed_hists = [hist.Clone() for hist in hists]
+        normed_hists = list(normalise_to_unit_area(hists))
         for hist in normed_hists:
-            if hist.integral() != 0:
-                hist = hist / hist.integral()
-                hist.GetYaxis().SetRangeUser(-0.1, 1.1)
+            hist.GetYaxis().SetRangeUser(-0.1, 1.1)
         self.__make_overlay(normed_hists, fits, labels, "a.u.", "__shapes")
 
     def overlay_with_emu(self, emu_plotter, with_fits=False):
@@ -114,11 +113,9 @@ class ResolutionPlot(BasePlotter):
         self.__make_overlay(hists, fits, labels,
                             "Number of events", "__Overlay_Emu")
 
-        normed_hists = [hist.Clone() for hist in hists]
+        normed_hists = list(normalise_to_unit_area(hists))
         for hist in normed_hists:
-            if hist.integral() != 0:
-                hist = hist / hist.integral()
-                hist.GetYaxis().SetRangeUser(-0.1, 1.1)
+            hist.GetYaxis().SetRangeUser(-0.1, 1.1)
         self.__make_overlay(normed_hists, fits, labels,
                             "a.u.", "__shapes__Overlay_Emu")
 
