@@ -1,4 +1,6 @@
 
+from .luminosity import LuminosityFilter
+
 
 def muonfilter(muons):
     passes = False
