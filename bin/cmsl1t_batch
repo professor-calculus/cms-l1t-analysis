@@ -1,0 +1,74 @@
+#!/usr/bin/env python
+from __future__ import print_function
+import click
+import click_log
+import collections
+import yaml
+import os
+from textwrap import dedent
+import logging
+
+from cmsl1t.config import ConfigParser
+from cmsl1t.batch import Batch, condor_submit, lsf_submit
+from cmsl1t.batch import prepare_output_folders, get_config_name_template
+
+from cmsl1t.batch import create_run_script, create_info_file, prepare_jobs
+
+logger = logging.getLogger(__name__)
+click_log.basic_config(logger)
+
+
+@click.command()
+@click.option('-c', '--config_file', help='YAML style config file', type=click.File(), required=True)
+@click.option('-f', '--files-per-job', help='Give each job this many files', type=int, default=1)
+@click.option('--debug/--no-debug', help='Debug mode for the job submission', default=False)
+@click.option('--batch', default=Batch.condor, type=click.Choice([Batch.lsf, Batch.condor]),
+              help='Select the job submission system to use')
+def run(config_file, debug, batch, files_per_job):
+    if batch == Batch.lsf:
+        logger.warn('Legacy LSF system is no longer supported for cmsl1t.')
+        logger.warn(
+            ' see http://information-technology.web.cern.ch/services/batch')
+    # Read the config file
+    config = ConfigParser()
+    config.read(config_file)
+
+    # Get the output directory
+    output_folder = config.get('output', 'folder')
+    batch_dir, batch_config_dir, batch_log_dir = prepare_output_folders(
+        output_folder)
+
+    # Sort out a name for the batch config files
+    batch_filename = get_config_name_template(config_file, batch_config_dir)
+    # Prepare input jobs
+    outdir = os.path.join(batch_dir, "job_{index}")
+    job_configs, job_ids, output_folders = prepare_jobs(
+        config, batch_filename, outdir, files_per_job)
+
+    project_root = os.environ["PROJECT_ROOT"]
+    setup_script = os.path.join(project_root, "bin", "env.sh")
+    run_script = create_run_script(setup_script, project_root, batch_dir)
+    # submit jobs
+    submit = condor_submit
+    if batch == Batch.lsf:
+        submit = lsf_submit
+    results = submit(job_configs, batch_dir, batch_log_dir, run_script)
+    # from list of dict to dict of lists
+    info = collections.defaultdict(list)
+    for r in results:
+        for k, v in r.items():
+            info[k].append(v)
+    info['local_id'] = job_ids
+    info['output_folder'] = output_folders
+
+    info_file = create_info_file(info, batch_dir)
+
+    logger.info(dedent("""\
+    Submitted jobs in {0}.
+    To check their status run
+
+      cmsl1t_batch_status -i {1}""".format(batch_dir, info_file)))
+
+
+if __name__ == '__main__':
+    run()
