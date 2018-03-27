@@ -1,5 +1,36 @@
 # Change Log
 
+## [Unreleased](https://github.com/cms-l1t-offline/cms-l1t-analysis/tree/HEAD)
+
+[Full Changelog](https://github.com/cms-l1t-offline/cms-l1t-analysis/compare/v0.1.2...HEAD)
+
+**Implemented enhancements:**
+
+- YAML NTuple config file for documentation and aliasing [\#82](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/82) ([kreczko](https://github.com/kreczko))
+
+**Closed issues:**
+
+- Add JSON filter for \(run, lumi\) [\#105](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/105)
+- Failed job resubmission & log files for investigating job failure on batch [\#99](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/99)
+- JetET & \*\_Emu\_phi\_res plotters not being created in Offline MET analyser [\#97](https://github.com/cms-l1t-offline/cms-l1t-analysis/issues/97)
+
+**Merged pull requests:**
+
+- Adding luminosity filter [\#111](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/111) ([kreczko](https://github.com/kreczko))
+- Plotting updates from \#106 [\#110](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/110) ([kreczko](https://github.com/kreczko))
+- Config, Event and hist related parts of \#106 [\#108](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/108) ([kreczko](https://github.com/kreczko))
+- Breaking down \#106 [\#107](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/107) ([kreczko](https://github.com/kreczko))
+- A "cleaner" batch submission [\#104](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/104) ([kreczko](https://github.com/kreczko))
+- After the long slumber, cmsl1t wakes up [\#103](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/103) ([kreczko](https://github.com/kreczko))
+- Added JetET plotters to offline MET analyser, no longer crashes [\#98](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/98) ([professor-calculus](https://github.com/professor-calculus))
+- Fixing the readthedocs errors [\#94](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/94) ([kreczko](https://github.com/kreczko))
+- Breakdown of PR 89 - part 4 [\#93](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/93) ([kreczko](https://github.com/kreczko))
+- Breakdown of PR 89 - part 3 [\#92](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/92) ([kreczko](https://github.com/kreczko))
+- Breakdown of PR 89 - part 2 [\#91](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/91) ([kreczko](https://github.com/kreczko))
+- Breakdown of PR 89 - part 1 [\#90](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/90) ([kreczko](https://github.com/kreczko))
+- Minor fixes for Makefile and bin/\* [\#87](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/87) ([kreczko](https://github.com/kreczko))
+- Github templates for issues and pull requests [\#86](https://github.com/cms-l1t-offline/cms-l1t-analysis/pull/86) ([kreczko](https://github.com/kreczko))
+
 ## [v0.1.2](https://github.com/cms-l1t-offline/cms-l1t-analysis/tree/v0.1.2) (2017-09-18)
 [Full Changelog](https://github.com/cms-l1t-offline/cms-l1t-analysis/compare/v0.1.1...v0.1.2)
 
