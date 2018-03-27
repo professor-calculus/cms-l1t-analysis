@@ -10,6 +10,7 @@ from cmsl1t.collections import HistogramsByPileUpCollection
 from cmsl1t.utils.draw import draw, label_canvas
 from cmsl1t.plotting.rates import RatesPlot
 import cmsl1t.hist.binning as bn
+from cmsl1t.utils.hist import cumulative_hist, normalise_to_collision_rate
 
 
 sum_types = [
@@ -170,14 +171,9 @@ class Analyzer(BaseAnalyzer):
         # calculate cumulative histograms
         for plot in self.all_plots:
             hist = plot.plots.get_bin_contents([bn.Base.everything])
-            bin1 = hist.get_bin_content(1)
-            if bin1 != 0.:
-                hist.Scale(40000000. / bin1)
-            h = get_cumulative_hist(hist)
-            bin1cumul = h.get_bin_content(1)
-            if bin1cumul != 0.:
-                h.Scale(40000000. / bin1cumul)
-            setattr(self, plot.online_name, h)
+            hist = cumulative_hist(hist)
+            hist = normalise_to_collision_rate(hist)
+            setattr(self, plot.online_name, hist)
             plot.draw()
 
         print('  thresholds:')
@@ -213,25 +209,6 @@ class Analyzer(BaseAnalyzer):
             plot(h, histo_name, self.output_folder)
         '''
         return True
-
-
-def _reverse(a):
-    return np.array(np.flipud(a))
-
-
-def get_cumulative_hist(hist):
-    h = hist.clone(hist.name + '_cumul')
-    arr = np.cumsum(_reverse([bin.value for bin in hist]))
-    h.set_content(_reverse(arr))
-    errors_sq = np.cumsum(_reverse([bin.error**2 for bin in hist]))
-    h.set_error(_reverse(np.sqrt(errors_sq)))
-
-    # now scale
-    bin1 = h.get_bin_content(1)
-    if bin1 != 0:
-        h.GetSumw2()
-        h.Scale(4.0e7 / bin1)
-    return h
 
 
 def plot(hist, name, output_folder):

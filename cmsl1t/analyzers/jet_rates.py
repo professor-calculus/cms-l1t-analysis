@@ -7,6 +7,7 @@ import ROOT
 import os
 from cmsl1t.analyzers.BaseAnalyzer import BaseAnalyzer
 from cmsl1t.collections import HistogramsByPileUpCollection
+from cmsl1t.utils.hist import cumulative_hist, normalise_to_collision_rate
 
 
 class Analyzer(BaseAnalyzer):
@@ -61,7 +62,8 @@ class Analyzer(BaseAnalyzer):
         for puBin, histograms in six.iteritems(self.rates):
             cumul_hists[puBin] = {}
             for hist_name, hist in six.iteritems(histograms):
-                h = get_cumulative_hist(hist)
+                h = cumulative_hist(hist)
+                h = normalise_to_collision_rate(h)
                 cumul_hists[puBin][h.name] = h
             self.rates[puBin].update(cumul_hists)
 
@@ -83,25 +85,6 @@ class Analyzer(BaseAnalyzer):
                     obj = f.get(name)
                     plot(obj, name, self.output_folder)
         return True
-
-
-def _reverse(a):
-    return np.array(np.flipud(a))
-
-
-def get_cumulative_hist(hist):
-    h = hist.clone(hist.name + '_cumul')
-    arr = np.cumsum(_reverse([bin.value for bin in hist]))
-    h.set_content(_reverse(arr))
-    errors_sq = np.cumsum(_reverse([bin.error**2 for bin in hist]))
-    h.set_error(_reverse(np.sqrt(errors_sq)))
-
-    # now scale
-    bin1 = h.get_bin_content(1)
-    if bin1 != 0:
-        h.GetSumw2()
-        h.Scale(4.0e7 / bin1)
-    return h
 
 
 def plot(hist, name, output_folder):
