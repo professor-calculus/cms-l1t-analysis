@@ -69,12 +69,49 @@ class RatesPlot(BasePlotter):
         self.__make_overlay(normed_hists, fits, labels,
                             "Fraction of events", "__shapes")
 
-    def __make_overlay(self, hists, fits, labels, ytitle, suffix=""):
+    def overlay_with_emu(self, emu_plotter, with_fits=False):
+        hists = []
+        labels = []
+        fits = []
+        for (pile_up, ), hist in self.plots.flat_items_all():
+            h = cumulative_hist(hist)
+            bin1 = h.get_bin_content(1)
+            if pile_up == bn.Base.everything:
+                h.SetLineStyle(1)
+                h.drawstyle = "hist"
+                label = "HW, all PU"
+            else:
+                continue
+            h.SetLineWidth(5)
+            h.SetMinimum(0.1)
+            hists.append(h)
+            labels.append(label)
+
+        for (pile_up, ), hist in emu_plotter.plots.flat_items_all():
+            h = get_cumulative_unscaled_hist(hist)
+            bin1 = h.get_bin_content(1)
+            if pile_up == bn.Base.everything:
+                h.SetLineStyle(7)
+                h.drawstyle = "hist"
+                label = "Emu, all PU"
+            else:
+                continue
+            h.SetLineWidth(5)
+            h.SetMinimum(0.1)
+            hists.append(h)
+            labels.append(label)
+
+        self.__make_overlay(hists, fits, labels, "Number of events", "__Overlay_Emu", legendtitle="", setlogy=True)
+
+        normed_hists = [hist / hist.integral() if hist.integral() != 0 else hist.Clone() for hist in hists]
+        self.__make_overlay(normed_hists, fits, labels, "Fraction of events", "__shapes__Overlay_Emu", legendtitle="")
+
+    def __make_overlay(self, hists, fits, labels, ytitle, suffix="", legendtitle="Pile-up bin", setlogy=False):
         with preserve_current_style():
             # Draw each resolution (with fit)
             xtitle = self.online_title
             canvas = draw(hists, draw_args={
-                          "xtitle": xtitle, "ytitle": ytitle})
+                          "xtitle": xtitle, "ytitle": ytitle, "logy": setlogy})
             if fits:
                 for fit, hist in zip(fits, hists):
                     fit["asymmetric"].linecolor = hist.GetLineColor()
@@ -84,7 +121,7 @@ class RatesPlot(BasePlotter):
             label_canvas()
 
             # Add a legend
-            legend = Legend(len(hists), header="Pile-up bin",
+            legend = Legend(len(hists), header=legendtitle,
                             topmargin=0.35, entryheight=0.035)
             for hist, label in zip(hists, labels):
                 legend.AddEntry(hist, label)

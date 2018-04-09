@@ -15,10 +15,11 @@ from cmsl1t.utils.hist import cumulative_hist, normalise_to_collision_rate
 def types():
     sum_types = ["HT", "METBE", "METHF"]
     jet_types = ["JetET"]
+    HW_types = sum_types + jet_types
     sum_types += [t + '_Emu' for t in sum_types]
     jet_types += [t + '_Emu' for t in jet_types]
 
-    return sum_types, jet_types
+    return sum_types, jet_types, HW_types
 
 
 def extractSums(event):
@@ -47,7 +48,7 @@ class Analyzer(BaseAnalyzer):
 
         self._lastRunAndLumi = (-1, -1)
         self._processLumi = True
-        self._sumTypes, self._jetTypes = types()
+        self._sumTypes, self._jetTypes, self._hwTypes = types()
 
         for name in self._sumTypes + self._jetTypes:
             rates_plot = RatesPlot(name)
@@ -175,6 +176,9 @@ class Analyzer(BaseAnalyzer):
             outputline = ('    {0}: {1}'.format(histo_name, thresholds) +
                           '\n' + '    {0}: {1}'.format(histo_name + '_Emu', emu_thresholds))
             print(outputline)
+
+        for histo_name in self._hwTypes:
+            getattr(self, histo_name + '_rates').overlay_with_emu(getattr(self, histo_name + '_Emu_rates'))
 
         '''
         for histo_name in object_types:
